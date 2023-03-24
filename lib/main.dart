@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 //importing the main app
 import 'src/view/mobile/afya_app.dart';
 
-
 //Color.fromARGB(255, 231, 248, 232),
 
 void main() async {
@@ -16,4 +15,3 @@ void main() async {
 
   runApp(const AfyaApp());
 }
-
