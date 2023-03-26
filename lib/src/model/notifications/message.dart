@@ -1,16 +1,14 @@
 import '../models.dart';
 
 class Message {
-  final int _id;
-  final Personne _expediteur;
-  final Personne _destinataire;
+  final Utilisateur _expediteur;
+  final Utilisateur _destinataire;
   final DateTime _dateHeure;
   final ObjetMessage _objet;
   final String _contenu;
   StatutMessage _statut;
 
   Message(
-    this._id,
     this._expediteur,
     this._destinataire,
     this._dateHeure,
@@ -19,13 +17,44 @@ class Message {
     this._statut,
   );
 
-  int get id => _id;
-  Personne get expediteur => _expediteur;
-  Personne get destinataire => _destinataire;
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      Utilisateur.fromJson(json['expediteur']),
+      Utilisateur.fromJson(json['destinataire']),
+      DateTime.parse(json['dateHeure']),
+      parseObjet(json['objet']),
+      json['contenu'] as String,
+      parseStatut(json['statut']),
+    );
+  }
+
+  Utilisateur get expediteur => _expediteur;
+  Utilisateur get destinataire => _destinataire;
   DateTime get dateHeure => _dateHeure;
   ObjetMessage get objet => _objet;
   String get contenu => _contenu;
   StatutMessage get statut => _statut;
 
   void setSatut(StatutMessage statut) => _statut = statut;
+
+  Map<String, dynamic> toJson() => {
+        'expediteur': expediteur.toJson(),
+        'destinaire': destinataire.toJson(),
+        'dateHeure': dateHeure.toIso8601String(),
+        'objet': objet.name,
+        'contenu': contenu,
+        'statut': statut.name,
+      };
+
+  static ObjetMessage parseObjet(String name) {
+    ObjetMessage objet = ObjetMessage.values
+        .firstWhere((o) => o.toString() == 'ObjetMessage.$name');
+    return objet;
+  }
+
+  static StatutMessage parseStatut(String name) {
+    StatutMessage statut = StatutMessage.values
+        .firstWhere((s) => s.toString() == 'StatutMessage.$name');
+    return statut;
+  }
 }
