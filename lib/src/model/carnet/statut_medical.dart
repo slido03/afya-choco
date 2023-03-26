@@ -1,45 +1,31 @@
 import '../models.dart';
 
 class StatutMedical {
-  final int _id;
   final Patient _patient;
-  GroupeSanguin? _groupeSanguin;
-  final List<String> _allergies = [];
-  final List<String> _maladiesHereditaires = [];
+  GroupeSanguin _groupeSanguin;
+  List<String> _allergies = [];
+  List<String> _maladiesHereditaires = [];
 
   StatutMedical(
-    this._id,
     this._patient,
     this._groupeSanguin,
+    this._allergies,
+    this._maladiesHereditaires,
   );
 
-  int get id => _id;
+  factory StatutMedical.fromJson(Map<String, dynamic> json) {
+    return StatutMedical(
+      Patient.fromJson(json['patient']),
+      parseGroupeSanguin(json['groupeSanguin']),
+      json['allergies'] as List<String>,
+      json['maladies-hereditaires'] as List<String>,
+    );
+  }
+
   Patient get patient => _patient;
-  GroupeSanguin? get groupeSanguin => _groupeSanguin;
+  GroupeSanguin get groupeSanguin => _groupeSanguin;
   List<String> get allergies => _allergies;
   List<String> get maladiesHereditaires => _maladiesHereditaires;
-  String get groupeSanguinToString {
-    switch (groupeSanguin) {
-      case GroupeSanguin.aPositif:
-        return 'A+';
-      case GroupeSanguin.aNegatif:
-        return 'A-';
-      case GroupeSanguin.bPositif:
-        return 'B+';
-      case GroupeSanguin.bNegatif:
-        return 'B-';
-      case GroupeSanguin.oPositif:
-        return 'O+';
-      case GroupeSanguin.oNegatif:
-        return 'O-';
-      case GroupeSanguin.abPositif:
-        return 'AB+';
-      case GroupeSanguin.abNegatif:
-        return 'AB-';
-      default:
-        return 'aucun';
-    }
-  }
 
   void setGroupeSanguin(GroupeSanguin groupeSanguin) =>
       _groupeSanguin = groupeSanguin;
@@ -49,4 +35,17 @@ class StatutMedical {
   void supprimerAllergie(String allergie) => _allergies.remove(allergie);
   void supprimerMaladie(String maladie) =>
       _maladiesHereditaires.remove(maladie);
+
+  Map<String, dynamic> toJson() => {
+        'patient': patient.toJson(),
+        'groupeSanguin': groupeSanguin.name,
+        'allergies': allergies,
+        'maladies-hereditaires': maladiesHereditaires,
+      };
+
+  static GroupeSanguin parseGroupeSanguin(String name) {
+    GroupeSanguin groupeSanguin = GroupeSanguin.values
+        .firstWhere((g) => g.toString() == 'GroupeSanguin.$name');
+    return groupeSanguin;
+  }
 }
