@@ -1,7 +1,6 @@
 import '../models.dart';
 
 class RendezVous {
-  final int _id;
   DateTime _dateHeure;
   int _duree;
   final Patient _patient;
@@ -11,7 +10,6 @@ class RendezVous {
   StatutRendezVous _statut;
 
   RendezVous(
-    this._id,
     this._dateHeure,
     this._duree,
     this._patient,
@@ -21,7 +19,18 @@ class RendezVous {
     this._statut,
   );
 
-  int get id => _id;
+  factory RendezVous.fromJson(Map<String, dynamic> json) {
+    return RendezVous(
+      DateTime.parse(json['dateHeure']),
+      json['duree'] as int,
+      Patient.fromJson(json['patient']),
+      Medecin.fromJson(json['medecin']),
+      json['lieu'] as String,
+      parseObjet(json['objet']),
+      parseStatut(json['statut']),
+    );
+  }
+
   DateTime get dateHeure => _dateHeure;
   int get duree => _duree;
   Patient get patient => _patient;
@@ -34,4 +43,26 @@ class RendezVous {
   void setDuree(int duree) => _duree = duree;
   void setLieu(String lieu) => _lieu = lieu;
   void setStatut(StatutRendezVous statut) => _statut = statut;
+
+  Map<String, dynamic> toJson() => {
+        'dateHeure': dateHeure.toIso8601String(),
+        'duree': duree,
+        'patient': patient.toJson(),
+        'medecin': medecin.toJson(),
+        'lieu': lieu,
+        'objet': objet.name,
+        'statut': statut.name,
+      };
+
+  static ObjetRendezVous parseObjet(String name) {
+    ObjetRendezVous objet = ObjetRendezVous.values
+        .firstWhere((o) => o.toString() == 'ObjetRendezVous.$name');
+    return objet;
+  }
+
+  static StatutRendezVous parseStatut(String name) {
+    StatutRendezVous statut = StatutRendezVous.values
+        .firstWhere((s) => s.toString() == 'StatutRendezVous.$name');
+    return statut;
+  }
 }
