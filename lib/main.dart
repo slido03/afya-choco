@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import './src/repository/repositories.dart';
 
-void main() async {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await PatientRepositoryImpl.instance.supprimer('EB214043');
+  List<Patient> liste = await PatientRepositoryImpl.instance.lister();
+  for (var p in liste) {
+    // ignore: avoid_print
+    print(p);
+  }
 
   runApp(const MyApp());
 }
@@ -30,7 +39,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const PatientWidget(),
     );
   }
 }
@@ -116,6 +125,28 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class PatientWidget extends StatelessWidget {
+  const PatientWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('patient'),
+      ),
+      body: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Text(
+            'blablabla',
+          )
+        ],
+      )),
     );
   }
 }
