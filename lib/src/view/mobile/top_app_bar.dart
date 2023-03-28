@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'consultation/components/popupmenu_more.dart';
+import 'consultation/components/popupmenu_user.dart';
+
 // ignore: must_be_immutable
 class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
   String title;
@@ -12,6 +15,7 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      elevation: 2,
       title: Text(
         title,
         style: const TextStyle(
@@ -22,26 +26,15 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
           fontStyle: FontStyle.italic,
         ),
       ),
-      elevation: 2,
       actions: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.person_outlined),
-          onPressed: () {
-            // do something
-          },
-        ),
+        const PopupMenuUser(),
         IconButton(
           icon: const Icon(Icons.notifications_none),
           onPressed: () {
-            // do something
+            Navigator.pushNamed(context, '/notifications');
           },
         ),
-        IconButton(
-          icon: const Icon(Icons.more_vert),
-          onPressed: () {
-            // do something
-          },
-        ),
+        const PopupMenuMore(),
       ],
     );
   }
