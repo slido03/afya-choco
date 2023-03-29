@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 //importing the main app
 import 'src/view/mobile/afya_app.dart';
 
+//importing the main app
+//import 'src/view/mobile/afya_app.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Initialise la liaison
   await Firebase.initializeApp(
