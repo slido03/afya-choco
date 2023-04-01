@@ -28,7 +28,7 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
   Future<Diagnostic?> trouver(
       DateTime date, Medecin medecin, Patient patient) async {
     return await diagnostics
-        .where('date', isEqualTo: date.toIso8601String())
+        .where('date', isEqualTo: date.millisecondsSinceEpoch)
         .where('medecin.identifiant', isEqualTo: medecin.identifiant)
         .where('patient.identifiant', isEqualTo: patient.identifiant)
         .limit(1)
@@ -45,7 +45,7 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
   @override
   Future<void> modifier(Diagnostic diagnostic) {
     return diagnostics
-        .where('date', isEqualTo: diagnostic.date.toIso8601String())
+        .where('date', isEqualTo: diagnostic.date.millisecondsSinceEpoch)
         .where('medecin.identifiant', isEqualTo: diagnostic.medecin.identifiant)
         .where('patient.identifiant',
             isEqualTo: diagnostic.patient!.identifiant)
@@ -69,6 +69,7 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
   Future<List<Diagnostic>> lister(Patient patient) async {
     return await diagnostics
         .where('patient.identifiant', isEqualTo: patient.identifiant)
+        .orderBy('date', descending: true)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {

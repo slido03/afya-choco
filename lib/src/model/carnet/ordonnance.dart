@@ -17,7 +17,7 @@ class Ordonnance {
 
   factory Ordonnance.fromJson(Map<String, dynamic> json) {
     return Ordonnance(
-      DateTime.parse(json['date']),
+      DateTime.fromMillisecondsSinceEpoch(json['date']),
       Medecin.fromJson(json['medecin']),
       Patient.fromJson(json['patient']),
       Diagnostic.fromJson(json['diagnostic']),
@@ -35,7 +35,7 @@ class Ordonnance {
       _instructions = instructions;
 
   Map<String, dynamic> toJson() => {
-        'date': date.toIso8601String(),
+        'date': date.millisecondsSinceEpoch,
         'médecin': medecin.toJson(),
         'patient': patient.toJson(),
         'diagnostic': diagnostic.toJson(),

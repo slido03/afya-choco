@@ -32,7 +32,7 @@ class MessageRepositoryImpl extends MessageRepository {
     return await messages
         .where('expediteur.identifiant', isEqualTo: expediteur.identifiant)
         .where('destinataire.identifiant', isEqualTo: destinataire.identifiant)
-        .where('dateHeure', isEqualTo: dateHeure.toIso8601String())
+        .where('dateHeure', isEqualTo: dateHeure.millisecondsSinceEpoch)
         .limit(1)
         .get()
         .then((snapshot) {
@@ -52,7 +52,7 @@ class MessageRepositoryImpl extends MessageRepository {
             isEqualTo: message.expediteur.identifiant)
         .where('destinataire.identifiant',
             isEqualTo: message.destinataire.identifiant)
-        .where('dateHeure', isEqualTo: message.dateHeure.toIso8601String())
+        .where('dateHeure', isEqualTo: message.dateHeure.millisecondsSinceEpoch)
         .limit(1)
         .get()
         .then((snapshot) {
@@ -73,6 +73,7 @@ class MessageRepositoryImpl extends MessageRepository {
     return await messages
         .where('expediteur.identifiant', isEqualTo: expediteur.identifiant)
         .where('objet', isEqualTo: objet.name)
+        .orderBy('dateHeure', descending: true)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -96,6 +97,7 @@ class MessageRepositoryImpl extends MessageRepository {
     return await messages
         .where('destinataire.identifiant', isEqualTo: destinaire.identifiant)
         .where('objet', isEqualTo: objet.name)
+        .orderBy('dateHeure', descending: true)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -119,6 +121,7 @@ class MessageRepositoryImpl extends MessageRepository {
     return await messages
         .where('destinataire.identifiant', isEqualTo: destinaire.identifiant)
         .where('statut', isEqualTo: statut.name)
+        .orderBy('dateHeure', descending: true)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -142,7 +145,7 @@ class MessageRepositoryImpl extends MessageRepository {
             isEqualTo: message.expediteur.identifiant)
         .where('destinataire.identifiant',
             isEqualTo: message.destinataire.identifiant)
-        .where('dateHeure', isEqualTo: message.dateHeure.toIso8601String())
+        .where('dateHeure', isEqualTo: message.dateHeure.millisecondsSinceEpoch)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {

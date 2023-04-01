@@ -21,7 +21,7 @@ class RendezVous {
 
   factory RendezVous.fromJson(Map<String, dynamic> json) {
     return RendezVous(
-      DateTime.parse(json['dateHeure']),
+      DateTime.fromMillisecondsSinceEpoch(json['dateHeure']),
       json['duree'] as int,
       Patient.fromJson(json['patient']),
       Medecin.fromJson(json['medecin']),
@@ -45,7 +45,7 @@ class RendezVous {
   void setStatut(StatutRendezVous statut) => _statut = statut;
 
   Map<String, dynamic> toJson() => {
-        'dateHeure': dateHeure.toIso8601String(),
+        'dateHeure': dateHeure.millisecondsSinceEpoch,
         'duree': duree,
         'patient': patient.toJson(),
         'medecin': medecin.toJson(),

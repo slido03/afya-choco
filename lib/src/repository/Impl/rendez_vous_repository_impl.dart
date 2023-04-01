@@ -28,7 +28,7 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
   Future<RendezVous?> trouver(
       DateTime dateHeure, Patient patient, Medecin medecin) async {
     return await rendezvous
-        .where('dateHeure', isEqualTo: dateHeure.toIso8601String())
+        .where('dateHeure', isEqualTo: dateHeure.millisecondsSinceEpoch)
         .where('medecin.identifiant', isEqualTo: medecin.identifiant)
         .where('patient.identifiant', isEqualTo: patient.identifiant)
         .limit(1)
@@ -45,7 +45,8 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
   @override
   Future<void> modifier(RendezVous rendezVous) {
     return rendezvous
-        .where('dateHeure', isEqualTo: rendezVous.dateHeure.toIso8601String())
+        .where('dateHeure',
+            isEqualTo: rendezVous.dateHeure.millisecondsSinceEpoch)
         .where('medecin.identifiant', isEqualTo: rendezVous.medecin.identifiant)
         .where('patient.identifiant', isEqualTo: rendezVous.patient.identifiant)
         .limit(1)
