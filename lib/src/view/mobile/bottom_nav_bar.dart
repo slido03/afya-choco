@@ -2,21 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 
 // ignore: must_be_immutable
-class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({super.key});
 
-  @override
-  State<BottomNavBar> createState() => _BottomNavBarState();
-}
+class BottomNavBar extends StatelessWidget {
+  const BottomNavBar({super.key, required this.currentIndex, required this.onItemTapped});
 
-class _BottomNavBarState extends State<BottomNavBar> {
-  int _selectedIndex = 0;
+  final int currentIndex;
+  final void Function(int) onItemTapped;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -39,28 +32,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
           activeIcon: Icon(Icons.calendar_month),
         ),
       ],
-      currentIndex: _selectedIndex,
+      currentIndex: currentIndex,
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.white60,
       showUnselectedLabels: true,
       backgroundColor: Colors.green,
-      onTap: (int index) {
-        setState(() {
-          _selectedIndex = index;
-        });
-
-        switch (index) {
-          case 0:
-            //Navigator.pushNamed(context, '/consultation');
-            break;
-          case 1:
-            //Navigator.pushNamed(context, '/carnet');
-            break;
-          case 2:
-            //Navigator.pushNamed(context, '/agenda');
-            break;
-        }
-      },
+      onTap: onItemTapped,
     );
   }
 }
