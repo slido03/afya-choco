@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'
-    hide EmailAuthProvider, PhoneAuthProvider;
+import 'package:firebase_auth/firebase_auth.dart';
+import '../home_page.dart';
+import './login.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -63,8 +64,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     onSubmitted: (value) {
                       // Vérifier si la saisie utilisateur correspond à l'expression régulière pour les emails
                       if (!_emailValidator.hasMatch(value)) {
-                        _emailError = "L'email saisi n'est pas valide";
-                        // Effacer la saisie incorrecte
+                        setState(() {
+                          _emailError = "L'email saisi n'est pas valide";
+                          // Effacer la saisie incorrecte
+                          _emailController.clear();
+                        });
+                      }
+                      if (value.isEmpty) {
+                        setState(() {
+                          _emailError = 'Veuillez sasir un email valide';
+                        });
                       }
                     },
                     decoration: InputDecoration(
@@ -76,10 +85,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextField(
                     controller: _firstPasswordController,
                     onSubmitted: (value) {
-                      if (_firstPasswordController.text.length < 6) {
-                        _firstPasswordError =
-                            'Le mot de passe doit contenir au moins 6 caractères';
-                        // Effacer la saisie incorrecte
+                      if (value.length < 6) {
+                        setState(() {
+                          _firstPasswordError = 'Au moins 6 caractères';
+                        });
                       }
                     },
                     decoration: InputDecoration(
@@ -92,11 +101,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextField(
                     controller: _secondPasswordController,
                     onSubmitted: (value) {
-                      if (_secondPasswordController.text !=
-                          _firstPasswordController.text) {
-                        _secondPasswordError =
-                            'Le mot de passe saisi est différent du précédent';
-                        // Effacer la saisie incorrecte
+                      if (value != _firstPasswordController.text) {
+                        setState(() {
+                          _secondPasswordError =
+                              'Le mot de passe saisi est différent du précédent';
+                        });
                       }
                     },
                     decoration: InputDecoration(
@@ -109,16 +118,16 @@ class _RegisterPageState extends State<RegisterPage> {
                   ElevatedButton(
                     child: const Text('Créer un compte'),
                     onPressed: () async {
-                      if (await registerWithEmailAndPassword(
+                      //Si l'user a été créé
+                      // ignore: use_build_context_synchronously
+                      if (!await registerWithEmailAndPassword(
                           _emailController.text,
-                          _secondPasswordController.text)) {
-                        // ignore: use_build_context_synchronously
-                        navigateToHome(context);
-                      } else {
+                          _secondPasswordController.text,
+                          context)) {
                         const snackBar = SnackBar(
                             padding: EdgeInsets.only(bottom: 30, top: 30),
                             content: Text(
-                                "Désolé l'email saisi est déjà utilisé ou invalide, ou le mot de passe n'est pas valide"));
+                                "Désolé l'email saisi est déjà utilisé, invalide ou désactivé, ou le mot de passe saisi n'est pas valide"));
                         // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
@@ -137,16 +146,38 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<bool> registerWithEmailAndPassword(
-      String email, String password) async {
+      String email, String password, BuildContext context) async {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      // Si l'utilisateur a été créé avec succès
       if (userCredential.user != null) {
-        // L'utilisateur a été créé avec succès
-        // On redirige l'utilisateur vers la page d'accueil
+        //envoie de l'email de vérification au nouvel utilisateur
+        await userCredential.user!.sendEmailVerification();
+        // ignore: use_build_context_synchronously
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Vérification de votre email"),
+              content:
+                  Text("Un e-mail de vérification vous a été envoyé à $email"),
+              actions: [
+                TextButton(
+                  child: const Text("OK"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    navigateToLogin(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
         return true;
       }
       // L'utilisateur est créé avec succès.
@@ -160,30 +191,13 @@ class _RegisterPageState extends State<RegisterPage> {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
           builder: (context) =>
-              const PatientWidget()), //à changer par la home page
+              const MyHomePage(title: 'HomePage')), //à changer par la home page
     );
   }
-}
 
-//fausse homePage
-class PatientWidget extends StatelessWidget {
-  const PatientWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('patient'),
-      ),
-      body: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Text(
-            'blablabla',
-          )
-        ],
-      )),
+  void navigateToLogin(BuildContext context) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
 }

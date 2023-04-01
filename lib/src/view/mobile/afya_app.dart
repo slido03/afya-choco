@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'home_page.dart';
+import './authentication/login.dart';
 import 'consultation/pages/changer_rdv.dart';
 import 'notifications_screen.dart';
 import 'consultation/pages/prise_rdv.dart';
-
 
 class AfyaApp extends StatelessWidget {
   const AfyaApp({super.key});
@@ -20,7 +19,7 @@ class AfyaApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const MyHomePage(title: 'StenDemo Home Page'),
+        '/': (context) => const LoginPage(),
         '/prise_rendez_vous': (context) => const PriseRdv(),
         '/changer_rendez_vous': (context) => const ChangerRdv(),
         '/notifications': (context) => const NotificationsScreen(),

@@ -27,7 +27,8 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
   @override
   Future<Ordonnance?> trouver(Diagnostic diagnostic) async {
     return await ordonnances
-        .where('diagnostic.date', isEqualTo: diagnostic.date.toIso8601String())
+        .where('diagnostic.date',
+            isEqualTo: diagnostic.date.millisecondsSinceEpoch)
         .where('medecin.identifiant', isEqualTo: diagnostic.medecin.identifiant)
         .where('patient.identifiant',
             isEqualTo: diagnostic.patient!.identifiant)
@@ -46,7 +47,7 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
   Future<void> modifier(Ordonnance ordonnance) {
     return ordonnances
         .where('diagnostic.date',
-            isEqualTo: ordonnance.diagnostic.date.toIso8601String())
+            isEqualTo: ordonnance.diagnostic.date.millisecondsSinceEpoch)
         .where('diagnostic.medecin.identifiant',
             isEqualTo: ordonnance.diagnostic.medecin.identifiant)
         .where('diagnostic.patient.identifiant',
@@ -68,6 +69,7 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
   Future<List<Ordonnance>> lister(Patient patient) async {
     return await ordonnances
         .where('diagnostic.patient.identifiant', isEqualTo: patient.identifiant)
+        .orderBy('date', descending: true)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {

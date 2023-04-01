@@ -21,7 +21,7 @@ class Message {
     return Message(
       Utilisateur.fromJson(json['expediteur']),
       Utilisateur.fromJson(json['destinataire']),
-      DateTime.parse(json['dateHeure']),
+      DateTime.fromMillisecondsSinceEpoch(json['dateHeure']),
       parseObjet(json['objet']),
       json['contenu'] as String,
       parseStatut(json['statut']),
@@ -40,7 +40,7 @@ class Message {
   Map<String, dynamic> toJson() => {
         'expediteur': expediteur.toJson(),
         'destinaire': destinataire.toJson(),
-        'dateHeure': dateHeure.toIso8601String(),
+        'dateHeure': dateHeure.millisecondsSinceEpoch,
         'objet': objet.name,
         'contenu': contenu,
         'statut': statut.name,

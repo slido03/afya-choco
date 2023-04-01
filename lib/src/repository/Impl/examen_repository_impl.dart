@@ -30,7 +30,7 @@ class ExamenRepositoryImpl extends ExamenRepository {
         .where('medecin.identifiant', isEqualTo: medecin.identifiant)
         .where('patient.identifiant', isEqualTo: patient.identifiant)
         .where('type', isEqualTo: type.name)
-        .where('date', isEqualTo: date.toIso8601String())
+        .where('date', isEqualTo: date.millisecondsSinceEpoch)
         .limit(1)
         .get()
         .then((snapshot) {
@@ -48,7 +48,7 @@ class ExamenRepositoryImpl extends ExamenRepository {
         .where('medecin.identifiant', isEqualTo: examen.medecin.identifiant)
         .where('patient.identifiant', isEqualTo: examen.patient.identifiant)
         .where('type', isEqualTo: examen.type.name)
-        .where('date', isEqualTo: examen.date.toIso8601String())
+        .where('date', isEqualTo: examen.date.millisecondsSinceEpoch)
         .limit(1)
         .get()
         .then((snapshot) {
@@ -66,6 +66,30 @@ class ExamenRepositoryImpl extends ExamenRepository {
   Future<List<Examen>> lister(Patient patient) async {
     return await examens
         .where('patient.identifiant', isEqualTo: patient.identifiant)
+        .orderBy('date', descending: true)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Examen> liste = [];
+        for (var document in snapshot.docs) {
+          Examen examen = document.data();
+          liste.add(examen);
+        }
+        return liste;
+      } else {
+        List<Examen> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<List<Examen>> listerSpecialite(
+      Specialite type, Patient patient) async {
+    return await examens
+        .where('patient.identifiant', isEqualTo: patient.identifiant)
+        .where('type', isEqualTo: type.name)
+        .orderBy('date', descending: true)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -88,7 +112,7 @@ class ExamenRepositoryImpl extends ExamenRepository {
         .where('medecin.identifiant', isEqualTo: examen.medecin.identifiant)
         .where('patient.identifiant', isEqualTo: examen.patient.identifiant)
         .where('type', isEqualTo: examen.type.name)
-        .where('date', isEqualTo: examen.date.toIso8601String())
+        .where('date', isEqualTo: examen.date.millisecondsSinceEpoch)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
