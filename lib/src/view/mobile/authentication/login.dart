@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     hide EmailAuthProvider, PhoneAuthProvider;
-import './register.dart';
+import 'register.dart';
+import '../home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -78,9 +79,16 @@ class _LoginPageState extends State<LoginPage> {
                     onSubmitted: (value) {
                       // Vérifier si la saisie utilisateur correspond à l'expression régulière pour les emails
                       if (!_emailValidator.hasMatch(value)) {
-                        _errorText = "L'email saisi n'est pas valide";
-                        // Effacer la saisie incorrecte
-                        _emailController.clear();
+                        setState(() {
+                          _errorText = "L'email saisi n'est pas valide";
+                          // Effacer la saisie incorrecte
+                          _emailController.clear();
+                        });
+                      }
+                      if (value.isEmpty) {
+                        setState(() {
+                          _errorText = 'Veuillez sasir un email valide';
+                        });
                       }
                     },
                     decoration: InputDecoration(
@@ -126,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                         const snackBar = SnackBar(
                             padding: EdgeInsets.only(bottom: 50, top: 30),
                             content: Text(
-                                'Désolé votre email ou mot de passe est invalide ou vous avez été déconnecté'));
+                                'Désolé votre email ou mot de passe sont invalides ou non vérifiés ou votre compte a été désactivé'));
                         // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
@@ -151,10 +159,12 @@ class _LoginPageState extends State<LoginPage> {
         email: email,
         password: password,
       );
-      if (userCredential.user != null) {
-        // L'utilisateur a été connecté avec succès
-        // On redirige l'utilisateur vers la page d'accueil
-        return true;
+      if ((userCredential.user != null)) {
+        if ((userCredential.user!.emailVerified)) {
+          // L'utilisateur a été connecté avec succès et a son email vérifié
+          // On redirige l'utilisateur vers la page d'accueil
+          return true;
+        }
       }
     } catch (e) {
       return false;
@@ -166,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
           builder: (context) =>
-              const PatientWidget()), //à changer par la home page
+              const MyHomePage(title: 'HomePage')), //à changer par la home page
     );
   }
 
@@ -182,7 +192,15 @@ class _LoginPageState extends State<LoginPage> {
             onSubmitted: (value) {
               // Vérifier si la saisie utilisateur correspond à l'expression régulière pour les emails
               if (!_emailValidator.hasMatch(value)) {
-                errorText = 'Le mot de passe saisi est invalide';
+                setState(() {
+                  errorText = "L'email saisi est invalide";
+                  _emailController.clear();
+                });
+              }
+              if (value.isEmpty) {
+                setState(() {
+                  errorText = 'Veuillez sasir un email valide';
+                });
               }
             },
             decoration: InputDecoration(
@@ -227,34 +245,16 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
   }
-
-  Future<void> logout() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      return await FirebaseAuth.instance.signOut();
-    }
-  }
 }
 
-//fausse homePage
-class PatientWidget extends StatelessWidget {
-  const PatientWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('patient'),
-      ),
-      body: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Text(
-            'blablabla',
-          )
-        ],
-      )),
+Future<void> logout(BuildContext context) async {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    await FirebaseAuth.instance.signOut();
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+          builder: (context) => const LoginPage()), //à changer par la home page
     );
   }
 }
