@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import './authentication/login.dart';
-import 'consultation/pages/changer_rdv.dart';
+import 'agenda/agenda_screen.dart';
+import 'carnet/carnet_screen.dart';
 import 'notifications_screen.dart';
-import 'consultation/pages/prise_rdv.dart';
+
 
 class AfyaApp extends StatelessWidget {
   const AfyaApp({super.key});
@@ -21,8 +22,8 @@ class AfyaApp extends StatelessWidget {
       //mettre les destinations principales ici : /, /carnet, /agenda
       routes: {
         '/': (context) => const LoginPage(),
-        '/prise_rendez_vous': (context) => const PriseRdv(),
-        '/changer_rendez_vous': (context) => const ChangerRdv(),
+        '/carnet': (context) => const CarnetScreen(),
+        '/agenda': (context) => const AgendaScreen(),
         '/notifications': (context) => const NotificationsScreen(),
       },
       debugShowCheckedModeBanner: false,

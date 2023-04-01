@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
                       if (value.isEmpty) {
                         setState(() {
-                          _errorText = 'Veuillez sasir un email valide';
+                          _errorText = 'Veuillez saisir un email valide';
                         });
                       }
                     },
