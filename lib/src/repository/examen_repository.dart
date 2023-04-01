@@ -8,5 +8,6 @@ abstract class ExamenRepository {
       Medecin medecin, Patient patient, Specialite type, DateTime date);
   Future<void> modifier(Examen examen);
   Future<List<Examen>> lister(Patient patient);
+  Future<List<Examen>> listerSpecialite(Specialite type, Patient patient);
   Future<void> supprimer(Examen examen);
 }

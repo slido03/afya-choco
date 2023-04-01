@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:afya/src/view/mobile/authentication/login.dart';
 
 class PopupMenuUser extends StatelessWidget {
   const PopupMenuUser({super.key});
@@ -35,16 +36,12 @@ class PopupMenuUser extends StatelessWidget {
       onSelected: (value) {
         switch (value) {
           case 1:
-
             if (kDebugMode) {
               print('Edit');
             }
             break;
           case 2:
-            
-            if (kDebugMode) {
-              print('Delete');
-            }
+            logout(context);
             break;
         }
       },

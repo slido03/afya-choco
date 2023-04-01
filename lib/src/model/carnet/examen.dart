@@ -17,7 +17,7 @@ class Examen {
 
   factory Examen.fromJson(Map<String, dynamic> json) {
     return Examen(
-      DateTime.parse(json['date']),
+      DateTime.fromMillisecondsSinceEpoch(json['date']),
       parseType(json['type']),
       Patient.fromJson(json['patient']),
       Medecin.fromJson(json['medecin']),
@@ -34,7 +34,7 @@ class Examen {
   void setResultats(Map<String, String> resultats) => _resultats = resultats;
 
   Map<String, dynamic> toJson() => {
-        'date': date.toIso8601String(),
+        'date': date.millisecondsSinceEpoch,
         'type': type.name,
         'patient': patient.toJson(),
         'medecin': medecin.toJson(),
