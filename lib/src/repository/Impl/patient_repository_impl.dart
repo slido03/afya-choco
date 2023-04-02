@@ -20,7 +20,10 @@ class PatientRepositoryImpl extends PatientRepository {
   Future<Patient?> ajouter(Patient patient) async {
     //si l'id généré est unique alors on ajouter le patient
     if (_checkID(patient)) {
-      await patients.add(patient);
+      //on crée un patient avec comme référence de document son uid
+      //on procède ainsi afin de faciliter l'édition des règles de sécurité firestore
+      //précisément pour contrôler les types des entités humaines
+      await patients.doc(patient.uid).set(patient);
       return patient;
     } else {
       return null;

@@ -20,7 +20,10 @@ class MedecinRepositoryImpl extends MedecinRepository {
   Future<Medecin?> ajouter(Medecin medecin) async {
     //si l'id généré est unique alors on ajouter le medecin
     if (_checkID(medecin)) {
-      await medecins.add(medecin);
+      //on crée un médecin avec comme référence de document son uid
+      //on procède ainsi afin de faciliter l'édition des règles de sécurité firestore
+      //précisément pour contrôler les types des entités humaines
+      await medecins.doc(medecin.uid).set(medecin);
       return medecin;
     } else {
       return null;
