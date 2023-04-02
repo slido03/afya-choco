@@ -4,6 +4,7 @@ class PersonnelSante extends Utilisateur {
   final String _clinique;
 
   PersonnelSante(
+    super._uid,
     super._identifiant,
     super._nom,
     super._prenoms,
@@ -15,6 +16,7 @@ class PersonnelSante extends Utilisateur {
 
   factory PersonnelSante.fromJson(Map<String, dynamic> json) {
     return PersonnelSante(
+      json['uid'] as String,
       json['identifiant'] as String,
       json['nom'] as String,
       json['prenoms'] as String,
@@ -29,6 +31,7 @@ class PersonnelSante extends Utilisateur {
 
   @override
   Map<String, dynamic> toJson() => {
+        'uid': uid,
         'identifiant': identifiant,
         'nom': nom,
         'prenoms': prenoms,

@@ -17,7 +17,7 @@ class Rappel {
     return Rappel(
       json['titre'] as String,
       json['description'] as String,
-      DateTime.parse(json['dateHeure']),
+      DateTime.fromMillisecondsSinceEpoch(json['dateHeure']),
       Evenement.fromJson(json['evenement']),
     );
   }
@@ -33,7 +33,7 @@ class Rappel {
   Map<String, dynamic> toJson() => {
         'titre': titre,
         'description': description,
-        'dateHeure': dateHeure.toIso8601String(),
-        'évènement': evenement.toJson(),
+        'dateHeure': dateHeure.millisecondsSinceEpoch,
+        'evenement': evenement.toJson(),
       };
 }

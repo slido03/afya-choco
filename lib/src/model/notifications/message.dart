@@ -35,7 +35,7 @@ class Message {
   String get contenu => _contenu;
   StatutMessage get statut => _statut;
 
-  void setSatut(StatutMessage statut) => _statut = statut;
+  void changerStatut(StatutMessage statut) => _statut = statut;
 
   Map<String, dynamic> toJson() => {
         'expediteur': expediteur.toJson(),

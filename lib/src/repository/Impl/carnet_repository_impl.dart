@@ -56,10 +56,9 @@ class CarnetRepositoryImpl extends CarnetRepository {
   }
 
   @override
-  Future<void> supprimer(Carnet carnet) {
+  Future<void> supprimer(String identifiantPatient) {
     return carnets
-        .where('proprietaire.identifiant',
-            isEqualTo: carnet.proprietaire.identifiant)
+        .where('proprietaire.identifiant', isEqualTo: identifiantPatient)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {

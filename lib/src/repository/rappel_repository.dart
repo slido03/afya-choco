@@ -1,8 +1,7 @@
 import '../model/models.dart';
 
 abstract class RappelRepository {
-  //dao api
-
+  //repository api
   Future<Rappel> ajouter(Rappel rappel);
   Future<Rappel?> trouver(DateTime dateHeure, Evenement evenement);
   Future<void> modifier(Rappel rappel);

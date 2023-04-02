@@ -25,13 +25,13 @@ class MessageRepositoryImpl extends MessageRepository {
 
   @override
   Future<Message?> trouver(
-    Utilisateur expediteur,
-    Utilisateur destinataire,
+    String uidExpediteur,
+    String uidDestinataire,
     DateTime dateHeure,
   ) async {
     return await messages
-        .where('expediteur.identifiant', isEqualTo: expediteur.identifiant)
-        .where('destinataire.identifiant', isEqualTo: destinataire.identifiant)
+        .where('expediteur.uid', isEqualTo: uidExpediteur)
+        .where('destinataire.uid', isEqualTo: uidDestinataire)
         .where('dateHeure', isEqualTo: dateHeure.millisecondsSinceEpoch)
         .limit(1)
         .get()
@@ -48,10 +48,8 @@ class MessageRepositoryImpl extends MessageRepository {
   @override
   Future<void> modifierStatut(Message message) {
     return messages
-        .where('expediteur.identifiant',
-            isEqualTo: message.expediteur.identifiant)
-        .where('destinataire.identifiant',
-            isEqualTo: message.destinataire.identifiant)
+        .where('expediteur.uid', isEqualTo: message.expediteur.uid)
+        .where('destinataire.uid', isEqualTo: message.destinataire.uid)
         .where('dateHeure', isEqualTo: message.dateHeure.millisecondsSinceEpoch)
         .limit(1)
         .get()
@@ -68,10 +66,10 @@ class MessageRepositoryImpl extends MessageRepository {
 
   //lister les messages envoyés en fonction de l'objet
   @override
-  Future<List<Message>> lister(
-      Utilisateur expediteur, ObjetMessage objet) async {
+  Future<List<Message>> listerEnvoye(
+      String uidExpediteur, ObjetMessage objet) async {
     return await messages
-        .where('expediteur.identifiant', isEqualTo: expediteur.identifiant)
+        .where('expediteur.uid', isEqualTo: uidExpediteur)
         .where('objet', isEqualTo: objet.name)
         .orderBy('dateHeure', descending: true)
         .get()
@@ -92,10 +90,10 @@ class MessageRepositoryImpl extends MessageRepository {
 
   //lister les messages reçus en fonction de l'objet
   @override
-  Future<List<Message>> listerObjet(
-      Utilisateur destinaire, ObjetMessage objet) async {
+  Future<List<Message>> listerRecu(
+      String uidDestinataire, ObjetMessage objet) async {
     return await messages
-        .where('destinataire.identifiant', isEqualTo: destinaire.identifiant)
+        .where('destinataire.uid', isEqualTo: uidDestinataire)
         .where('objet', isEqualTo: objet.name)
         .orderBy('dateHeure', descending: true)
         .get()
@@ -117,9 +115,9 @@ class MessageRepositoryImpl extends MessageRepository {
   //lister les messages reçus traités ou non traités
   @override
   Future<List<Message>> listerStatut(
-      Utilisateur destinaire, StatutMessage statut) async {
+      String uidDestinataire, StatutMessage statut) async {
     return await messages
-        .where('destinataire.identifiant', isEqualTo: destinaire.identifiant)
+        .where('destinataire.uid', isEqualTo: uidDestinataire)
         .where('statut', isEqualTo: statut.name)
         .orderBy('dateHeure', descending: true)
         .get()
@@ -141,10 +139,8 @@ class MessageRepositoryImpl extends MessageRepository {
   @override
   Future<void> supprimer(Message message) {
     return messages
-        .where('expediteur.identifiant',
-            isEqualTo: message.expediteur.identifiant)
-        .where('destinataire.identifiant',
-            isEqualTo: message.destinataire.identifiant)
+        .where('expediteur.uid', isEqualTo: message.expediteur.uid)
+        .where('destinataire.uid', isEqualTo: message.destinataire.uid)
         .where('dateHeure', isEqualTo: message.dateHeure.millisecondsSinceEpoch)
         .get()
         .then((snapshot) {

@@ -18,3 +18,16 @@ export '../model/models.dart';
 
 export 'Impl/patient_repository_impl.dart';
 export 'Impl/message_repository_impl.dart';
+export 'Impl/carnet_repository_impl.dart';
+export 'Impl/diagnostic_repository_impl.dart';
+export 'Impl/evenement_repository_impl.dart';
+export 'Impl/examen_repository_impl.dart';
+export 'Impl/medecin_repository_impl.dart';
+export 'Impl/note_repository_impl.dart';
+export 'Impl/ordonnance_repository_impl.dart';
+export 'Impl/patient_intermediaire_repository_impl.dart';
+export 'Impl/personnel_sante_repository_impl.dart';
+export 'Impl/rappel_repository_impl.dart';
+export 'Impl/rendez_vous_repository_impl.dart';
+export 'Impl/secretaire_repository_impl.dart';
+export 'Impl/statut_medical_repository_impl.dart';

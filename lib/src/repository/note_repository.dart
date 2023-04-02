@@ -1,8 +1,7 @@
 import '../model/models.dart';
 
 abstract class NoteRepository {
-  //dao api
-
+  //repository api
   Future<Note> ajouter(Note note);
   Future<void> modifier(Note note);
   Future<List<Note>> lister(Evenement evenement);

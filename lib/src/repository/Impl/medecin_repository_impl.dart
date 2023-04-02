@@ -43,6 +43,21 @@ class MedecinRepositoryImpl extends MedecinRepository {
   }
 
   @override
+  Future<Medecin?> trouverUid(String uid) async {
+    return await medecins
+        .where('uid', isEqualTo: uid)
+        .limit(1)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.single.exists) {
+        return snapshot.docs.single.data();
+      } else {
+        return null;
+      }
+    }).catchError((onError) => null);
+  }
+
+  @override
   Future<void> modifier(Medecin medecin) {
     return medecins
         .where('identifiant', isEqualTo: medecin.identifiant)

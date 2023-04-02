@@ -63,7 +63,28 @@ class ExamenRepositoryImpl extends ExamenRepository {
   }
 
   @override
-  Future<List<Examen>> lister(Patient patient) async {
+  Future<List<Examen>> listerMedecin(Medecin medecin) async {
+    return await examens
+        .where('medecin.identifiant', isEqualTo: medecin.identifiant)
+        .orderBy('date', descending: true)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Examen> liste = [];
+        for (var document in snapshot.docs) {
+          Examen examen = document.data();
+          liste.add(examen);
+        }
+        return liste;
+      } else {
+        List<Examen> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<List<Examen>> listerPatient(Patient patient) async {
     return await examens
         .where('patient.identifiant', isEqualTo: patient.identifiant)
         .orderBy('date', descending: true)

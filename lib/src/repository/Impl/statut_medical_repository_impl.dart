@@ -78,10 +78,9 @@ class StatutMedicalRepositoryImpl extends StatutMedicalRepository {
   }
 
   @override
-  Future<void> supprimer(StatutMedical statutmedical) {
+  Future<void> supprimer(String identifiantPatient) {
     return statutmedicaux
-        .where('patient.identifiant',
-            isEqualTo: statutmedical.patient.identifiant)
+        .where('patient.identifiant', isEqualTo: identifiantPatient)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
