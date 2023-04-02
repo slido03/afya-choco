@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:afya/src/application_state.dart';
-import 'package:provider/provider.dart';
 
 import './authentication/login.dart';
 import 'consultation/pages/changer_rdv.dart';
