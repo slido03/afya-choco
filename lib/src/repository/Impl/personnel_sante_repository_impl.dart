@@ -22,7 +22,10 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
   Future<PersonnelSante?> ajouter(PersonnelSante personnelsante) async {
     //si l'id généré est unique alors on ajouter le personnelsante
     if (_checkID(personnelsante)) {
-      await personnelsantes.add(personnelsante);
+      //on crée un personnel santé avec comme référence de document son uid
+      //on procède ainsi afin de faciliter l'édition des règles de sécurité firestore
+      //précisément pour contrôler les types des entités humaines
+      await personnelsantes.doc(personnelsante.uid).set(personnelsante);
       return personnelsante;
     } else {
       return null;

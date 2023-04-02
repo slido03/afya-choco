@@ -24,7 +24,12 @@ class PatientIntermediaireRepositoryImpl
       PatientIntermediaire patientintermediaire) async {
     //si l'id généré est unique alors on ajouter le patient intermediaire
     if (_checkTempID(patientintermediaire)) {
-      await patientintermediaires.add(patientintermediaire);
+      //on crée un patient intermédiaire avec comme référence de document son uid
+      //on procède ainsi afin de faciliter l'édition des règles de sécurité firestore
+      //précisément pour contrôler les types des entités humaines
+      await patientintermediaires
+          .doc(patientintermediaire.uid)
+          .set(patientintermediaire);
       return patientintermediaire;
     } else {
       return null;

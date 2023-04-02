@@ -21,7 +21,10 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
   Future<Secretaire?> ajouter(Secretaire secretaire) async {
     //si l'id généré est unique alors on ajouter le secretaire
     if (_checkID(secretaire)) {
-      await secretaires.add(secretaire);
+      //on crée un secrétaire avec comme référence de document son uid
+      //on procède ainsi afin de faciliter l'édition des règles de sécurité firestore
+      //précisément pour contrôler les types des entités humaines
+      await secretaires.doc(secretaire.uid).set(secretaire);
       return secretaire;
     } else {
       return null;
