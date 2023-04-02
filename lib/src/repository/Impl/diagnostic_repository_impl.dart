@@ -66,7 +66,7 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
   }
 
   @override
-  Future<List<Diagnostic>> lister(Patient patient) async {
+  Future<List<Diagnostic>> listerPatient(Patient patient) async {
     return await diagnostics
         .where('patient.identifiant', isEqualTo: patient.identifiant)
         .orderBy('date', descending: true)
@@ -87,9 +87,30 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
   }
 
   @override
+  Future<List<Diagnostic>> listerMedecin(Medecin medecin) async {
+    return await diagnostics
+        .where('medecin.identifiant', isEqualTo: medecin.identifiant)
+        .orderBy('date', descending: true)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Diagnostic> liste = [];
+        for (var document in snapshot.docs) {
+          Diagnostic diagnostic = document.data();
+          liste.add(diagnostic);
+        }
+        return liste;
+      } else {
+        List<Diagnostic> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
   Future<void> supprimer(Diagnostic diagnostic) {
     return diagnostics
-        .where('date', isEqualTo: diagnostic.date.toIso8601String())
+        .where('date', isEqualTo: diagnostic.date.millisecondsSinceEpoch)
         .where('medecin.identifiant', isEqualTo: diagnostic.medecin.identifiant)
         .where('patient.identifiant',
             isEqualTo: diagnostic.patient!.identifiant)

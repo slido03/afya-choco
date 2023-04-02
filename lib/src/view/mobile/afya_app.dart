@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:afya/src/application_state.dart';
+import 'package:provider/provider.dart';
 
 import './authentication/login.dart';
 import 'consultation/pages/changer_rdv.dart';
@@ -8,16 +10,17 @@ import 'consultation/pages/prise_rdv.dart';
 class AfyaApp extends StatelessWidget {
   const AfyaApp({super.key});
 
-  // This widget is the root of your application.
+  // This widget is the root of our application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Sten Demo',
+      title: 'Afya Demo',
       theme: ThemeData(
         //const Color.fromARGB(255, 33, 243, 156)
         primarySwatch: Colors.green,
       ),
       initialRoute: '/',
+      //mettre les destinations principales ici : /, /carnet, /agenda
       routes: {
         '/': (context) => const LoginPage(),
         '/prise_rendez_vous': (context) => const PriseRdv(),
@@ -25,7 +28,6 @@ class AfyaApp extends StatelessWidget {
         '/notifications': (context) => const NotificationsScreen(),
       },
       debugShowCheckedModeBanner: false,
-      //home: const MyHomePage(title: 'StenDemo Home Page'),
     );
   }
 }

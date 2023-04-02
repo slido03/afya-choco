@@ -45,6 +45,21 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
   }
 
   @override
+  Future<PersonnelSante?> trouverUid(String uid) async {
+    return await personnelsantes
+        .where('uid', isEqualTo: uid)
+        .limit(1)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.single.exists) {
+        return snapshot.docs.single.data();
+      } else {
+        return null;
+      }
+    }).catchError((onError) => null);
+  }
+
+  @override
   Future<void> modifier(PersonnelSante personnelsante) {
     return personnelsantes
         .where('identifiant', isEqualTo: personnelsante.identifiant)

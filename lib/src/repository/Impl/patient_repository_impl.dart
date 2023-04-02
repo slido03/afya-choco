@@ -44,6 +44,22 @@ class PatientRepositoryImpl extends PatientRepository {
   }
 
   @override
+  Future<Patient?> trouverUid(String uid) async {
+    return await patients
+        .where('uid', isEqualTo: uid)
+        .limit(1)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.single.exists) {
+        return snapshot.docs.single.data();
+      } else {
+        return null;
+        // throw StateError("Le patient spécifié n'existe pas");
+      }
+    }).catchError((onError) => null);
+  }
+
+  @override
   Future<void> modifier(Patient patient) {
     return patients
         .where('identifiant', isEqualTo: patient.identifiant)

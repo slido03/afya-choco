@@ -66,9 +66,30 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
   }
 
   @override
-  Future<List<Ordonnance>> lister(Patient patient) async {
+  Future<List<Ordonnance>> listerPatient(Patient patient) async {
     return await ordonnances
         .where('diagnostic.patient.identifiant', isEqualTo: patient.identifiant)
+        .orderBy('date', descending: true)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Ordonnance> liste = [];
+        for (var document in snapshot.docs) {
+          Ordonnance ordonnance = document.data();
+          liste.add(ordonnance);
+        }
+        return liste;
+      } else {
+        List<Ordonnance> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<List<Ordonnance>> listerMedecin(Medecin medecin) async {
+    return await ordonnances
+        .where('diagnostic.medecin.identifiant', isEqualTo: medecin.identifiant)
         .orderBy('date', descending: true)
         .get()
         .then((snapshot) {
@@ -90,7 +111,7 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
   Future<void> supprimer(Ordonnance ordonnance) {
     return ordonnances
         .where('diagnostic.date',
-            isEqualTo: ordonnance.diagnostic.date.toIso8601String())
+            isEqualTo: ordonnance.diagnostic.date.millisecondsSinceEpoch)
         .where('diagnostic.medecin.identifiant',
             isEqualTo: ordonnance.diagnostic.medecin.identifiant)
         .where('diagnostic.patient.identifiant',

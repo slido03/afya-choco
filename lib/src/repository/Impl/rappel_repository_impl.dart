@@ -26,13 +26,13 @@ class RappelRepositoryImpl extends RappelRepository {
   @override
   Future<Rappel?> trouver(DateTime dateHeure, Evenement evenement) async {
     return await rappels
-        .where('dateHeure', isEqualTo: dateHeure.toIso8601String())
+        .where('dateHeure', isEqualTo: dateHeure.millisecondsSinceEpoch)
         .where('evenement.rendez-vous.dateHeure',
-            isEqualTo: evenement.rendezVous.dateHeure.toIso8601String())
-        .where('evenement.rendez-vous.medecin.identifiant',
-            isEqualTo: evenement.rendezVous.medecin.identifiant)
-        .where('evenement.rendez-vous.patient.identifiant',
-            isEqualTo: evenement.rendezVous.patient.identifiant)
+            isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
+        .where('evenement.rendez-vous.medecin.uid',
+            isEqualTo: evenement.rendezVous.medecin.uid)
+        .where('evenement.rendez-vous.patient.uid',
+            isEqualTo: evenement.rendezVous.patient.uid)
         .limit(1)
         .get()
         .then((snapshot) {
@@ -48,11 +48,12 @@ class RappelRepositoryImpl extends RappelRepository {
   Future<void> modifier(Rappel rappel) {
     return rappels
         .where('evenement.rendez-vous.dateHeure',
-            isEqualTo: rappel.evenement.rendezVous.dateHeure.toIso8601String())
-        .where('evenement.rendez-vous.medecin.identifiant',
-            isEqualTo: rappel.evenement.rendezVous.medecin.identifiant)
-        .where('evenement.rendez-vous.patient.identifiant',
-            isEqualTo: rappel.evenement.rendezVous.patient.identifiant)
+            isEqualTo:
+                rappel.evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
+        .where('evenement.rendez-vous.medecin.uid',
+            isEqualTo: rappel.evenement.rendezVous.medecin.uid)
+        .where('evenement.rendez-vous.patient.uid',
+            isEqualTo: rappel.evenement.rendezVous.patient.uid)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -70,11 +71,12 @@ class RappelRepositoryImpl extends RappelRepository {
   Future<List<Rappel>> lister(Evenement evenement) async {
     return await rappels
         .where('evenement.rendez-vous.dateHeure',
-            isEqualTo: evenement.rendezVous.dateHeure.toIso8601String())
-        .where('evenement.rendez-vous.medecin.identifiant',
-            isEqualTo: evenement.rendezVous.medecin.identifiant)
-        .where('evenement.rendez-vous.patient.identifiant',
-            isEqualTo: evenement.rendezVous.patient.identifiant)
+            isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
+        .where('evenement.rendez-vous.medecin.uid',
+            isEqualTo: evenement.rendezVous.medecin.uid)
+        .where('evenement.rendez-vous.patient.uid',
+            isEqualTo: evenement.rendezVous.patient.uid)
+        .orderBy('dateHeure', descending: true)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -94,13 +96,14 @@ class RappelRepositoryImpl extends RappelRepository {
   @override
   Future<void> supprimer(Rappel rappel) {
     return rappels
-        .where('dateHeure', isEqualTo: rappel.dateHeure.toIso8601String())
+        .where('dateHeure', isEqualTo: rappel.dateHeure.millisecondsSinceEpoch)
         .where('evenement.rendez-vous.dateHeure',
-            isEqualTo: rappel.evenement.rendezVous.dateHeure.toIso8601String())
-        .where('evenement.rendez-vous.medecin.identifiant',
-            isEqualTo: rappel.evenement.rendezVous.medecin.identifiant)
-        .where('evenement.rendez-vous.patient.identifiant',
-            isEqualTo: rappel.evenement.rendezVous.patient.identifiant)
+            isEqualTo:
+                rappel.evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
+        .where('evenement.rendez-vous.medecin.uid',
+            isEqualTo: rappel.evenement.rendezVous.medecin.uid)
+        .where('evenement.rendez-vous.patient.uid',
+            isEqualTo: rappel.evenement.rendezVous.patient.uid)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {

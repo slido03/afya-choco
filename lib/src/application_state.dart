@@ -10,6 +10,8 @@ class ApplicationState extends ChangeNotifier {
   }
 
   bool _loggedIn = false;
+  User? _currentUser;
+  User? get currentUser => _currentUser;
   bool get loggedIn => _loggedIn;
 
   Future<void> init() async {
@@ -19,8 +21,10 @@ class ApplicationState extends ChangeNotifier {
     FirebaseAuth.instance.userChanges().listen((user) {
       if (user != null) {
         _loggedIn = true;
+        _currentUser = user;
       } else {
         _loggedIn = false;
+        _currentUser = null;
       }
       notifyListeners();
     });

@@ -34,7 +34,22 @@ class PatientIntermediaireRepositoryImpl
   @override
   Future<PatientIntermediaire?> trouver(String identifiantTemporaire) async {
     return await patientintermediaires
-        .where('identifiantTemporaire', isEqualTo: identifiantTemporaire)
+        .where('identifiant', isEqualTo: identifiantTemporaire)
+        .limit(1)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.single.exists) {
+        return snapshot.docs.single.data();
+      } else {
+        return null;
+      }
+    }).catchError((onError) => null);
+  }
+
+  @override
+  Future<PatientIntermediaire?> trouverUid(String uid) async {
+    return await patientintermediaires
+        .where('uid', isEqualTo: uid)
         .limit(1)
         .get()
         .then((snapshot) {
@@ -49,7 +64,7 @@ class PatientIntermediaireRepositoryImpl
   @override
   Future<void> modifier(PatientIntermediaire patientintermediaire) {
     return patientintermediaires
-        .where('identifiantTemporaire',
+        .where('identifiant',
             isEqualTo: patientintermediaire.identifiantTemporaire)
         .limit(1)
         .get()
@@ -86,10 +101,9 @@ class PatientIntermediaireRepositoryImpl
   }
 
   @override
-  Future<void> supprimer(PatientIntermediaire patientintermediaire) {
+  Future<void> supprimer(String identifiantTemporaire) {
     return patientintermediaires
-        .where('identifiantTemporaire',
-            isEqualTo: patientintermediaire.identifiantTemporaire)
+        .where('identifiant', isEqualTo: identifiantTemporaire)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -105,7 +119,7 @@ class PatientIntermediaireRepositoryImpl
     patientintermediaires.get().then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var doc in snapshot.docs) {
-          if (doc['identifiantTemporaire'] == patient.identifiantTemporaire) {
+          if (doc['identifiant'] == patient.identifiantTemporaire) {
             //on s'assure que le nouveau patient a un ID unique en base données
             checked = false;
           }

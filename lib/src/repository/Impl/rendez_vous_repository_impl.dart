@@ -29,8 +29,8 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
       DateTime dateHeure, Patient patient, Medecin medecin) async {
     return await rendezvous
         .where('dateHeure', isEqualTo: dateHeure.millisecondsSinceEpoch)
-        .where('medecin.identifiant', isEqualTo: medecin.identifiant)
-        .where('patient.identifiant', isEqualTo: patient.identifiant)
+        .where('medecin.uid', isEqualTo: medecin.uid)
+        .where('patient.uid', isEqualTo: patient.uid)
         .limit(1)
         .get()
         .then((snapshot) {
@@ -47,8 +47,8 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
     return rendezvous
         .where('dateHeure',
             isEqualTo: rendezVous.dateHeure.millisecondsSinceEpoch)
-        .where('medecin.identifiant', isEqualTo: rendezVous.medecin.identifiant)
-        .where('patient.identifiant', isEqualTo: rendezVous.patient.identifiant)
+        .where('medecin.uid', isEqualTo: rendezVous.medecin.uid)
+        .where('patient.uid', isEqualTo: rendezVous.patient.uid)
         .limit(1)
         .get()
         .then((snapshot) {
@@ -66,8 +66,33 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
   }
 
   @override
-  Future<List<RendezVous>> lister() async {
-    return await rendezvous.get().then((snapshot) {
+  Future<List<RendezVous>> listerPatient(String uidPatient) async {
+    return await rendezvous
+        .where('patient.uid', isEqualTo: uidPatient)
+        .orderBy('dateHeure', descending: true)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<RendezVous> liste = [];
+        for (var document in snapshot.docs) {
+          RendezVous rendezVous = document.data();
+          liste.add(rendezVous);
+        }
+        return liste;
+      } else {
+        List<RendezVous> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<List<RendezVous>> listerMedecin(String uidMedecin) async {
+    return await rendezvous
+        .where('medecin.uid', isEqualTo: uidMedecin)
+        .orderBy('dateHeure', descending: true)
+        .get()
+        .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<RendezVous> liste = [];
         for (var document in snapshot.docs) {
@@ -85,9 +110,10 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
   @override
   Future<void> supprimer(RendezVous rendezVous) {
     return rendezvous
-        .where('dateHeure', isEqualTo: rendezVous.dateHeure.toIso8601String())
-        .where('medecin.identifiant', isEqualTo: rendezVous.medecin.identifiant)
-        .where('patient.identifiant', isEqualTo: rendezVous.patient.identifiant)
+        .where('dateHeure',
+            isEqualTo: rendezVous.dateHeure.millisecondsSinceEpoch)
+        .where('medecin.uid', isEqualTo: rendezVous.medecin.uid)
+        .where('patient.uid', isEqualTo: rendezVous.patient.uid)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {

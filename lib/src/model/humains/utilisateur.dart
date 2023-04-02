@@ -1,14 +1,16 @@
 import 'package:uuid/uuid.dart';
 
 class Utilisateur {
+  String _uid; //id unique généré par firebase auth
   String? _identifiant;
   String _nom;
   String _prenoms;
   String _telephone;
-  String? _email;
+  String _email;
   String? _adresse;
 
   Utilisateur(
+    this._uid,
     this._identifiant,
     this._nom,
     this._prenoms,
@@ -19,20 +21,22 @@ class Utilisateur {
 
   factory Utilisateur.fromJson(Map<String, dynamic> json) {
     return Utilisateur(
+      json['uid'] as String,
       json['identifiant'] as String?,
       json['nom'] as String,
       json['prenoms'] as String,
       json['telephone'] as String,
-      json['email'] as String?,
+      json['email'] as String,
       json['adresse'] as String?,
     );
   }
 
+  String get uid => _uid;
   String? get identifiant => _identifiant;
   String get nom => _nom;
   String get prenoms => _prenoms;
   String get telephone => _telephone;
-  String? get email => _email;
+  String get email => _email;
   String? get adresse => _adresse;
   String get nomComplet => '$nom $prenoms';
 
@@ -44,6 +48,7 @@ class Utilisateur {
   void setAdresse(String adresse) => _adresse = adresse;
 
   Map<String, dynamic> toJson() => {
+        'uid': uid,
         'identifiant': identifiant,
         'nom': nom,
         'prenoms': prenoms,
