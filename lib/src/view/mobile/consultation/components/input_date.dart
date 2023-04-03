@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
   * and the date picker
 */
 class InputDate extends StatefulWidget {
-  const InputDate({super.key, this.maxwidth});
+  const InputDate({super.key, this.maxwidth, required String labelText, required String hintText});
 
   final double? maxwidth;
 

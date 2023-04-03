@@ -50,22 +50,20 @@ class FirstPresentation extends StatelessWidget {
   }
 
   Widget _fonctionnalite(String explication) {
-    return Row(
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         const Icon(
           Icons.check_circle,
           color: Colors.white,
         ),
         const SizedBox(width: 10.0),
-        Wrap(
-          children: [Text(
-            explication,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-            ),
+        Text(
+          explication,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
           ),
-          ]
         ),
       ],
     );
@@ -76,7 +74,7 @@ class FirstPresentation extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          '\nce que vous pouvez faire avec AFYA:\n\n',
+          '\nce que vous pouvez faire avec AFYA:\n',
           style: TextStyle(
               // apply theme colors
               color: Colors.white,
@@ -89,7 +87,6 @@ class FirstPresentation extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 10.0),
             child: _fonctionnalite(fonctionnalite),
           ),
-          
       ],
     );
   }
@@ -105,12 +102,14 @@ class FirstPresentation extends StatelessWidget {
             topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0)),
         color: Colors.green[300],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _salutation(),
-          _blocFonctionnalite(_fonctionnalites),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _salutation(),
+            _blocFonctionnalite(_fonctionnalites),
+          ],
+        ),
       ),
     );
   }

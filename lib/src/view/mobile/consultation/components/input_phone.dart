@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
   * in the "Prise de rendez-vous" page
 */
 class InputPhone extends StatelessWidget {
-  const InputPhone({super.key, this.maxwidth});
+  const InputPhone({super.key, this.maxwidth, required String labelText, required String hintText});
 
   final double? maxwidth;
 
