@@ -27,6 +27,7 @@ class _ChangerRdvState extends State<ChangerRdv> {
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             titleChangerRdv(),
             const FormChangerRdv(),

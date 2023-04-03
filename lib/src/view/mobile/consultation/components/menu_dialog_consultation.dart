@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../pages/prise_rdv.dart';
 import '../pages/changer_rdv.dart';
+import '../components/separator.dart';
 
 showSimpleDialog(BuildContext context) {
   // configurer la boîte de dialogue
@@ -16,12 +17,7 @@ showSimpleDialog(BuildContext context) {
     * This class is used to display the separator
     * in the simple dialog
   */
-  separator() {
-    return Container(
-      height: 1,
-      color: Colors.black12,
-    );
-  }
+  
 
   Widget menuItem({required String title, Function()? onTap}) {
     return Column(

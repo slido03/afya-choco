@@ -1,55 +1,68 @@
 import 'package:flutter/material.dart';
 
-// importing the top app bar and bottom nav bar
-
 import 'top_app_bar.dart';
 import 'bottom_nav_bar.dart';
-import 'consultation/components/banner_carousel.dart';
-import 'consultation/components/section_first_presentation.dart';
 import 'consultation/components/menu_dialog_consultation.dart';
 
+import 'consultation/consultation_screen.dart';
+import 'carnet/carnet_screen.dart';
+import 'agenda/agenda_screen.dart';
 
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+  //int _tabIndexCarnet = 0;
+  //int _tabIndexAgenda = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pages.addAll([
+      const ConsultationScreen(),
+      const CarnetScreen(),
+      const AgendaScreen(),
+    ]);
+  }
+
+  final List<Widget> _pages = [];
+
+  void _onNavBarItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
     return Scaffold(
-      appBar: TopAppBar(title: 'AFYA'),
-      body: Center(
-          child: Column(
-        //mainAxisAlignment: MainAxisAlignment.,
-        children: const <Widget>[
-          SizedBox(height: 20.0),
-          BannerCarousel(),
-          //InputTextArea(labelText: "nom", hintText: "entrez votre messgae"),
-          //InputDate(),
-          /*Text(
-                ":) Hello AFYA !!",
-                style: TextStyle(fontSize: 30.0),
-              ),*/
-          SizedBox(height: 10.0),
-          Expanded(child: FirstPresentation()),
-        ],
-      )),
-
-      bottomNavigationBar: const BottomNavBar(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showSimpleDialog(context);
-        },
-        tooltip: 'new consultation',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      appBar: const TopAppBar(
+        title: 'AFYA',
+      ),
+      // pages wrapped in a SingleChildScrollView to avoid overflow
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _selectedIndex,
+        onItemTapped: _onNavBarItemTapped,
+      ),
+      floatingActionButton: Visibility(
+        visible: _selectedIndex == 0,
+        child: FloatingActionButton(
+          onPressed: () {
+            showSimpleDialog(context);
+          },
+          tooltip: 'new consultation',
+          child: const Icon(Icons.add),
+        ),
+      ),
     );
   }
 }

@@ -1,21 +1,29 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
+import 'agenda/components/tab_bar_agenda.dart';
+import 'carnet/components/tab_bar_carnet.dart';
 import 'consultation/components/popupmenu_more.dart';
 import 'consultation/components/popupmenu_user.dart';
+import '../mobile/tabs.dart';
 
 // ignore: must_be_immutable
 class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
-  String title;
+  const TopAppBar({
+    super.key,
+    required this.title,
+  });
 
-  TopAppBar({super.key, required this.title});
+  final String title;
 
   // the name of app is afya
-  //Widget miniLogo =
+  //Widget miniLogo = const Text('Afya');
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      elevation: 2,
+      elevation: 1,
       title: Text(
         title,
         style: const TextStyle(

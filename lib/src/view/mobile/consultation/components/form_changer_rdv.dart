@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'button_cancel.dart';
+import 'button_submit.dart';
 import 'rdv_dialog.dart';
 import 'select_rdv.dart';
+import 'input_text_area.dart';
 
 /*
  * This is a form that is used to change a rendez-vous. the last one for préférence.
@@ -51,30 +54,52 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
   @override
   Widget build(BuildContext context) {
     // appel de la fonction showRdvDialog une fois que build est appelé et est terminé
-
-    return Column(
-      children: [
-        Visibility(
-          visible: !_isGoodRdv,
-          child: const SelectRdv(rdvs: [
-            {
-              'id': 1,
-              'date': '2021-05-01',
-              "medecin": "Dr. Jean",
-            },
-            {
-              'id': 2,
-              'date': '2021-05-01',
-              "medecin": "Dr. koko",
-            },
-            {'id': 3, 'date': '2021-05-01', "medecin": "Dr. kiki"},
-            {'id': 4, 'date': '2021-05-01', "medecin": "Dr. kaka"},
-            {'id': 5, 'date': '2021-05-01', "medecin": "Dr. kuku"},
-            {'id': 6, 'date': '2021-05-01', "medecin": "Dr. kiki"},
-            {'id': 7, 'date': '2021-05-01', "medecin": "Dr. koukou"}
-          ]),
-        ),
-      ],
+    var size = MediaQuery.of(context).size;
+    return Center(
+      child: Column(
+        children: [
+          Visibility(
+            visible: !_isGoodRdv,
+            child: SelectRdv(
+              rdvs: const [
+                {
+                  'id': 1,
+                  'date': '01 Jan',
+                  "medecin": "Dr. Jean",
+                },
+                {
+                  'id': 2,
+                  'date': '01 Jan',
+                  "medecin": "Dr. koko",
+                },
+                {'id': 3, 'date': '01 Jan', "medecin": "Dr. kiki"},
+                {'id': 4, 'date': '01 Jan', "medecin": "Dr. kaka"},
+                {'id': 5, 'date': '01 Jan', "medecin": "Dr. kuku"},
+                {'id': 6, 'date': '01 Jan', "medecin": "Dr. kiki"},
+                {'id': 7, 'date': '01 Jan', "medecin": "Dr. koukou"}
+              ],
+              maxwidth: size.width * 0.95,
+            ),
+          ),
+          InputTextArea(
+            labelText: "message",
+            hintText: "quel est le motif de votre demande ?",
+            maxwidth: size.width * 0.95,
+          ),
+          Container(
+            width: size.width * 0.95,
+            margin: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 3),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: const <Widget>[
+                ButtonCancel(),
+                SizedBox(width: 20),
+                ButtonSubmit(),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

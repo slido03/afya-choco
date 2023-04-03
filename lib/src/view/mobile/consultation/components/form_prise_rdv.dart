@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'button_submit.dart';
 import 'input_phone.dart';
 import 'input_date.dart';
 import 'input_text.dart';
+import 'button_cancel.dart';
 import 'input_text_area.dart';
 
 class FormPriseRdv extends StatelessWidget {
@@ -17,13 +19,19 @@ class FormPriseRdv extends StatelessWidget {
       child: Center(
         child: Container(
           width: maxwidth * 1.115,
-          margin: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 3),
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
+          margin: const EdgeInsets.symmetric(
+            vertical: 20.0,
+            horizontal: 3,
+          ),
+          padding: const EdgeInsets.symmetric(
+            vertical: 20.0,
+          ),
           child: Column(
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(
                   vertical: 20.0,
+                  horizontal: 10.0,
                 ),
                 decoration: const BoxDecoration(
                   color: Color.fromARGB(255, 231, 248, 232),
@@ -51,16 +59,44 @@ class FormPriseRdv extends StatelessWidget {
                       labelText: 'Email',
                       hintText: 'Votre email',
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        InputPhone(
-                          maxwidth: MediaQuery.of(context).size.width * .40,
-                        ), // Phone number input
-                        InputDate(
-                            maxwidth: MediaQuery.of(context).size.width *
-                                .30), // Date input
-                      ],
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        if (constraints.maxWidth > 600) {
+                          return Row(
+                            children: const [
+                              Expanded(
+                                child: InputPhone(
+                                  labelText: 'Téléphone',
+                                  hintText: 'Votre téléphone',
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              Expanded(
+                                child: InputDate(
+                                  labelText: 'Date',
+                                  hintText: 'Votre date',
+                                ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return Column(
+                            children: [
+                              const InputPhone(
+                                labelText: 'Téléphone',
+                                hintText: 'Votre téléphone',
+                              ),
+                              const SizedBox(height: 20),
+                              InputDate(
+                                labelText: 'Date',
+                                hintText: 'Votre date',
+                                maxwidth:
+                                    MediaQuery.of(context).size.width * .80,
+                              ),
+                            ],
+                          );
+                        }
+                      },
                     ),
                     const InputTextArea(
                       labelText: 'Message',
@@ -76,29 +112,10 @@ class FormPriseRdv extends StatelessWidget {
                     const EdgeInsets.symmetric(vertical: 15.0, horizontal: 3),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    OutlinedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          if (kDebugMode) {
-                            print('Cancel button pressed');
-                          }
-                        },
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.red,
-                        ),
-                        child: const Text('Annuler')),
-                    const SizedBox(width: 20),
-                    OutlinedButton(
-                        onPressed: () {
-                          if (kDebugMode) {
-                            print('Submit button pressed');
-                          }
-                        },
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.green,
-                        ),
-                        child: const Text('Envoyer')),
+                  children: const <Widget>[
+                    ButtonCancel(),
+                    SizedBox(width: 20),
+                    ButtonSubmit(),
                   ],
                 ),
               ),

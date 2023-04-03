@@ -176,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
           builder: (context) =>
-              const MyHomePage(title: 'HomePage')), //à changer par la home page
+              const HomePage(title: 'HomePage')), //à changer par la home page
     );
   }
 
