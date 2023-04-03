@@ -6,17 +6,20 @@ class InputText extends StatelessWidget {
       {super.key,
       required this.labelText,
       required this.hintText,
+      required this.controller,
       this.maxwidth});
 
   final String labelText;
   final String hintText;
   final double? maxwidth;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10.0),
       child: TextFormField(
+        controller: controller,
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
