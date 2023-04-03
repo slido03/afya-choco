@@ -9,6 +9,13 @@ class MessageRepositoryImpl extends MessageRepository {
             toFirestore: (message, _) => message.toJson(),
           ); //collection messages
 
+  final secretaires = FirebaseFirestore.instance
+      .collection('secretaires')
+      .withConverter<Secretaire>(
+        fromFirestore: (snapshot, _) => Secretaire.fromJson(snapshot.data()!),
+        toFirestore: (secretaire, _) => secretaire.toJson(),
+      ); //collection secretaires
+
   MessageRepositoryImpl._(); //constructeur privé
 
   static MessageRepository get instance {

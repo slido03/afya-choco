@@ -1,6 +1,7 @@
 import '../models.dart';
 
 class Medecin extends PersonnelSante {
+  bool _admin;
   Specialite _specialite;
   String _numeroLicence;
   Secretaire _secretaire;
@@ -14,6 +15,7 @@ class Medecin extends PersonnelSante {
     super._email,
     super._adresse,
     super._clinique,
+    this._admin,
     this._specialite,
     this._numeroLicence,
     this._secretaire,
@@ -29,16 +31,19 @@ class Medecin extends PersonnelSante {
       json['email'] as String,
       json['adresse'] as String,
       json['clinique'] as String,
+      json['admin'] as bool,
       parseSpecialite(json['specialite']),
       json['numeroLicence'] as String,
       Secretaire.fromJson(json['secretaire']),
     );
   }
 
+  bool get admin => _admin;
   Specialite get specialite => _specialite;
   String get numeroLicence => _numeroLicence;
   Secretaire get secretaire => _secretaire;
 
+  void setAdmin(bool admin) => _admin = admin;
   void setSpecialite(Specialite specialite) => _specialite = specialite;
   void setNumeroLicence(String numeroLicence) => _numeroLicence = numeroLicence;
   void setSecretaire(Secretaire secretaire) => _secretaire = secretaire;
@@ -53,6 +58,7 @@ class Medecin extends PersonnelSante {
         'email': email,
         'adresse': adresse,
         'clinique': clinique,
+        'admin': admin.toString(),
         'specialite': specialite.name,
         'numeroLicence': numeroLicence,
         'secretaire': secretaire.toJson(),

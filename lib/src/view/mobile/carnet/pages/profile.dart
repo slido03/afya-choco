@@ -33,6 +33,7 @@ class _ProfileState extends State<Profile> {
     return Container(
       padding: const EdgeInsets.all(20.0),
       child: Center(
+        // ignore: avoid_unnecessary_containers
         child: Container(
             //padding: const EdgeInsets.all(10),
             child: SingleChildScrollView(

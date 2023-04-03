@@ -62,6 +62,21 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
   }
 
   @override
+  Future<Secretaire?> getSecretariatCentral() async {
+    return await secretaires
+        .where('identifiant', isEqualTo: 'FE654664')
+        .where('email', isEqualTo: 'nayokomiphilippe@gmail.com')
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.single.exists) {
+        return snapshot.docs.single.data();
+      } else {
+        return null;
+      }
+    }).catchError((onError) => null);
+  }
+
+  @override
   Future<void> modifier(Secretaire secretaire) {
     return secretaires
         .where('identifiant', isEqualTo: secretaire.identifiant)
