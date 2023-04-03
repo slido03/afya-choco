@@ -192,6 +192,7 @@ class _RegisterPageState extends State<RegisterPage> {
       MaterialPageRoute(
           builder: (context) =>
               const HomePage(title: 'HomePage')), //à changer par la home page
+
     );
   }
 
