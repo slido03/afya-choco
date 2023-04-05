@@ -8,7 +8,7 @@ class PriseRdv extends StatefulWidget {
   const PriseRdv({super.key, this.title = 'Prise de rendez-vous'});
 
   final String title;
-  
+
   @override
   State<PriseRdv> createState() => _PriseRdvState();
 }
@@ -16,7 +16,6 @@ class PriseRdv extends StatefulWidget {
 class _PriseRdvState extends State<PriseRdv> {
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -25,7 +24,7 @@ class _PriseRdvState extends State<PriseRdv> {
         child: Column(
           children: [
             titlePriseRdv(),
-            const FormPriseRdv(),
+            //const FormPriseRdv(),
           ],
         ),
       ),
