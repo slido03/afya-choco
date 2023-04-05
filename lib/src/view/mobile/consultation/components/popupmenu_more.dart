@@ -26,7 +26,7 @@ class PopupMenuMore extends StatelessWidget {
       onSelected: (value) {
         switch (value) {
           case 1:
-            // print('Edit');
+            Navigator.pushNamed(context, '/intro');
             break;
           case 2:
             // print('Delete');
