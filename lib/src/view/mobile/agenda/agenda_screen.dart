@@ -1,6 +1,10 @@
+import 'package:afya/src/view/mobile/agenda/pages/evenements.dart';
+import 'package:afya/src/view/mobile/agenda/pages/rappels.dart';
 import 'package:flutter/material.dart';
 
 import '../tabs.dart';
+import 'pages/historiques.dart';
+
 
 // placeholder
 class AgendaScreen extends StatefulWidget {
@@ -57,15 +61,9 @@ class _AgendaScreenState extends State<AgendaScreen>
               });
             },
             children: const <Widget>[
-              Center(
-                child: Text('Page 1 agenda'),
-              ),
-              Center(
-                child: Text('Page 2 agenda'),
-              ),
-              Center(
-                child: Text('Page 3 agenda'),
-              ),
+              Evenements(),
+              Rappels(),
+              Historiques(),
             ],
           ),
         ),
