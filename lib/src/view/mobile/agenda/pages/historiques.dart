@@ -74,6 +74,7 @@ class _HistoriquesState extends State<Historiques> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: avoid_unnecessary_containers
     return Container(
       child: Center(
         child: Expanded(

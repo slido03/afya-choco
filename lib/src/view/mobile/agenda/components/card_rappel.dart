@@ -127,10 +127,12 @@ class CardRappel extends StatelessWidget {
     );
   }
 
+  // ignore: unused_element
   void _showBottomSheetMenu(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
+        // ignore: sized_box_for_whitespace
         return Container(
           height: MediaQuery.of(context).size.height * 0.3,
           child: Column(

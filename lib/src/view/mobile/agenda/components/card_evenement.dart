@@ -126,6 +126,7 @@ class CardEvenement extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
+        // ignore: sized_box_for_whitespace
         return Container(
           height: MediaQuery.of(context).size.height * 0.3,
           child: Column(

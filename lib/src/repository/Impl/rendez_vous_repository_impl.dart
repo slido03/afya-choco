@@ -4,11 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class RendezVousRepositoryImpl extends RendezVousRepository {
   static RendezVousRepository? _instance;
   final rendezvous = FirebaseFirestore.instance
-      .collection('rendezvouss')
+      .collection('rendezvous')
       .withConverter<RendezVous>(
         fromFirestore: (snapshot, _) => RendezVous.fromJson(snapshot.data()!),
         toFirestore: (rendezvous, _) => rendezvous.toJson(),
-      ); //collection rendezvouss
+      ); //collection rendezvous
 
   RendezVousRepositoryImpl._(); //constructeur privé
 

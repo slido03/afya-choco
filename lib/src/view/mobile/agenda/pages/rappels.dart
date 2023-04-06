@@ -1,7 +1,6 @@
 import 'package:afya/src/model/models.dart';
 import 'package:flutter/material.dart';
 
-import '../components/card_evenement.dart';
 import '../components/card_rappel.dart';
 
 /// la page de l'onglet "Rappels" de l'agenda
@@ -73,6 +72,7 @@ class _RappelsState extends State<Rappels> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: avoid_unnecessary_containers
     return Container(
       child: Center(
         child: Column(

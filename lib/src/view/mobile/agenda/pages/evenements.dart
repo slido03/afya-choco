@@ -47,15 +47,16 @@ class _EvenementsState extends State<Evenements> {
           Specialite.anesthesiologie,
           "34827DE",
           Secretaire(
-              "ES7284D", //uid
-              "6382BY3",
-              "Jean",
-              "Dupont",
-              "93750300",
-              "edmond234@hotmail.com", //email
-              "12 rue de la paix, 75000 Paris", //adresse
-              "La sante meilleure",
-              "34827DE",),
+            "ES7284D", //uid
+            "6382BY3",
+            "Jean",
+            "Dupont",
+            "93750300",
+            "edmond234@hotmail.com", //email
+            "12 rue de la paix, 75000 Paris", //adresse
+            "La sante meilleure",
+            "34827DE",
+          ),
         ), //clinique
         "12 rue de la paix, 75000 Paris",
         ObjetRendezVous.consultation,
@@ -66,6 +67,7 @@ class _EvenementsState extends State<Evenements> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: avoid_unnecessary_containers
     return Container(
       child: Center(
         child: Column(
