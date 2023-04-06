@@ -113,9 +113,9 @@ class _EvenementsState extends State<Evenements> {
                         ),
                       )
                     : GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount:
+                              (MediaQuery.of(context).size.width < 390) ? 2 : 3,
                           crossAxisSpacing: 5,
                           mainAxisSpacing: 5,
                           mainAxisExtent: 185,
