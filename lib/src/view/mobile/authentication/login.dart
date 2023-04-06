@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
           PageViewModel(
             titleWidget: const Center(
               child: Text(
-                "Consultaion",
+                "Consultation",
                 style: TextStyle(
                   fontSize: 28.0,
                   fontWeight: FontWeight.w700,
@@ -186,18 +186,42 @@ class _LoginPageState extends State<LoginPage> {
           ),
         },
         showSkipButton: true,
-        skip: const Text("Passer"),
-        next: const Icon(Icons.arrow_forward),
-        back: const Icon(Icons.arrow_back),
+        skip: MediaQuery.of(context).size.width < 335
+            ? const Text("Passer",
+                style: TextStyle(
+                  fontSize: 10,
+                ))
+            : const Text(
+                "Passer",
+              ),
         done: const Text("Fait", style: TextStyle(fontWeight: FontWeight.w600)),
-        dotsDecorator: const DotsDecorator(
-          size: Size(10.0, 10.0),
-          color: Color(0xFFBDBDBD),
-          activeSize: Size(22.0, 10.0),
+        next: MediaQuery.of(context).size.width < 335
+            ? const Icon(
+                Icons.arrow_forward,
+                size: 14,
+              )
+            : const Icon(Icons.arrow_forward),
+
+        back: const Icon(Icons.arrow_back),
+        dotsFlex: 2,
+        controlsPadding: MediaQuery.of(context).size.width < 335
+            ? const EdgeInsets.all(10)
+            : const EdgeInsets.all(16),
+        dotsDecorator: DotsDecorator(
+          size: MediaQuery.of(context).size.width < 335
+              ? const Size(7.0, 7.0)
+              : const Size(10.0, 10.0),
+          color: const Color(0xFFBDBDBD),
+          activeSize: MediaQuery.of(context).size.width < 335
+              ? const Size(14.0, 7.0)
+              : const Size(20.0, 10.0),
           activeColor: Colors.green,
-          activeShape: RoundedRectangleBorder(
+          activeShape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(25.0)),
           ),
+          spacing: MediaQuery.of(context).size.width < 335
+              ? const EdgeInsets.symmetric(horizontal: 2.5)
+              : const EdgeInsets.symmetric(horizontal: 5.0),
         ),
       );
     }
