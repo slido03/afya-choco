@@ -72,6 +72,8 @@ dependencies:
   go_router: ^6.5.0
   firebase_analytics: ^10.1.6
   intl: ^0.17.0
+  introduction_screen: ^3.1.7
+  shared_preferences: ^2.1.0
 
 dev_dependencies:
   flutter_test:

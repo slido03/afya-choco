@@ -9,7 +9,10 @@ import 'pages/profile.dart';
 class CarnetScreen extends StatefulWidget {
   const CarnetScreen({
     super.key,
+    this.tabIndex = 0,
   });
+
+  final int tabIndex;
 
   @override
   State<CarnetScreen> createState() => _CarnetScreenState();
@@ -24,13 +27,13 @@ class _CarnetScreenState extends State<CarnetScreen>
   void initState() {
     super.initState();
     _pageController = PageController(
-      initialPage: 0,
+      initialPage: widget.tabIndex,
     );
 
     _tabController = TabController(
       length: tabs[1].length,
       vsync: this,
-      initialIndex: 0,
+      initialIndex: widget.tabIndex,
     );
   }
 
