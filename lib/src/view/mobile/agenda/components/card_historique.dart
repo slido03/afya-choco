@@ -1,4 +1,3 @@
-
 import 'package:afya/src/repository/repositories.dart';
 import 'package:flutter/material.dart';
 
@@ -12,24 +11,36 @@ class CardHistorique extends StatelessWidget {
   CardHistorique({super.key});
 
   final historique = Evenement(
-      "consultation du Dr. Jean",
-      "consultation pour un mal de tête, je suis malade depuis 3 jours"
-          "Rendez-vous du 12/12/2020 à 12h, pour des examens approfondis"
-          "être à l'heure, et ne pas oublier votre carte vitale",
-      RendezVous(
-        DateTime.now(),
-        30,
-        Patient(
-            "ES7284D", //uid
-            "6382BY3", //id
-            "Jean",
-            "Dupont",
-            "93750300",
-            "felindelaplace@hotmail.com", //email
-            "12 rue de la paix, 75000 Paris", //adresse
-            DateTime.now(), //date de naissance
-            Sexe.homme),
-        Medecin(
+    "consultation du Dr. Jean",
+    "consultation pour un mal de tête, je suis malade depuis 3 jours"
+        "Rendez-vous du 12/12/2020 à 12h, pour des examens approfondis"
+        "être à l'heure, et ne pas oublier votre carte vitale",
+    RendezVous(
+      DateTime.now(),
+      30,
+      Patient(
+          "ES7284D", //uid
+          "6382BY3", //id
+          "Jean",
+          "Dupont",
+          "93750300",
+          "felindelaplace@hotmail.com", //email
+          "12 rue de la paix, 75000 Paris", //adresse
+          DateTime.now(), //date de naissance
+          Sexe.homme),
+      Medecin(
+        "ES7284D", //uid
+        "6382BY3",
+        "Jean",
+        "Dupont",
+        "93750300",
+        "edmond234@hotmail.com", //email
+        "12 rue de la paix, 75000 Paris", //adresse
+        "La sante meilleure",
+        true,
+        Specialite.anesthesiologie,
+        "34827DE",
+        Secretaire(
           "ES7284D", //uid
           "6382BY3",
           "Jean",
@@ -38,25 +49,14 @@ class CardHistorique extends StatelessWidget {
           "edmond234@hotmail.com", //email
           "12 rue de la paix, 75000 Paris", //adresse
           "La sante meilleure",
-          Specialite.anesthesiologie,
           "34827DE",
-          Secretaire(
-              "ES7284D", //uid
-              "6382BY3",
-              "Jean",
-              "Dupont",
-              "93750300",
-              "edmond234@hotmail.com", //email
-              "12 rue de la paix, 75000 Paris", //adresse
-              "La sante meilleure",
-              "34827DE",
-              []),
-        ), //clinique
-        "12 rue de la paix, 75000 Paris",
-        ObjetRendezVous.consultation,
-        StatutRendezVous.enAttente,
-      ),
-    );
+        ),
+      ), //clinique
+      "12 rue de la paix, 75000 Paris",
+      ObjetRendezVous.consultation,
+      StatutRendezVous.enAttente,
+    ),
+  );
 
   void _showDialog(BuildContext context) {
     showDialog(
@@ -134,8 +134,7 @@ class CardHistorique extends StatelessWidget {
               ListTile(
                 leading: const Icon(Icons.event_available),
                 title: const Text("Rendez-vous"),
-                subtitle:
-                    Text(historique.rendezVous.dateHeure.toString()),
+                subtitle: Text(historique.rendezVous.dateHeure.toString()),
               ),
               const SizedBox(
                 height: 10,

@@ -23,23 +23,26 @@ showSimpleDialog(BuildContext context) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         separator(),
-        SimpleDialogOption(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-          onPressed: () {
-            // fermer la boîte de dialogue et ouvrir la page de prise de rendez-vous
-            Navigator.of(context).pop();
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => menus[title]!,
+        SizedBox(
+          width: double.infinity,
+          child: SimpleDialogOption(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            onPressed: () {
+              // fermer la boîte de dialogue et ouvrir la page de prise de rendez-vous
+              Navigator.of(context).pop();
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => menus[title]!,
+                ),
+              );
+            },
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
               ),
-            );
-          },
-          child: Text(
-            title,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w400,
             ),
           ),
         ),
