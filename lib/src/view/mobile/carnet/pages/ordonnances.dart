@@ -3,9 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../components/drop_down_categories.dart';
-import '../components/drop_down_mois.dart';
-
 class Ordonnances extends StatefulWidget {
   const Ordonnances({super.key});
 
@@ -136,6 +133,7 @@ class _OrdonnancesState extends State<Ordonnances> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     var size = MediaQuery.of(context).size.width;
 
     return Container(

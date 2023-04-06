@@ -5,6 +5,8 @@ class MessageViewModel extends ChangeNotifier {
   MessageRepository messageRep = MessageRepositoryImpl.instance;
   PatientIntermediaireRepository patientIntermediaireRep =
       PatientIntermediaireRepositoryImpl.instance;
+  SecretaireRepository secretaireRep = SecretaireRepositoryImpl.instance;
+  PatientRepository patientRep = PatientRepositoryImpl.instance;
 
   //ajout d'un message dans la base de données
   void envoyer(Message message) {
@@ -46,6 +48,10 @@ class MessageViewModel extends ChangeNotifier {
   Future<List<Message>> listerStatut(
       String uidDestinataire, StatutMessage statut) async {
     return await messageRep.listerStatut(uidDestinataire, statut);
+  }
+
+  Future<Secretaire?> getSecretariatCentral() async {
+    return await secretaireRep.getSecretariatCentral();
   }
 
   void supprimer(Message message) {

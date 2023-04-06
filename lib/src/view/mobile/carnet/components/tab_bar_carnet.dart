@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class TabBarCarnet extends TabBar {
-  TabBarCarnet({
+  const TabBarCarnet({
     super.key,
     required super.tabs,
     super.controller,
@@ -26,6 +26,5 @@ class TabBarCarnet extends TabBar {
     super.enableFeedback,
     super.automaticIndicatorColorAdjustment,
     super.onTap,
-  }) ;
-
+  });
 }

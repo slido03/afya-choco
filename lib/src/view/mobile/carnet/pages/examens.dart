@@ -170,7 +170,7 @@ class _ExamensState extends State<Examens> {
                 const SizedBox(height: 15),
                 DropDownMois(
                   filterState: filterState,
-                  width: width*0.80,
+                  width: width * 0.80,
                   onChanged: onChanged,
                 ),
               ],

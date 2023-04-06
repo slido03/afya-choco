@@ -60,6 +60,7 @@ class Utilisateur {
 
 String _makeID(Utilisateur utilisateur) {
   num hash = Object.hash(
+    utilisateur.uid,
     utilisateur.telephone,
     utilisateur.email,
     utilisateur.adresse,
