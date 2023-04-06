@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './authentication.dart';
+import 'package:introduction_screen/introduction_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'register.dart';
+
 import '../home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,10 +18,13 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? get email => _emailController.text;
+  int _counter =
+      0; // initialisation du compteur, ce sera le nombre de fois où l'on ouvre l'application
 
   @override
   void initState() {
     super.initState();
+    _loadCounter();
   }
 
   @override
@@ -27,9 +34,173 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  // permet de charger le compteur
+  void _loadCounter() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _counter = (prefs.getInt('counter') ?? 0);
+    });
+  }
+
+  // permet d'incrémenter le compteur
+  void _incrementCounter() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _counter = (prefs.getInt('counter') ?? 0) + 1;
+      prefs.setInt('counter', _counter);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double maxwidth = MediaQuery.of(context).size.width * .80;
+    if (_counter == 0) {
+      return IntroductionScreen(
+        pages: [
+          PageViewModel(
+            titleWidget: const Center(
+              child: Text(
+                "Bienvenue sur Afya",
+                style: TextStyle(
+                  fontSize: 28.0,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.green,
+                ),
+              ),
+            ),
+            image: const Center(
+              child: Icon(
+                Icons.android,
+                size: 100,
+                color: Colors.green,
+              ),
+            ),
+            body:
+                "Une application qui facilite votre vie hospitalière et médicale",
+            decoration: const PageDecoration(
+              titleTextStyle:
+                  TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
+              bodyTextStyle: TextStyle(fontSize: 18.0),
+              pageColor: Colors.white,
+              imagePadding: EdgeInsets.zero,
+            ),
+          ),
+          PageViewModel(
+            titleWidget: const Center(
+              child: Text(
+                "Consultaion",
+                style: TextStyle(
+                  fontSize: 28.0,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.green,
+                ),
+              ),
+            ),
+            body:
+                "Vous pouvez prendre rendez-vous avec votre médecin, demander des informations à votre Clinique ou à votre pharmacie, et bien plus encore.",
+            image: const Center(
+              child: Icon(
+                //FlutterMaterialSymbols.calendar,
+                Icons.medical_services_rounded,
+                size: 100,
+                color: Colors.green,
+              ),
+            ),
+            decoration: const PageDecoration(
+              titleTextStyle:
+                  TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
+              bodyTextStyle: TextStyle(fontSize: 18.0),
+              pageColor: Colors.white,
+              imagePadding: EdgeInsets.zero,
+            ),
+          ),
+          PageViewModel(
+            titleWidget: const Center(
+              child: Text(
+                "Carnet de santé",
+                style: TextStyle(
+                  fontSize: 28.0,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.green,
+                ),
+              ),
+            ),
+            body:
+                "Vous pouvez consulter votre dossier médical, vos résultats d'analyses, vos ordonnances, vos vaccins, et bien plus encore.",
+            image: const Center(
+              child: Icon(
+                Icons.book,
+                size: 100,
+                color: Colors.green,
+              ),
+            ),
+            decoration: const PageDecoration(
+              titleTextStyle:
+                  TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
+              bodyTextStyle: TextStyle(fontSize: 18.0),
+              pageColor: Colors.white,
+              imagePadding: EdgeInsets.zero,
+            ),
+          ),
+          PageViewModel(
+            titleWidget: const Center(
+              child: Text(
+                "Agenda médical",
+                style: TextStyle(
+                  fontSize: 28.0,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.green,
+                ),
+              ),
+            ),
+            body:
+                "Vous pouvez consulter votre agenda médical, et avoir des rappels de vos rendez-vous, et bien plus encore.",
+            image: const Center(
+              child: Icon(
+                Icons.calendar_month,
+                size: 100,
+                color: Colors.green,
+              ),
+            ),
+            decoration: const PageDecoration(
+              titleTextStyle:
+                  TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
+              bodyTextStyle: TextStyle(fontSize: 18.0),
+              pageColor: Colors.white,
+              imagePadding: EdgeInsets.zero,
+            ),
+          ),
+        ],
+        onDone: () => {
+          _incrementCounter(),
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginPage()),
+          ),
+        },
+        onSkip: () => {
+          _incrementCounter(),
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginPage()),
+          ),
+        },
+        showSkipButton: true,
+        skip: const Text("Passer"),
+        next: const Icon(Icons.arrow_forward),
+        back: const Icon(Icons.arrow_back),
+        done: const Text("Fait", style: TextStyle(fontWeight: FontWeight.w600)),
+        dotsDecorator: const DotsDecorator(
+          size: Size(10.0, 10.0),
+          color: Color(0xFFBDBDBD),
+          activeSize: Size(22.0, 10.0),
+          activeColor: Colors.green,
+          activeShape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25.0)),
+          ),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text(

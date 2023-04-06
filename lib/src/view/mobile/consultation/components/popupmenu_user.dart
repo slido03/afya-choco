@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+//import 'package:flutter/foundation.dart';
+import 'package:afya/src/view/mobile/carnet/pages/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:afya/src/view/mobile/authentication/login.dart';
 
@@ -36,9 +37,19 @@ class PopupMenuUser extends StatelessWidget {
       onSelected: (value) {
         switch (value) {
           case 1:
-            if (kDebugMode) {
-              print('Edit');
-            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Scaffold(
+                  appBar: AppBar(
+                    title: const Text('Profile'),
+                  ),
+                  body: const Center(
+                    child: Profile(),
+                  ),
+                ),
+              ),
+            );
             break;
           case 2:
             logout(context);

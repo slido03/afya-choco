@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './authentication/login.dart';
 import 'agenda/agenda_screen.dart';
 import 'carnet/carnet_screen.dart';
+import 'intro_screen.dart';
 import 'notifications_screen.dart';
 
 
@@ -25,6 +26,7 @@ class AfyaApp extends StatelessWidget {
         '/carnet': (context) => const CarnetScreen(),
         '/agenda': (context) => const AgendaScreen(),
         '/notifications': (context) => const NotificationsScreen(),
+        '/intro': (context) => const IntroScreen(),
       },
       debugShowCheckedModeBanner: false,
     );
