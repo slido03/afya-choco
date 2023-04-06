@@ -43,6 +43,7 @@ class _EvenementsState extends State<Evenements> {
           "edmond234@hotmail.com", //email
           "12 rue de la paix, 75000 Paris", //adresse
           "La sante meilleure",
+          true,
           Specialite.anesthesiologie,
           "34827DE",
           Secretaire(
@@ -54,8 +55,7 @@ class _EvenementsState extends State<Evenements> {
               "edmond234@hotmail.com", //email
               "12 rue de la paix, 75000 Paris", //adresse
               "La sante meilleure",
-              "34827DE",
-              []),
+              "34827DE",),
         ), //clinique
         "12 rue de la paix, 75000 Paris",
         ObjetRendezVous.consultation,
