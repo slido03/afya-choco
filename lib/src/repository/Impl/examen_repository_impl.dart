@@ -31,11 +31,12 @@ class ExamenRepositoryImpl extends ExamenRepository {
         .where('patient.identifiant', isEqualTo: patient.identifiant)
         .where('type', isEqualTo: type.name)
         .where('date', isEqualTo: date.millisecondsSinceEpoch)
-        .limit(1)
         .get()
         .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+      if (snapshot.docs.isNotEmpty) {
+        if (snapshot.docs.first.exists) {
+          return snapshot.docs.first.data();
+        }
       } else {
         return null;
       }
@@ -49,7 +50,6 @@ class ExamenRepositoryImpl extends ExamenRepository {
         .where('patient.identifiant', isEqualTo: examen.patient.identifiant)
         .where('type', isEqualTo: examen.type.name)
         .where('date', isEqualTo: examen.date.millisecondsSinceEpoch)
-        .limit(1)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {

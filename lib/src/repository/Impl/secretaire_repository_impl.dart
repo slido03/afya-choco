@@ -1,5 +1,6 @@
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class SecretaireRepositoryImpl extends SecretaireRepository {
   static SecretaireRepository? _instance;
@@ -35,11 +36,12 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
   Future<Secretaire?> trouver(String identifiant) async {
     return await secretaires
         .where('identifiant', isEqualTo: identifiant)
-        .limit(1)
         .get()
         .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+      if (snapshot.docs.isNotEmpty) {
+        if (snapshot.docs.first.exists) {
+          return snapshot.docs.first.data();
+        }
       } else {
         return null;
       }
@@ -48,13 +50,9 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
 
   @override
   Future<Secretaire?> trouverUid(String uid) async {
-    return await secretaires
-        .where('uid', isEqualTo: uid)
-        .limit(1)
-        .get()
-        .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+    return await secretaires.doc(uid).get().then((snapshot) {
+      if (snapshot.exists) {
+        return snapshot.data();
       } else {
         return null;
       }
@@ -64,23 +62,28 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
   @override
   Future<Secretaire?> getSecretariatCentral() async {
     return await secretaires
-        .where('identifiant', isEqualTo: 'FE654664')
-        .where('email', isEqualTo: 'nayokomiphilippe@gmail.com')
+        .where('identifiant', isEqualTo: 'AAAA1111')
         .get()
         .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+      if (snapshot.docs.isNotEmpty) {
+        if (snapshot.docs.first.exists) {
+          return snapshot.docs.first.data();
+        }
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError);
+      }
+      return null;
+    });
   }
 
   @override
   Future<void> modifier(Secretaire secretaire) {
     return secretaires
         .where('identifiant', isEqualTo: secretaire.identifiant)
-        .limit(1)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -94,7 +97,7 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
               'adresse',
               'clinique',
               'numeroSecuriteSociale',
-              'medecins'
+              //'medecins',
             ]));
       }
     }).catchError((onError) => null);
@@ -132,17 +135,18 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
   }
 
   bool _checkID(Secretaire secretaire) {
-    bool checked = true;
     secretaires.get().then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var doc in snapshot.docs) {
           if (doc['identifiant'] == secretaire.identifiant) {
             //on s'assure que le nouveau secretaire a un ID unique en base données
-            checked = false;
+            return false;
           }
         }
+      } else {
+        return true;
       }
     }).catchError((error) => error);
-    return checked;
+    return true;
   }
 }

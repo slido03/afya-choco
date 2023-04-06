@@ -29,11 +29,12 @@ class StatutMedicalRepositoryImpl extends StatutMedicalRepository {
   Future<StatutMedical?> trouver(String identifiantPatient) async {
     return await statutmedicaux
         .where('patient.identifiant', isEqualTo: identifiantPatient)
-        .limit(1)
         .get()
         .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+      if (snapshot.docs.isNotEmpty) {
+        if (snapshot.docs.first.exists) {
+          return snapshot.docs.first.data();
+        }
       } else {
         return null;
       }
@@ -45,7 +46,6 @@ class StatutMedicalRepositoryImpl extends StatutMedicalRepository {
     return statutmedicaux
         .where('patient.identifiant',
             isEqualTo: statutmedical.patient.identifiant)
-        .limit(1)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {

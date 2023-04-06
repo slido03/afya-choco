@@ -39,6 +39,8 @@ class Utilisateur {
   String get email => _email;
   String? get adresse => _adresse;
   String get nomComplet => '$nom $prenoms';
+  @override
+  String toString() => nomComplet;
 
   void setIdentifiant() => _identifiant = _makeID(this);
   void setNom(String nom) => _nom = nom;

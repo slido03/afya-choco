@@ -2,6 +2,7 @@ import '../models.dart';
 
 class Secretaire extends PersonnelSante {
   String _numeroSecuriteSociale;
+  // ignore: prefer_final_fields
   List<Medecin> _medecins = [];
 
   Secretaire(
@@ -14,21 +15,21 @@ class Secretaire extends PersonnelSante {
     super._clinique,
     super._identifiant,
     this._numeroSecuriteSociale,
-    this._medecins,
+    //this._medecins,
   );
 
   factory Secretaire.fromJson(Map<String, dynamic> json) {
     return Secretaire(
-      json['uid'] as String,
-      json['nom'] as String,
-      json['prenoms'] as String,
-      json['telephone'] as String,
-      json['email'] as String,
-      json['adresse'] as String,
-      json['clinique'] as String,
-      json['identifiant'] as String,
-      json['numeroSecuriteSociale'] as String,
-      medecinsFromJson(json['medecins']),
+      json['uid'],
+      json['nom'],
+      json['prenoms'],
+      json['telephone'],
+      json['email'],
+      json['adresse'],
+      json['clinique'],
+      json['identifiant'],
+      json['numeroSecuriteSociale'],
+      //medecinsFromJson(json['medecins']),
     );
   }
 
@@ -54,7 +55,7 @@ class Secretaire extends PersonnelSante {
         'clinique': clinique,
         'identifiant': identifiant,
         'numeroSecuriteSociale': numeroSecuriteSociale,
-        'medecins': medecinsJson,
+        //'medecins': medecinsJson,
       };
 
   static List<Medecin> medecinsFromJson(

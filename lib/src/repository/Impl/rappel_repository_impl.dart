@@ -33,11 +33,12 @@ class RappelRepositoryImpl extends RappelRepository {
             isEqualTo: evenement.rendezVous.medecin.uid)
         .where('evenement.rendez-vous.patient.uid',
             isEqualTo: evenement.rendezVous.patient.uid)
-        .limit(1)
         .get()
         .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+      if (snapshot.docs.isNotEmpty) {
+        if (snapshot.docs.first.exists) {
+          return snapshot.docs.first.data();
+        }
       } else {
         return null;
       }

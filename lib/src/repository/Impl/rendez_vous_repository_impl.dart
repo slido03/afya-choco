@@ -31,11 +31,12 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
         .where('dateHeure', isEqualTo: dateHeure.millisecondsSinceEpoch)
         .where('medecin.uid', isEqualTo: medecin.uid)
         .where('patient.uid', isEqualTo: patient.uid)
-        .limit(1)
         .get()
         .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+      if (snapshot.docs.isNotEmpty) {
+        if (snapshot.docs.first.exists) {
+          return snapshot.docs.first.data();
+        }
       } else {
         return null;
       }
@@ -49,7 +50,6 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
             isEqualTo: rendezVous.dateHeure.millisecondsSinceEpoch)
         .where('medecin.uid', isEqualTo: rendezVous.medecin.uid)
         .where('patient.uid', isEqualTo: rendezVous.patient.uid)
-        .limit(1)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -105,6 +105,74 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
         return emptyList;
       }
     });
+  }
+
+  @override
+  Future<List<RendezVous>> listerEnAttentePatient(String uidPatient) async {
+    return await rendezvous
+        .where('patient.uid', isEqualTo: uidPatient)
+        .where('dateHeure',
+            isGreaterThan: DateTime.now().millisecondsSinceEpoch)
+        .orderBy('dateHeure', descending: true)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<RendezVous> liste = [];
+        for (var document in snapshot.docs) {
+          RendezVous rendezVous = document.data();
+          liste.add(rendezVous);
+        }
+        return liste;
+      } else {
+        List<RendezVous> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<List<RendezVous>> listerEnAttenteMedecin(String uidMedecin) async {
+    return await rendezvous
+        .where('medecin.uid', isEqualTo: uidMedecin)
+        .where('dateHeure',
+            isGreaterThan: DateTime.now().millisecondsSinceEpoch)
+        .orderBy('dateHeure', descending: true)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<RendezVous> liste = [];
+        for (var document in snapshot.docs) {
+          RendezVous rendezVous = document.data();
+          liste.add(rendezVous);
+        }
+        return liste;
+      } else {
+        List<RendezVous> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<RendezVous?> getLastForPatient(String uidPatient) async {
+    //liste des rendez-vous du patient du plus récent au plus ancien
+    List<RendezVous> liste = await listerPatient(uidPatient);
+    if (liste.isNotEmpty) {
+      return liste.first;
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  Future<RendezVous?> getLastForMedecin(String uidMedecin) async {
+    //liste des rendez-vous du patient du plus récent au plus ancien
+    List<RendezVous> liste = await listerMedecin(uidMedecin);
+    if (liste.isNotEmpty) {
+      return liste.first;
+    } else {
+      return null;
+    }
   }
 
   @override

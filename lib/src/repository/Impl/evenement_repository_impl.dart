@@ -31,11 +31,12 @@ class EvenementRepositoryImpl extends EvenementRepository {
             isEqualTo: rendezVous.dateHeure.millisecondsSinceEpoch)
         .where('rendez-vous.medecin.uid', isEqualTo: rendezVous.medecin.uid)
         .where('rendez-vous.patient.uid', isEqualTo: rendezVous.patient.uid)
-        .limit(1)
         .get()
         .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+      if (snapshot.docs.isNotEmpty) {
+        if (snapshot.docs.first.exists) {
+          return snapshot.docs.first.data();
+        }
       } else {
         return null;
       }
@@ -51,7 +52,6 @@ class EvenementRepositoryImpl extends EvenementRepository {
             isEqualTo: evenement.rendezVous.medecin.uid)
         .where('rendez-vous.patient.uid',
             isEqualTo: evenement.rendezVous.patient.uid)
-        .limit(1)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {

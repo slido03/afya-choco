@@ -26,7 +26,7 @@ class PatientIntermediaire extends Patient {
       json['prenoms'] as String,
       json['telephone'] as String,
       json['email'] as String,
-      json['adresse'] as String?,
+      null,
       null,
       null,
       json['identifiant'] as String,
@@ -43,7 +43,6 @@ class PatientIntermediaire extends Patient {
         'prenoms': prenoms,
         'telephone': telephone,
         'email': email,
-        'adresse': adresse,
         'identifiant': identifiantTemporaire,
       };
 }

@@ -9,9 +9,16 @@ import 'package:intl/intl.dart';
   * and the date picker
 */
 class InputDate extends StatefulWidget {
-  const InputDate({super.key, this.maxwidth, required String labelText, required String hintText});
+  const InputDate({
+    super.key,
+    this.maxwidth,
+    required String labelText,
+    required String hintText,
+    required this.controller,
+  });
 
   final double? maxwidth;
+  final TextEditingController controller;
 
   @override
   State<InputDate> createState() => _InputDateState();
@@ -30,6 +37,7 @@ class _InputDateState extends State<InputDate> {
     if (picked != null && picked != _date) {
       setState(() {
         _date = picked;
+        widget.controller.text = formatDate(_date);
       });
     }
   }

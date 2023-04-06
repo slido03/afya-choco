@@ -34,30 +34,25 @@ class PatientRepositoryImpl extends PatientRepository {
   Future<Patient?> trouver(String identifiant) async {
     return await patients
         .where('identifiant', isEqualTo: identifiant)
-        .limit(1)
         .get()
         .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+      if (snapshot.docs.isNotEmpty) {
+        if (snapshot.docs.first.exists) {
+          return snapshot.docs.first.data();
+        }
       } else {
         return null;
-        // throw StateError("Le patient spécifié n'existe pas");
       }
     }).catchError((onError) => null);
   }
 
   @override
   Future<Patient?> trouverUid(String uid) async {
-    return await patients
-        .where('uid', isEqualTo: uid)
-        .limit(1)
-        .get()
-        .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+    return await patients.doc(uid).get().then((snapshot) {
+      if (snapshot.exists) {
+        return snapshot.data();
       } else {
         return null;
-        // throw StateError("Le patient spécifié n'existe pas");
       }
     }).catchError((onError) => null);
   }
@@ -66,7 +61,6 @@ class PatientRepositoryImpl extends PatientRepository {
   Future<void> modifier(Patient patient) {
     return patients
         .where('identifiant', isEqualTo: patient.identifiant)
-        .limit(1)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -117,17 +111,18 @@ class PatientRepositoryImpl extends PatientRepository {
   }
 
   bool _checkID(Patient patient) {
-    bool checked = true;
     patients.get().then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var doc in snapshot.docs) {
           if (doc['identifiant'] == patient.identifiant) {
             //on s'assure que le nouveau patient a un ID unique en base données
-            checked = false;
+            return false;
           }
         }
+      } else {
+        return true;
       }
     }).catchError((error) => error);
-    return checked;
+    return true;
   }
 }

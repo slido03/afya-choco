@@ -9,13 +9,6 @@ class MessageRepositoryImpl extends MessageRepository {
             toFirestore: (message, _) => message.toJson(),
           ); //collection messages
 
-  final secretaires = FirebaseFirestore.instance
-      .collection('secretaires')
-      .withConverter<Secretaire>(
-        fromFirestore: (snapshot, _) => Secretaire.fromJson(snapshot.data()!),
-        toFirestore: (secretaire, _) => secretaire.toJson(),
-      ); //collection secretaires
-
   MessageRepositoryImpl._(); //constructeur privé
 
   static MessageRepository get instance {
@@ -40,11 +33,12 @@ class MessageRepositoryImpl extends MessageRepository {
         .where('expediteur.uid', isEqualTo: uidExpediteur)
         .where('destinataire.uid', isEqualTo: uidDestinataire)
         .where('dateHeure', isEqualTo: dateHeure.millisecondsSinceEpoch)
-        .limit(1)
         .get()
         .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+      if (snapshot.docs.isNotEmpty) {
+        if (snapshot.docs.first.exists) {
+          return snapshot.docs.first.data();
+        }
       } else {
         return null;
       }
@@ -58,7 +52,6 @@ class MessageRepositoryImpl extends MessageRepository {
         .where('expediteur.uid', isEqualTo: message.expediteur.uid)
         .where('destinataire.uid', isEqualTo: message.destinataire.uid)
         .where('dateHeure', isEqualTo: message.dateHeure.millisecondsSinceEpoch)
-        .limit(1)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {

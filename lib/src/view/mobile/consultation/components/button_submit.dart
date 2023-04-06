@@ -7,13 +7,13 @@ class ButtonSubmit extends StatelessWidget {
     this.onPressed,
   });
 
-  final VoidCallback? onPressed;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
         onPressed: () {
-          onPressed?.call();
+          onPressed!.call();
           if (kDebugMode) {
             print('Submit button pressed');
           }

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
   * in the "Prise de rendez-vous" page
 */
 class InputPhone extends StatelessWidget {
-    const InputPhone(
+  const InputPhone(
       {super.key,
       this.maxwidth,
       required this.controller,
@@ -15,7 +15,6 @@ class InputPhone extends StatelessWidget {
 
   final double? maxwidth;
   final TextEditingController controller;
-
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +37,6 @@ class InputPhone extends StatelessWidget {
           fillColor: Colors.white,
           labelText: 'Téléphone',
           hintText: 'Votre numéro de téléphone',
-          //errorText: 'Veuillez saisir un numéro de téléphone valide',
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
@@ -53,28 +51,6 @@ class InputPhone extends StatelessWidget {
             print(value);
           }
         },
-        onTapOutside: (event) {
-          //event. 
-          final validator = RegExp(r'^[1-9][0-9]{7}$');
-          // if (controller.text.isEmpty) {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //     const SnackBar(
-          //       content: Text('Veuillez saisir votre numéro de téléphone'),
-          //     ),
-          //   );
-          // } else if (!validator.hasMatch(controller.text)) {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //     const SnackBar(
-          //       content: Text('Veuillez saisir un numéro de téléphone valide'),
-          //     ),
-          //   );
-          // }
-        },
-        // onFieldSubmitted: (value) {
-        //   if (kDebugMode) {
-        //     print('submitted');
-        //   }
-        // },
       ),
     );
   }
