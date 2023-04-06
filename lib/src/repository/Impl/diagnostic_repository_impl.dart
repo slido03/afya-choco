@@ -31,11 +31,12 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
         .where('date', isEqualTo: date.millisecondsSinceEpoch)
         .where('medecin.identifiant', isEqualTo: medecin.identifiant)
         .where('patient.identifiant', isEqualTo: patient.identifiant)
-        .limit(1)
         .get()
         .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+      if (snapshot.docs.isNotEmpty) {
+        if (snapshot.docs.first.exists) {
+          return snapshot.docs.first.data();
+        }
       } else {
         return null;
       }
@@ -49,7 +50,6 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
         .where('medecin.identifiant', isEqualTo: diagnostic.medecin.identifiant)
         .where('patient.identifiant',
             isEqualTo: diagnostic.patient!.identifiant)
-        .limit(1)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {

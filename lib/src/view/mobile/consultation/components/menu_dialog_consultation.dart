@@ -1,6 +1,7 @@
+import 'package:afya/src/view/mobile/consultation/pages/demander_info.dart';
 import 'package:flutter/material.dart';
 
-import '../pages/prise_rdv.dart';
+import '../pages/prendre_rdv.dart';
 import '../pages/changer_rdv.dart';
 import '../components/separator.dart';
 
@@ -8,16 +9,14 @@ showSimpleDialog(BuildContext context) {
   // configurer la boîte de dialogue
 
   Map<String, Widget> menus = {
-    "Prise de rendez-vous": const PriseRdv(),
+    "Prendre rendez-vous": const PrendreRdv(),
     "Changer de rendez-vous": const ChangerRdv(),
-    "Annuler votre rendez-vous": const Placeholder(), //AnnulerRdv(),
-    "Demander des informations": const Placeholder() //DemanderInfo(),
+    "Demander des informations": const DemanderInfos()
   };
   /*
     * This class is used to display the separator
     * in the simple dialog
   */
-  
 
   Widget menuItem({required String title, Function()? onTap}) {
     return Column(
@@ -60,9 +59,8 @@ showSimpleDialog(BuildContext context) {
       borderRadius: BorderRadius.circular(10.0),
     ),
     children: [
-      menuItem(title: "Prise de rendez-vous"),
+      menuItem(title: "Prendre rendez-vous"),
       menuItem(title: "Changer de rendez-vous"),
-      menuItem(title: "Annuler votre rendez-vous"),
       menuItem(title: "Demander des informations"),
     ],
   );

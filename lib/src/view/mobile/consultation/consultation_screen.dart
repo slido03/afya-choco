@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'components/banner_carousel.dart';
 import 'components/section_first_presentation.dart';
 
@@ -14,12 +13,6 @@ class ConsultationScreen extends StatelessWidget {
       children: const <Widget>[
         SizedBox(height: 5.0),
         BannerCarousel(),
-        //InputTextArea(labelText: "nom", hintText: "entrez votre messgae"),
-        //InputDate(),
-        /*Text(
-              ":) Hello AFYA !!",
-              style: TextStyle(fontSize: 30.0),
-            ),*/
         SizedBox(height: 5.0),
         Expanded(child: FirstPresentation()),
       ],

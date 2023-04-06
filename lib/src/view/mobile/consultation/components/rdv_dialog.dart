@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:afya/src/model/models.dart';
+import 'package:intl/intl.dart';
 
 /*
  * This is a dialog that is used to confirm the cancellation of a rendez-vous. the last one.
@@ -9,7 +11,7 @@ class RdvDialog extends StatelessWidget {
   //const RdvDialog({super.key, required this.rdv});
 
   //final Object? rdv;
-  final Map<String, dynamic>? rdv;
+  final RendezVous? rdv;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class RdvDialog extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(3.0),
             child: Text(
-              "Envoyé le: ${rdv?['date'] ?? '12/12/2023'}",
+              "Objet: ${rdv?.objet.value ?? 'Indéfini'}",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 14.0,
@@ -45,7 +47,7 @@ class RdvDialog extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(3.0),
             child: Text(
-              "Confirmé le: ${rdv?['date'] ?? '14/12/2023'}",
+              "Médecin: ${rdv?.medecin.nom ?? 'Iconnu(e)'}",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 14.0,
@@ -57,7 +59,7 @@ class RdvDialog extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(3.0),
             child: Text(
-              "Rendez-vous le: ${rdv?['date'] ?? '16/12/2023'}",
+              "Date: ${rdv?.dateHeure.formatDate() ?? '01/12/1970'}",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 14.0,
@@ -79,5 +81,11 @@ class RdvDialog extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+extension DateFormatString on DateTime {
+  String formatDate() {
+    return DateFormat('dd/MM/yyyy').format(this);
   }
 }

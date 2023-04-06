@@ -1,10 +1,6 @@
-import 'package:afya/src/model/agenda/evenement.dart';
-import 'package:afya/src/model/agenda/rendez_vous.dart';
-import 'package:afya/src/model/humains/medecin.dart';
+import 'package:afya/src/model/models.dart';
 import 'package:afya/src/repository/repositories.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../model/humains/patient.dart';
 
 class CardEvenement extends StatelessWidget {
   //final Evenement evenement;

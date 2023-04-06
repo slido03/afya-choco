@@ -1,8 +1,12 @@
-import 'package:flutter/material.dart';
 import '../repository/repositories.dart';
+import 'package:flutter/foundation.dart';
 
 class RendezVousViewModel extends ChangeNotifier {
   RendezVousRepository rendezvousRep = RendezVousRepositoryImpl.instance;
+  PatientIntermediaireRepository patientIntermediaireRep =
+      PatientIntermediaireRepositoryImpl.instance;
+  SecretaireRepository secretaireRep = SecretaireRepositoryImpl.instance;
+  PatientRepository patientRep = PatientRepositoryImpl.instance;
 
   //ajout d'un rendezvous dans la base de données
   void ajouter(RendezVous rendezvous) {
@@ -20,18 +24,54 @@ class RendezVousViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  //liste des rendezvous du patient courant du plus récent au plus ancien
-  Future<List<RendezVous>> listerPatient(String uidPatient) async {
-    return await rendezvousRep.listerPatient(uidPatient);
+  //liste des rendez-vous du patient courant en attente du plus récent au plus ancien
+  Future<List<RendezVous>> listerEnAttentePatient(String uidPatient) async {
+    return await rendezvousRep.listerEnAttentePatient(uidPatient);
   }
 
-  //liste des rendezvous du medecin courant du plus récent au plus ancien
-  Future<List<RendezVous>> listerMedecin(String uidMedecin) async {
-    return await rendezvousRep.listerMedecin(uidMedecin);
+  //liste des rendez-vous du medecin courant en attente du plus récent au plus ancien
+  Future<List<RendezVous>> listerEnAttenteMedecin(String uidMedecin) async {
+    return await rendezvousRep.listerEnAttenteMedecin(uidMedecin);
+  }
+
+  //le dernier rendez-vous du patient
+  Future<RendezVous?> getLastForPatient(String uidPatient) async {
+    return await rendezvousRep.getLastForPatient(uidPatient);
+  }
+
+  //le dernier rendez-vous du médecin
+  Future<RendezVous?> getLastForMedecin(String uidMedecin) async {
+    return await rendezvousRep.getLastForPatient(uidMedecin);
   }
 
   void supprimer(RendezVous rendezvous) {
     rendezvousRep.supprimer(rendezvous);
     notifyListeners();
+  }
+
+  //permet de s'assurer si l'utilisateur courant est un patient intermediaire
+  Future<PatientIntermediaire?> trouverPatientIntermediaireUid(
+      String uid) async {
+    PatientIntermediaire? patient =
+        await patientIntermediaireRep.trouverUid(uid);
+    return patient;
+  }
+
+//permet de s'assurer si l'utilisateur courant est un patient
+  Future<Patient?> trouverPatientUid(String uid) async {
+    Patient? patient = await patientRep.trouverUid(uid);
+    return patient;
+  }
+
+  Future<Secretaire?> getSecretariatCentral() async {
+    //faire en sorte que l'objet secretaire central existe en permanence
+    Secretaire? secretaire = await secretaireRep.getSecretariatCentral();
+    if (secretaire == null) {
+      if (kDebugMode) {
+        print(
+            "erreur lors de la recherche du secretariat central : l'objet est nul");
+      }
+    }
+    return secretaire;
   }
 }

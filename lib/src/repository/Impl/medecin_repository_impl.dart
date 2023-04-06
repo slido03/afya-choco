@@ -34,11 +34,12 @@ class MedecinRepositoryImpl extends MedecinRepository {
   Future<Medecin?> trouver(String identifiant) async {
     return await medecins
         .where('identifiant', isEqualTo: identifiant)
-        .limit(1)
         .get()
         .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+      if (snapshot.docs.isNotEmpty) {
+        if (snapshot.docs.first.exists) {
+          return snapshot.docs.first.data();
+        }
       } else {
         return null;
       }
@@ -47,13 +48,9 @@ class MedecinRepositoryImpl extends MedecinRepository {
 
   @override
   Future<Medecin?> trouverUid(String uid) async {
-    return await medecins
-        .where('uid', isEqualTo: uid)
-        .limit(1)
-        .get()
-        .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+    return await medecins.doc(uid).get().then((snapshot) {
+      if (snapshot.exists) {
+        return snapshot.data();
       } else {
         return null;
       }
@@ -64,7 +61,6 @@ class MedecinRepositoryImpl extends MedecinRepository {
   Future<void> modifier(Medecin medecin) {
     return medecins
         .where('identifiant', isEqualTo: medecin.identifiant)
-        .limit(1)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -77,6 +73,7 @@ class MedecinRepositoryImpl extends MedecinRepository {
               'email',
               'adresse',
               'clinique',
+              'admin',
               'specialite',
               'numeroLicence',
               'secretaire',
@@ -117,17 +114,18 @@ class MedecinRepositoryImpl extends MedecinRepository {
   }
 
   bool _checkID(Medecin medecin) {
-    bool checked = true;
     medecins.get().then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var doc in snapshot.docs) {
           if (doc['identifiant'] == medecin.identifiant) {
             //on s'assure que le nouveau medecin a un ID unique en base données
-            checked = false;
+            return false;
           }
         }
+      } else {
+        return true;
       }
     }).catchError((error) => error);
-    return checked;
+    return true;
   }
 }

@@ -40,11 +40,12 @@ class PatientIntermediaireRepositoryImpl
   Future<PatientIntermediaire?> trouver(String identifiantTemporaire) async {
     return await patientintermediaires
         .where('identifiant', isEqualTo: identifiantTemporaire)
-        .limit(1)
         .get()
         .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+      if (snapshot.docs.isNotEmpty) {
+        if (snapshot.docs.first.exists) {
+          return snapshot.docs.first.data();
+        }
       } else {
         return null;
       }
@@ -53,13 +54,9 @@ class PatientIntermediaireRepositoryImpl
 
   @override
   Future<PatientIntermediaire?> trouverUid(String uid) async {
-    return await patientintermediaires
-        .where('uid', isEqualTo: uid)
-        .limit(1)
-        .get()
-        .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+    return await patientintermediaires.doc(uid).get().then((snapshot) {
+      if (snapshot.exists) {
+        return snapshot.data();
       } else {
         return null;
       }
@@ -71,7 +68,6 @@ class PatientIntermediaireRepositoryImpl
     return patientintermediaires
         .where('identifiant',
             isEqualTo: patientintermediaire.identifiantTemporaire)
-        .limit(1)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -82,7 +78,6 @@ class PatientIntermediaireRepositoryImpl
               'prenoms',
               'telephone',
               'email',
-              'adresse',
             ]));
       }
     }).catchError((onError) => null);
@@ -120,17 +115,18 @@ class PatientIntermediaireRepositoryImpl
   }
 
   bool _checkTempID(PatientIntermediaire patient) {
-    bool checked = true;
     patientintermediaires.get().then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var doc in snapshot.docs) {
           if (doc['identifiant'] == patient.identifiantTemporaire) {
             //on s'assure que le nouveau patient a un ID unique en base données
-            checked = false;
+            return false;
           }
         }
+      } else {
+        return true;
       }
     }).catchError((error) => error);
-    return checked;
+    return true;
   }
 }

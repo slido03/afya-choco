@@ -27,11 +27,12 @@ class CarnetRepositoryImpl extends CarnetRepository {
   Future<Carnet?> trouver(String identifiantPatient) async {
     return await carnets
         .where('proprietaire.identifiant', isEqualTo: identifiantPatient)
-        .limit(1)
         .get()
         .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+      if (snapshot.docs.isNotEmpty) {
+        if (snapshot.docs.first.exists) {
+          return snapshot.docs.first.data();
+        }
       } else {
         return null;
       }

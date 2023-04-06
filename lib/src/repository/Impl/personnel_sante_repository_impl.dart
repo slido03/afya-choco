@@ -36,11 +36,12 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
   Future<PersonnelSante?> trouver(String identifiant) async {
     return await personnelsantes
         .where('identifiant', isEqualTo: identifiant)
-        .limit(1)
         .get()
         .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+      if (snapshot.docs.isNotEmpty) {
+        if (snapshot.docs.first.exists) {
+          return snapshot.docs.first.data();
+        }
       } else {
         return null;
       }
@@ -49,13 +50,9 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
 
   @override
   Future<PersonnelSante?> trouverUid(String uid) async {
-    return await personnelsantes
-        .where('uid', isEqualTo: uid)
-        .limit(1)
-        .get()
-        .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+    return await personnelsantes.doc(uid).get().then((snapshot) {
+      if (snapshot.exists) {
+        return snapshot.data();
       } else {
         return null;
       }
@@ -66,7 +63,6 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
   Future<void> modifier(PersonnelSante personnelsante) {
     return personnelsantes
         .where('identifiant', isEqualTo: personnelsante.identifiant)
-        .limit(1)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -116,17 +112,18 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
   }
 
   bool _checkID(PersonnelSante personnelsante) {
-    bool checked = true;
     personnelsantes.get().then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var doc in snapshot.docs) {
           if (doc['identifiant'] == personnelsante.identifiant) {
             //on s'assure que le nouveau personnel santé a un ID unique en base données
-            checked = false;
+            return false;
           }
         }
+      } else {
+        return true;
       }
     }).catchError((error) => error);
-    return checked;
+    return true;
   }
 }

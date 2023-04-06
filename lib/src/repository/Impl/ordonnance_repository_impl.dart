@@ -32,11 +32,12 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
         .where('medecin.identifiant', isEqualTo: diagnostic.medecin.identifiant)
         .where('patient.identifiant',
             isEqualTo: diagnostic.patient!.identifiant)
-        .limit(1)
         .get()
         .then((snapshot) {
-      if (snapshot.docs.single.exists) {
-        return snapshot.docs.single.data();
+      if (snapshot.docs.isNotEmpty) {
+        if (snapshot.docs.first.exists) {
+          return snapshot.docs.first.data();
+        }
       } else {
         return null;
       }
@@ -52,7 +53,6 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
             isEqualTo: ordonnance.diagnostic.medecin.identifiant)
         .where('diagnostic.patient.identifiant',
             isEqualTo: ordonnance.diagnostic.patient!.identifiant)
-        .limit(1)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
