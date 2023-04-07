@@ -94,7 +94,7 @@ extension DateFormat on DateTime {
   String get jourMois {
     String? jour;
     String? mois;
-    if ((day >= 1) && (day <= 9)) {
+    if (day < 10) {
       String j = '0$day';
       jour = '$j ';
     }
@@ -106,10 +106,10 @@ extension DateFormat on DateTime {
         mois = 'Fev';
         break;
       case 3:
-        mois = 'Mars';
+        mois = 'Mar';
         break;
       case 4:
-        mois = 'Avril';
+        mois = 'Avr';
         break;
       case 5:
         mois = 'Mai';

@@ -27,11 +27,11 @@ class RappelRepositoryImpl extends RappelRepository {
   Future<Rappel?> trouver(DateTime dateHeure, Evenement evenement) async {
     return await rappels
         .where('dateHeure', isEqualTo: dateHeure.millisecondsSinceEpoch)
-        .where('evenement.rendez-vous.dateHeure',
+        .where('evenement.rendezVous.dateHeure',
             isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
-        .where('evenement.rendez-vous.medecin.uid',
+        .where('evenement.rendezVous.medecin.uid',
             isEqualTo: evenement.rendezVous.medecin.uid)
-        .where('evenement.rendez-vous.patient.uid',
+        .where('evenement.rendezVous.patient.uid',
             isEqualTo: evenement.rendezVous.patient.uid)
         .get()
         .then((snapshot) {
@@ -48,12 +48,13 @@ class RappelRepositoryImpl extends RappelRepository {
   @override
   Future<void> modifier(Rappel rappel) {
     return rappels
-        .where('evenement.rendez-vous.dateHeure',
+        .where('dateHeure', isEqualTo: rappel.dateHeure.millisecondsSinceEpoch)
+        .where('evenement.rendezVous.dateHeure',
             isEqualTo:
                 rappel.evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
-        .where('evenement.rendez-vous.medecin.uid',
+        .where('evenement.rendezVous.medecin.uid',
             isEqualTo: rappel.evenement.rendezVous.medecin.uid)
-        .where('evenement.rendez-vous.patient.uid',
+        .where('evenement.rendezVous.patient.uid',
             isEqualTo: rappel.evenement.rendezVous.patient.uid)
         .get()
         .then((snapshot) {
@@ -71,11 +72,11 @@ class RappelRepositoryImpl extends RappelRepository {
   @override
   Future<List<Rappel>> lister(Evenement evenement) async {
     return await rappels
-        .where('evenement.rendez-vous.dateHeure',
+        .where('evenement.rendezVous.dateHeure',
             isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
-        .where('evenement.rendez-vous.medecin.uid',
+        .where('evenement.rendezVous.medecin.uid',
             isEqualTo: evenement.rendezVous.medecin.uid)
-        .where('evenement.rendez-vous.patient.uid',
+        .where('evenement.rendezVous.patient.uid',
             isEqualTo: evenement.rendezVous.patient.uid)
         .orderBy('dateHeure', descending: true)
         .get()
@@ -98,12 +99,12 @@ class RappelRepositoryImpl extends RappelRepository {
   Future<void> supprimer(Rappel rappel) {
     return rappels
         .where('dateHeure', isEqualTo: rappel.dateHeure.millisecondsSinceEpoch)
-        .where('evenement.rendez-vous.dateHeure',
+        .where('evenement.rendezVous.dateHeure',
             isEqualTo:
                 rappel.evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
-        .where('evenement.rendez-vous.medecin.uid',
+        .where('evenement.rendezVous.medecin.uid',
             isEqualTo: rappel.evenement.rendezVous.medecin.uid)
-        .where('evenement.rendez-vous.patient.uid',
+        .where('evenement.rendezVous.patient.uid',
             isEqualTo: rappel.evenement.rendezVous.patient.uid)
         .get()
         .then((snapshot) {

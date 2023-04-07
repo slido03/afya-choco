@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './authentication.dart';
@@ -17,8 +18,11 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? get email => _emailController.text;
-  int _counter =
-      0; // initialisation du compteur, ce sera le nombre de fois où l'on ouvre l'application
+  // initialisation du compteur, ce sera le nombre de fois où l'on ouvre l'application
+  int _counter = 0;
+
+  final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -172,14 +176,14 @@ class _LoginPageState extends State<LoginPage> {
         ],
         onDone: () => {
           _incrementCounter(),
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const LoginPage()),
           ),
         },
         onSkip: () => {
           _incrementCounter(),
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const LoginPage()),
           ),
@@ -222,6 +226,7 @@ class _LoginPageState extends State<LoginPage> {
               vertical: 25.0,
             ),
             child: Form(
+              key: _formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [
@@ -284,31 +289,39 @@ class _LoginPageState extends State<LoginPage> {
                           height: 20,
                         ),
                         // login button
-                        ElevatedButton(
-                          child: const Text(
-                            'Se connecter',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                            ),
-                          ),
-                          onPressed: () async {
-                            if (await signInWithEmailAndPassword(
-                                _emailController.text,
-                                _passwordController.text)) {
-                              // ignore: use_build_context_synchronously
-                              _navigateToHome(context);
-                            } else {
-                              const snackBar = SnackBar(
-                                  padding: EdgeInsets.only(bottom: 50, top: 30),
-                                  content: Text(
-                                      'Désolé votre email ou mot de passe sont invalides ou non vérifiés ou votre compte a été désactivé'));
-                              // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-                            }
-                          },
-                        ),
+                        _isLoading
+                            ? const CircularProgressIndicator()
+                            : ElevatedButton(
+                                child: const Text(
+                                  'Se connecter',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  bool signedIn =
+                                      await signInWithEmailAndPassword(
+                                          _emailController.text,
+                                          _passwordController.text);
+                                  if (signedIn) {
+                                    if (kDebugMode) {
+                                      print('user signed in');
+                                    }
+                                    // ignore: use_build_context_synchronously
+                                    _navigateToHome(context);
+                                  } else {
+                                    const snackBar = SnackBar(
+                                        padding: EdgeInsets.only(
+                                            bottom: 50, top: 30),
+                                        content: Text(
+                                            'Désolé votre email ou mot de passe sont invalides ou non vérifiés ou votre compte a été désactivé'));
+                                    // ignore: use_build_context_synchronously
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  }
+                                },
+                              ),
                       ],
                     ),
                   ),
@@ -322,30 +335,52 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<bool> signInWithEmailAndPassword(String email, String password) async {
-    try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      if ((userCredential.user != null)) {
-        if ((userCredential.user!.emailVerified)) {
-          // L'utilisateur a été connecté avec succès et a son email vérifié
-          // On redirige l'utilisateur vers la page d'accueil
-          return true;
-        }
+    AuthService authService = AuthService();
+    final form = _formKey.currentState;
+    if (form!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      form.save();
+      if (kDebugMode) {
+        print('sign in starts');
       }
-    } catch (e) {
-      return false;
+      try {
+        User? user =
+            await authService.signInWithEmailAndPassword(email, password);
+        if ((user != null)) {
+          if (kDebugMode) {
+            print('user signed-in non null');
+          }
+          if ((user.emailVerified)) {
+            if (kDebugMode) {
+              print('user email verified');
+            }
+            // L'utilisateur a été connecté avec succès et a son email est vérifié
+            // On redirige l'utilisateur vers la page d'accueil
+            return true;
+          }
+        }
+      } catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+        return false;
+      }
     }
+    if (kDebugMode) {
+      print('sign in not achieved');
+    }
+    setState(() {
+      _isLoading = false;
+    });
     return false;
   }
 
   void _navigateToHome(BuildContext context) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-          builder: (context) =>
-              const HomePage(title: 'HomePage')), //à changer par la home page
+          builder: (context) => const HomePage(title: 'HomePage')),
     );
   }
 
@@ -370,8 +405,9 @@ class _LoginPageState extends State<LoginPage> {
             TextButton(
               child: const Text("Envoyer"),
               onPressed: () async {
-                await FirebaseAuth.instance
-                    .sendPasswordResetEmail(email: email!);
+                if (kDebugMode) {
+                  print('password sending starts');
+                }
                 // ignore: use_build_context_synchronously
                 Navigator.pop(context);
                 // ignore: use_build_context_synchronously
@@ -393,6 +429,20 @@ class _LoginPageState extends State<LoginPage> {
                     );
                   },
                 );
+                try {
+                  await FirebaseAuth.instance
+                      .sendPasswordResetEmail(email: email!);
+                  if (kDebugMode) {
+                    print('password sent');
+                  }
+                } catch (e) {
+                  if (kDebugMode) {
+                    print('error while sending password : ');
+                  }
+                  if (kDebugMode) {
+                    print(e.toString());
+                  }
+                }
               },
             ),
           ],
@@ -403,13 +453,11 @@ class _LoginPageState extends State<LoginPage> {
 }
 
 Future<void> logout(BuildContext context) async {
-  User? user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    await FirebaseAuth.instance.signOut();
-    // ignore: use_build_context_synchronously
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-          builder: (context) => const LoginPage()), //à changer par la home page
-    );
-  }
+  AuthService authService = AuthService();
+  //l'utilisateur est déconnecté
+  authService.signOut();
+  // ignore: use_build_context_synchronously
+  Navigator.of(context).pushReplacement(
+    MaterialPageRoute(builder: (context) => const LoginPage()),
+  );
 }

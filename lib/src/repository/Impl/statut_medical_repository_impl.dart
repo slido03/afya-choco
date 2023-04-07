@@ -54,7 +54,7 @@ class StatutMedicalRepositoryImpl extends StatutMedicalRepository {
             SetOptions(mergeFields: [
               'groupeSanguin',
               'allergies',
-              'maladies-hereditaires',
+              'maladiesHereditaires',
             ]));
       }
     }).catchError((onError) => null);

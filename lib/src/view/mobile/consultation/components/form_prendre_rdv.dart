@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:afya/src/viewModel/message_view_model.dart';
 import 'package:afya/src/model/models.dart';
 import 'package:afya/src/view/mobile/authentication/login.dart';
@@ -9,9 +8,10 @@ import 'package:afya/src/view/mobile/consultation/components/components.dart';
 import 'package:afya/src/view/mobile/home_page.dart';
 
 class FormPrendreRdv extends StatefulWidget {
-  const FormPrendreRdv({super.key, required this.user});
+  const FormPrendreRdv({super.key, required this.userId, required this.email});
 
-  final User? user;
+  final String? userId;
+  final String? email;
 
   @override
   State<FormPrendreRdv> createState() => _FormPrendreRdvState();
@@ -47,15 +47,15 @@ class _FormPrendreRdvState extends State<FormPrendreRdv> {
 
     return Consumer<MessageViewModel>(
       builder: (context, messageViewModel, child) {
-        if (widget.user != null) {
-          String? uid = widget.user!.uid;
-          Future<Patient?> patient = messageViewModel.trouverPatientUid(uid);
-          Future<PatientIntermediaire?> patientIntermediaire =
-              messageViewModel.trouverPatientIntermediaireUid(uid);
+        if (widget.userId != null) {
+          Future<Patient?> p =
+              messageViewModel.trouverPatientUid(widget.userId!);
+          Future<PatientIntermediaire?> patientI =
+              messageViewModel.trouverPatientIntermediaireUid(widget.userId!);
           return FutureBuilder(
             future: Future.wait([
-              patient,
-              patientIntermediaire,
+              p,
+              patientI,
             ]),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -187,7 +187,7 @@ class _FormPrendreRdvState extends State<FormPrendreRdv> {
                                     OutlinedButton(
                                         onPressed: () async {
                                           await _sendPatientAndMessage(
-                                            uid,
+                                            widget.userId!,
                                             messageViewModel,
                                           );
                                           // ignore: use_build_context_synchronously
@@ -206,7 +206,8 @@ class _FormPrendreRdvState extends State<FormPrendreRdv> {
                       ),
                     ),
                   );
-                } else {
+                } else if ((patient != null) ||
+                    (patientIntermediaire != null)) {
                   //si l'un des deux objets est non nul
                   return SingleChildScrollView(
                     child: Center(
@@ -305,10 +306,12 @@ class _FormPrendreRdvState extends State<FormPrendreRdv> {
                     ),
                   );
                 }
-              } else {
-                //en cas d'erreur quelconque (snapshot.hasError)
-                return Center(child: Text('Erreur: ${snapshot.error}'));
+              } else if(snapshot.hasError){
+              //en cas d'erreur quelconque (snapshot.hasError)
+              return Center(child: Text('Erreur: ${snapshot.error}'));
               }
+              return const Center(
+                  child: Text('La récupération de données a échoué'));
             },
           );
         } else {
@@ -368,7 +371,7 @@ class _FormPrendreRdvState extends State<FormPrendreRdv> {
           _nomController.text,
           _prenomController.text,
           _telephoneController.text,
-          widget.user!.email!,
+          widget.email!,
           null,
           null,
           null,

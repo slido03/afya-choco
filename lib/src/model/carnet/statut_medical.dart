@@ -18,7 +18,7 @@ class StatutMedical {
       Patient.fromJson(json['patient']),
       parseGroupeSanguin(json['groupeSanguin']),
       json['allergies'] as List<String>,
-      json['maladies-hereditaires'] as List<String>,
+      json['maladiesHereditaires'] as List<String>,
     );
   }
 
@@ -40,7 +40,7 @@ class StatutMedical {
         'patient': patient.toJson(),
         'groupeSanguin': groupeSanguin.name,
         'allergies': allergies,
-        'maladies-hereditaires': maladiesHereditaires,
+        'maladiesHereditaires': maladiesHereditaires,
       };
 
   static GroupeSanguin parseGroupeSanguin(String name) {

@@ -27,10 +27,10 @@ class EvenementRepositoryImpl extends EvenementRepository {
   @override
   Future<Evenement?> trouver(RendezVous rendezVous) async {
     return await evenements
-        .where('rendez-vous.dateHeure',
+        .where('rendezVous.dateHeure',
             isEqualTo: rendezVous.dateHeure.millisecondsSinceEpoch)
-        .where('rendez-vous.medecin.uid', isEqualTo: rendezVous.medecin.uid)
-        .where('rendez-vous.patient.uid', isEqualTo: rendezVous.patient.uid)
+        .where('rendezVous.medecin.uid', isEqualTo: rendezVous.medecin.uid)
+        .where('rendezVous.patient.uid', isEqualTo: rendezVous.patient.uid)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -46,11 +46,11 @@ class EvenementRepositoryImpl extends EvenementRepository {
   @override
   Future<void> modifier(Evenement evenement) {
     return evenements
-        .where('rendez-vous.dateHeure',
+        .where('rendezVous.dateHeure',
             isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
-        .where('rendez-vous.medecin.uid',
+        .where('rendezVous.medecin.uid',
             isEqualTo: evenement.rendezVous.medecin.uid)
-        .where('rendez-vous.patient.uid',
+        .where('rendezVous.patient.uid',
             isEqualTo: evenement.rendezVous.patient.uid)
         .get()
         .then((snapshot) {
@@ -68,8 +68,8 @@ class EvenementRepositoryImpl extends EvenementRepository {
   @override
   Future<List<Evenement>> listerPatient(String uidPatient) async {
     return await evenements
-        .where('rendez-vous.patient.uid', isEqualTo: uidPatient)
-        .orderBy('rendez-vous.dateHeure', descending: true)
+        .where('rendezVous.patient.uid', isEqualTo: uidPatient)
+        .orderBy('rendezVous.dateHeure', descending: true)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -89,8 +89,8 @@ class EvenementRepositoryImpl extends EvenementRepository {
   @override
   Future<List<Evenement>> listerMedecin(String uidMedecin) async {
     return await evenements
-        .where('rendez-vous.medecin.uid', isEqualTo: uidMedecin)
-        .orderBy('rendez-vous.dateHeure', descending: true)
+        .where('rendezVous.medecin.uid', isEqualTo: uidMedecin)
+        .orderBy('rendezVous.dateHeure', descending: true)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -110,10 +110,10 @@ class EvenementRepositoryImpl extends EvenementRepository {
   @override
   Future<void> supprimer(RendezVous rendezVous) {
     return evenements
-        .where('rendez-vous.dateHeure',
+        .where('rendezVous.dateHeure',
             isEqualTo: rendezVous.dateHeure.millisecondsSinceEpoch)
-        .where('rendez-vous.medecin.uid', isEqualTo: rendezVous.medecin.uid)
-        .where('rendez-vous.patient.uid', isEqualTo: rendezVous.patient.uid)
+        .where('rendezVous.medecin.uid', isEqualTo: rendezVous.medecin.uid)
+        .where('rendezVous.patient.uid', isEqualTo: rendezVous.patient.uid)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {

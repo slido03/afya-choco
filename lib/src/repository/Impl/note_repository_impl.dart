@@ -26,13 +26,13 @@ class NoteRepositoryImpl extends NoteRepository {
   @override
   Future<void> modifier(Note note) {
     return notes
-        .where('evenement.rendez-vous.dateHeure',
+        .where('evenement.rendezVous.medecin.uid',
+            isEqualTo: note.evenement.rendezVous.medecin.uid)
+        .where('evenement.rendezVous.patient.uid',
+            isEqualTo: note.evenement.rendezVous.patient.uid)
+        .where('evenement.rendezVous.dateHeure',
             isEqualTo:
                 note.evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
-        .where('evenement.rendez-vous.medecin.uid',
-            isEqualTo: note.evenement.rendezVous.medecin.uid)
-        .where('evenement.rendez-vous.patient.uid',
-            isEqualTo: note.evenement.rendezVous.patient.uid)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -49,13 +49,13 @@ class NoteRepositoryImpl extends NoteRepository {
   @override
   Future<List<Note>> lister(Evenement evenement) async {
     return await notes
-        .where('evenement.rendez-vous.dateHeure',
-            isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
-        .where('evenement.rendez-vous.medecin.uid',
+        .where('evenement.rendezVous.medecin.uid',
             isEqualTo: evenement.rendezVous.medecin.uid)
-        .where('evenement.rendez-vous.patient.uid',
+        .where('evenement.rendezVous.patient.uid',
             isEqualTo: evenement.rendezVous.patient.uid)
-        .orderBy('evenement.rendez-vous.dateHeure', descending: true)
+        .where('evenement.rendezVous.dateHeure',
+            isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
+        .orderBy('evenement.rendezVous.dateHeure', descending: true)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -75,12 +75,12 @@ class NoteRepositoryImpl extends NoteRepository {
   @override
   Future<void> supprimer(Evenement evenement) {
     return notes
-        .where('evenement.rendez-vous.dateHeure',
-            isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
-        .where('evenement.rendez-vous.medecin.uid',
+        .where('evenement.rendezVous.medecin.uid',
             isEqualTo: evenement.rendezVous.medecin.uid)
-        .where('evenement.rendez-vous.patient.uid',
+        .where('evenement.rendezVous.patient.uid',
             isEqualTo: evenement.rendezVous.patient.uid)
+        .where('evenement.rendezVous.dateHeure',
+            isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {

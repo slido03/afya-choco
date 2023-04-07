@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:afya/src/view/mobile/consultation/components/components.dart';
 import 'package:afya/src/model/models.dart';
@@ -13,9 +13,9 @@ import 'package:afya/src/view/mobile/authentication/login.dart';
  * This is a form that is used to change a rendez-vous. the last one for préférence.
  */
 class FormChangerRdv extends StatefulWidget {
-  const FormChangerRdv({super.key, required this.user});
+  const FormChangerRdv({super.key, required this.userId});
 
-  final User? user;
+  final String? userId;
 
   @override
   State<FormChangerRdv> createState() => _FormChangerRdvState();
@@ -23,6 +23,7 @@ class FormChangerRdv extends StatefulWidget {
 
 class _FormChangerRdvState extends State<FormChangerRdv> {
   late bool _isGoodRdv;
+  late bool _dialogPushed;
   final TextEditingController _messageController = TextEditingController();
   final TextEditingController _selectedController = TextEditingController();
   String get message => _messageController.text;
@@ -31,10 +32,8 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
   @override
   initState() {
     super.initState();
-    // _isGoodRdv = true;
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   showRdvDialog(context);
-    // });
+   _isGoodRdv = true;
+   _dialogPushed = false;
   }
 
   Future<void> _showRdvDialog(BuildContext context, Patient? patient) async {
@@ -72,6 +71,7 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
 
     setState(() {
       _isGoodRdv = isGoodRdv_;
+      _dialogPushed = true;
       if (kDebugMode) {
         print('isGoodRdv_ = $_isGoodRdv');
       }
@@ -89,18 +89,18 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
   Widget build(BuildContext context) {
     return Consumer<RendezVousViewModel>(
       builder: (context, rendezVousViewModel, child) {
-        if (widget.user != null) {
-          String? uid = widget.user!.uid;
-          Future<Patient?> patient = rendezVousViewModel.trouverPatientUid(uid);
-          Future<PatientIntermediaire?> patientIntermediaire =
-              rendezVousViewModel.trouverPatientIntermediaireUid(uid);
+        if (widget.userId != null) {
+          Future<Patient?> p =
+              rendezVousViewModel.trouverPatientUid(widget.userId!);
+          Future<PatientIntermediaire?> patientI =
+              rendezVousViewModel
+                  .trouverPatientIntermediaireUid(widget.userId!);
           Future<List<RendezVous>> liste =
-              rendezVousViewModel.listerEnAttentePatient(uid);
+              rendezVousViewModel.listerEnAttentePatient(widget.userId!);
           return FutureBuilder(
             future: Future.wait([
-              patient,
-              patientIntermediaire,
-              liste,
+              p,
+              patientI,
             ]),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -110,85 +110,109 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
                   child: const CircularProgressIndicator(),
                 ));
               } else if (snapshot.hasData) {
-                final List<Object?> data = snapshot.data!;
-                final patient = data[0] as Patient?;
-                final patientIntermediaire = data[1] as PatientIntermediaire?;
-                //cette liste est soit vide, en fonction du patient ou en fonction du patient intermédiaire
-                final listeRendezVous = data[2] as List<RendezVous>;
+                final List<Patient?> data = snapshot.data!;
+                final patient = data[0];
+                final patientIntermediaire = data[1];
                 if (patient != null) {
-                  _isGoodRdv = true;
-                  _showRdvDialog(context, patient);
-                  return _changerRdv(context, listeRendezVous, patient);
+                  if(_dialogPushed){
+                   return _changerRdv(context, liste, patient);
+                  }
+                  return _formChanger(context, liste, patient);
                 } else if (patientIntermediaire != null) {
-                  _isGoodRdv = true;
-                  _showRdvDialog(context, patientIntermediaire);
-                  return _changerRdv(
-                      context, listeRendezVous, patientIntermediaire);
+                  if(_dialogPushed){
+                   return _changerRdv(context, liste, patientIntermediaire);
+                  }
+                  return _formChanger(context, liste, patientIntermediaire);
                 } else {
                   //patient et patient intermédiaire nuls
-                  _isGoodRdv = true;
                   _showRdvDialog(context, null);
                 }
+              } else if (snapshot.hasError) {
+                //en cas d'erreur quelconque (snapshot.hasError)
+                return Center(
+                    child: Text('Erreur: ${snapshot.error.toString()}'));
               }
-              //en cas d'erreur quelconque (snapshot.hasError)
-              return Center(child: Text('Erreur: ${snapshot.error}'));
+              return const Center(
+                  child: Text('La récupération de données a échoué'));
             },
           );
         } else {
-          //si l'user est nul c'est que l'utilisateur est déconnecté et donc on le ramène à la page de login
+          //si l'userId est nul c'est que l'utilisateur est déconnecté et donc on le ramène à la page de login
           return const LoginPage();
         }
       },
     );
   }
 
+  Widget _formChanger(BuildContext context, Future<List<RendezVous>> rdvs, Patient patient){
+    _showRdvDialog(context, patient);
+    return _changerRdv(context, rdvs, patient);
+  }
+
   Widget _changerRdv(
-      BuildContext context, List<RendezVous> rdvs, Patient patient) {
+      BuildContext context, Future<List<RendezVous>> rdvs, Patient patient) {
     var size = MediaQuery.of(context).size;
-    return Center(
-      child: Form(
-        child: Column(
-          children: [
-            Visibility(
-              visible: !_isGoodRdv,
-              child: SelectRdv(
-                rdvs: rdvs,
-                selectedController: _selectedController,
-                maxwidth: size.width * 0.95,
-              ),
-            ),
-            InputTextArea(
-              labelText: "message",
-              hintText: "quel est le motif de ce changement ?",
-              controller: _messageController,
-              maxwidth: size.width * 0.95,
-            ),
-            Container(
-              width: size.width * 0.95,
-              margin: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 3),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  const ButtonCancel(),
-                  const SizedBox(width: 20),
-                  //submit button
-                  OutlinedButton(
-                      onPressed: () async {
-                        await _sendMessage(patient, rdvs);
-                        // ignore: use_build_context_synchronously
-                        _messageSentDialog(context);
-                      },
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.green,
+    return FutureBuilder(
+        future: Future.wait([rdvs]),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: Container(
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator(),
+            ));
+          } else if (snapshot.hasData) {
+            final data = snapshot.data!;
+            final rdvs = data[0];
+            return Center(
+              child: Form(
+                child: Column(
+                  children: [
+                    Visibility(
+                      visible: !_isGoodRdv,
+                      child: SelectRdv(
+                        rdvs: rdvs,
+                        selectedController: _selectedController,
+                        maxwidth: size.width * 0.95,
                       ),
-                      child: const Text('Envoyer')),
-                ],
+                    ),
+                    InputTextArea(
+                      labelText: "message",
+                      hintText: "quel est le motif de ce changement ?",
+                      controller: _messageController,
+                      maxwidth: size.width * 0.95,
+                    ),
+                    Container(
+                      width: size.width * 0.95,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 3),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          const ButtonCancel(),
+                          const SizedBox(width: 20),
+                          //submit button
+                          OutlinedButton(
+                              onPressed: () async {
+                                await _sendMessage(patient, rdvs);
+                                // ignore: use_build_context_synchronously
+                                _messageSentDialog(context);
+                              },
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: Colors.green,
+                              ),
+                              child: const Text('Envoyer')),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
+            );
+          }
+          //en cas d'erreur quelconque (snapshot.hasError)
+          return Center(child: Text('Erreur: ${snapshot.error.toString()}'));
+        });
   }
 
   Future<void> _sendMessage(

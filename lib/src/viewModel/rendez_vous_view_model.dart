@@ -44,34 +44,31 @@ class RendezVousViewModel extends ChangeNotifier {
     return await rendezvousRep.getLastForPatient(uidMedecin);
   }
 
-  void supprimer(RendezVous rendezvous) {
-    rendezvousRep.supprimer(rendezvous);
+  Future<void> supprimer(RendezVous rendezvous) async {
+    await rendezvousRep.supprimer(rendezvous);
     notifyListeners();
   }
 
   //permet de s'assurer si l'utilisateur courant est un patient intermediaire
   Future<PatientIntermediaire?> trouverPatientIntermediaireUid(
       String uid) async {
-    PatientIntermediaire? patient =
-        await patientIntermediaireRep.trouverUid(uid);
-    return patient;
+    return await patientIntermediaireRep.trouverUid(uid);
   }
 
 //permet de s'assurer si l'utilisateur courant est un patient
   Future<Patient?> trouverPatientUid(String uid) async {
-    Patient? patient = await patientRep.trouverUid(uid);
-    return patient;
+    return await patientRep.trouverUid(uid);
   }
 
   Future<Secretaire?> getSecretariatCentral() async {
     //faire en sorte que l'objet secretaire central existe en permanence
-    Secretaire? secretaire = await secretaireRep.getSecretariatCentral();
-    if (secretaire == null) {
-      if (kDebugMode) {
-        print(
-            "erreur lors de la recherche du secretariat central : l'objet est nul");
-      }
-    }
-    return secretaire;
+    return await secretaireRep.getSecretariatCentral();
+    // if (secretaire == null) {
+    //   if (kDebugMode) {
+    //     print(
+    //         "erreur lors de la recherche du secretariat central : l'objet est nul");
+    //   }
+    // }
+    //return secretaire;
   }
 }

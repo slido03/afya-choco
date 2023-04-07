@@ -15,7 +15,7 @@ class Evenement {
     return Evenement(
       json['titre'] as String,
       json['description'] as String,
-      RendezVous.fromJson(json['rendez-vous']),
+      RendezVous.fromJson(json['rendezVous']),
     );
   }
 
@@ -29,6 +29,6 @@ class Evenement {
   Map<String, dynamic> toJson() => {
         'titre': titre,
         'description': description,
-        'rendez-vous': rendezVous.toJson(),
+        'rendezVous': rendezVous.toJson(),
       };
 }

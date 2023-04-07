@@ -37,23 +37,19 @@ class MessageViewModel extends ChangeNotifier {
   //liste des messages envoyés par l'utilisateur courant du plus récent au plus ancien
   Future<List<Message>> listerEnvoye(
       String uidExpediteur, ObjetMessage objet) async {
-    List<Message> liste = await messageRep.listerEnvoye(uidExpediteur, objet);
-    return liste;
+    return await messageRep.listerEnvoye(uidExpediteur, objet);
   }
 
   //liste des messages reçus par l'utilisateur courant du plus récent au plus ancien
   Future<List<Message>> listerRecu(
       String uidDestinataire, ObjetMessage objet) async {
-    List<Message> liste = await messageRep.listerRecu(uidDestinataire, objet);
-    return liste;
+    return await messageRep.listerRecu(uidDestinataire, objet);
   }
 
   //lister les messages reçus traités ou non traités par l'utilisateur courant
   Future<List<Message>> listerStatut(
       String uidDestinataire, StatutMessage statut) async {
-    List<Message> liste =
-        await messageRep.listerStatut(uidDestinataire, statut);
-    return liste;
+    return await messageRep.listerStatut(uidDestinataire, statut);
   }
 
   Future<Secretaire?> getSecretariatCentral() async {
@@ -61,22 +57,22 @@ class MessageViewModel extends ChangeNotifier {
     if (kDebugMode) {
       print('recherche du secretariat central');
     }
-    Secretaire? secretaire = await secretaireRep.getSecretariatCentral();
-    if (kDebugMode) {
-      print('fin de recherche du secretariat central');
-      //print(secretaire.toString());
-    }
-    if (secretaire == null) {
-      if (kDebugMode) {
-        print(
-            "erreur lors de la recherche du secretariat central : l'objet est nul");
-      }
-    }
-    return secretaire;
+    return secretaireRep.getSecretariatCentral();
+    // if (kDebugMode) {
+    //   print('fin de recherche du secretariat central');
+    //   //print(secretaire.toString());
+    // }
+    // if (secretaire == null) {
+    //   if (kDebugMode) {
+    //     print(
+    //         "erreur lors de la recherche du secretariat central : l'objet est nul");
+    //   }
+    // }
+    // return secretaire;
   }
 
-  void supprimer(Message message) {
-    messageRep.supprimer(message);
+  Future<void> supprimer(Message message) async {
+    await messageRep.supprimer(message);
     notifyListeners();
   }
 
@@ -105,14 +101,11 @@ class MessageViewModel extends ChangeNotifier {
   //permet de s'assurer si l'utilisateur courant est un patient intermediaire
   Future<PatientIntermediaire?> trouverPatientIntermediaireUid(
       String uid) async {
-    PatientIntermediaire? patient =
-        await patientIntermediaireRep.trouverUid(uid);
-    return patient;
+    return await patientIntermediaireRep.trouverUid(uid);
   }
 
 //permet de s'assurer si l'utilisateur courant est un patient
   Future<Patient?> trouverPatientUid(String uid) async {
-    Patient? patient = await patientRep.trouverUid(uid);
-    return patient;
+    return await patientRep.trouverUid(uid);
   }
 }
