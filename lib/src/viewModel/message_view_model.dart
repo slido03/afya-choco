@@ -40,16 +40,21 @@ class MessageViewModel extends ChangeNotifier {
     return await messageRep.listerEnvoye(uidExpediteur, objet);
   }
 
-  //liste des messages reçus par l'utilisateur courant du plus récent au plus ancien
-  Future<List<Message>> listerRecu(
+  //liste des messages reçus par l'utilisateur courant en fonction de l'objet du plus récent au plus ancien
+  Future<List<Message>> listerRecuObjet(
       String uidDestinataire, ObjetMessage objet) async {
-    return await messageRep.listerRecu(uidDestinataire, objet);
+    return await messageRep.listerRecuObjet(uidDestinataire, objet);
+  }
+
+  //liste de tous les messages reçus par l'utilisateur
+  Future<List<Message>> listerRecu( String uidDestinataire) async {
+    return await messageRep.listerRecu(uidDestinataire);
   }
 
   //lister les messages reçus traités ou non traités par l'utilisateur courant
-  Future<List<Message>> listerStatut(
+  Future<List<Message>> listerRecuStatut(
       String uidDestinataire, StatutMessage statut) async {
-    return await messageRep.listerStatut(uidDestinataire, statut);
+    return await messageRep.listerRecuStatut(uidDestinataire, statut);
   }
 
   Future<Secretaire?> getSecretariatCentral() async {

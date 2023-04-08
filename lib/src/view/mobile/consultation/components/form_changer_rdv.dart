@@ -32,8 +32,8 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
   @override
   initState() {
     super.initState();
-   _isGoodRdv = true;
-   _dialogPushed = false;
+    _isGoodRdv = true;
+    _dialogPushed = false;
   }
 
   Future<void> _showRdvDialog(BuildContext context, Patient? patient) async {
@@ -43,7 +43,26 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
 
     if (patient != null) {
       rendezVous = await rendezVousViewModel.getLastForPatient(patient.uid);
-      dialog = RdvDialog(rdv: rendezVous);
+      //si le patient a au moins un rendez-vous à venir (dans le future par rapport au jour d'hui)
+      if (rendezVous != null) {
+        dialog = RdvDialog(rdv: rendezVous);
+      } else {
+        //au cas contraire
+        dialog = AlertDialog(
+          title: const Text("Aucun rendez-vous à venir"),
+          content: const Text(
+              "Désolé vous n'avez aucun rendez-vous à venir pour le momment."),
+          actions: [
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.pop(context);
+                _navigateToHome(context);
+              },
+            ),
+          ],
+        );
+      }
     } else {
       dialog = AlertDialog(
         title: const Text("Aucun rendez-vous pris"),
@@ -69,6 +88,13 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
         ) ??
         false;
 
+    //si le patient est nul ou il est non nul et n'a aucun rendez-vous en attente
+    //et de plus il a appuyé hors de la zone du dialog on le ramène à la HomePage
+    if (((patient == null) || (rendezVous == null)) && (isGoodRdv_ == false)) {
+      // ignore: use_build_context_synchronously
+      _navigateToHome(context);
+    }
+
     setState(() {
       _isGoodRdv = isGoodRdv_;
       _dialogPushed = true;
@@ -92,9 +118,8 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
         if (widget.userId != null) {
           Future<Patient?> p =
               rendezVousViewModel.trouverPatientUid(widget.userId!);
-          Future<PatientIntermediaire?> patientI =
-              rendezVousViewModel
-                  .trouverPatientIntermediaireUid(widget.userId!);
+          Future<PatientIntermediaire?> patientI = rendezVousViewModel
+              .trouverPatientIntermediaireUid(widget.userId!);
           Future<List<RendezVous>> liste =
               rendezVousViewModel.listerEnAttentePatient(widget.userId!);
           return FutureBuilder(
@@ -114,13 +139,13 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
                 final patient = data[0];
                 final patientIntermediaire = data[1];
                 if (patient != null) {
-                  if(_dialogPushed){
-                   return _changerRdv(context, liste, patient);
+                  if (_dialogPushed) {
+                    return _changerRdv(context, liste, patient);
                   }
                   return _formChanger(context, liste, patient);
                 } else if (patientIntermediaire != null) {
-                  if(_dialogPushed){
-                   return _changerRdv(context, liste, patientIntermediaire);
+                  if (_dialogPushed) {
+                    return _changerRdv(context, liste, patientIntermediaire);
                   }
                   return _formChanger(context, liste, patientIntermediaire);
                 } else {
@@ -144,7 +169,8 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
     );
   }
 
-  Widget _formChanger(BuildContext context, Future<List<RendezVous>> rdvs, Patient patient){
+  Widget _formChanger(
+      BuildContext context, Future<List<RendezVous>> rdvs, Patient patient) {
     _showRdvDialog(context, patient);
     return _changerRdv(context, rdvs, patient);
   }
@@ -248,25 +274,32 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
     }
   }
 
-  void _messageSentDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Confirmation d'envoie"),
-          content: const Text(
-              "Votre demande a bien été envoyée. \nLa clinique vous fera un retour dans les bref délais."),
-          actions: [
-            TextButton(
-              child: const Text("OK"),
-              onPressed: () {
-                Navigator.pop(context);
-                _navigateToHome(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
+  Future<void> _messageSentDialog(BuildContext context) async {
+    //pushed permet de savoir si l'utilisateur a bien cliqué sur le bouton OK
+    final pushed = await showDialog<bool?>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Confirmation d'envoie"),
+              content: const Text(
+                  "Votre demande a bien été envoyée. \nLa clinique vous fera un retour dans les bref délais."),
+              actions: [
+                TextButton(
+                  child: const Text("OK"),
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                    _navigateToHome(context);
+                  },
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
+    //si l'utilisateur n'a pas cliquer sur OK on le redirige quand même à la HomePage
+    if (!pushed) {
+      // ignore: use_build_context_synchronously
+      _navigateToHome(context);
+    }
   }
 }

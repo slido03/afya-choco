@@ -90,7 +90,7 @@ class MessageRepositoryImpl extends MessageRepository {
 
   //lister les messages reçus en fonction de l'objet
   @override
-  Future<List<Message>> listerRecu(
+  Future<List<Message>> listerRecuObjet(
       String uidDestinataire, ObjetMessage objet) async {
     return await messages
         .where('destinataire.uid', isEqualTo: uidDestinataire)
@@ -112,9 +112,33 @@ class MessageRepositoryImpl extends MessageRepository {
     });
   }
 
+   //lister tous les messages reçus
+  @override
+  Future<List<Message>> listerRecu(
+      String uidDestinataire) async {
+    return await messages
+        .where('destinataire.uid', isEqualTo: uidDestinataire)
+        .orderBy('dateHeure', descending: true)
+        .orderBy('statut')
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Message> liste = [];
+        for (var document in snapshot.docs) {
+          Message message = document.data();
+          liste.add(message);
+        }
+        return liste;
+      } else {
+        List<Message> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
   //lister les messages reçus traités ou non traités
   @override
-  Future<List<Message>> listerStatut(
+  Future<List<Message>> listerRecuStatut(
       String uidDestinataire, StatutMessage statut) async {
     return await messages
         .where('destinataire.uid', isEqualTo: uidDestinataire)

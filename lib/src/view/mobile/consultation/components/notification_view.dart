@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:afya/src/model/models.dart';
+import 'package:intl/intl.dart';
 
 class NotificationView extends StatelessWidget {
-  const NotificationView({super.key, required this.datas});
+  const NotificationView({super.key, required this.message});
 
-  final Map<String, dynamic> datas;
+  final Message message;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10.0),
-      color: datas['readed']
+      color: (message.statut == StatutMessage.traite)
           ? Colors.white
           : const Color.fromARGB(255, 231, 248, 232),
       //margin: const EdgeInsets.symmetric(vertical: 5.0),
@@ -20,13 +22,13 @@ class NotificationView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                datas['date'],
+                message.dateHeure.dateFormatted,
                 style: const TextStyle(
                   fontSize: 12.0,
                 ),
               ),
               Text(
-                datas['heure'],
+                message.dateHeure.timeFormatted,
                 style: const TextStyle(
                   fontSize: 12.0,
                 ),
@@ -37,9 +39,9 @@ class NotificationView extends StatelessWidget {
             height: 2,
           ),
 
-          // title
+          // objet
           Text(
-            datas['title'],
+            message.objet.value,
             style: const TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 16.0,
@@ -48,10 +50,10 @@ class NotificationView extends StatelessWidget {
           const SizedBox(
             height: 2,
           ),
-          // description of notification
+          // content of notification
 
           Text(
-            datas['description'],
+            message.contenu,
             style: const TextStyle(
               fontSize: 14.0,
             ),
@@ -60,4 +62,9 @@ class NotificationView extends StatelessWidget {
       ),
     );
   }
+}
+
+extension FormatDate on DateTime {
+  String get dateFormatted => DateFormat('dd/MM/yyyy').format(this);
+  String get timeFormatted => DateFormat('HH:mm').format(this);
 }

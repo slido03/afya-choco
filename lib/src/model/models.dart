@@ -151,8 +151,8 @@ extension ObjetMessageExtension on ObjetMessage {
 }
 
 enum StatutMessage {
-  traite,
   nonTraite,
+  traite,
 }
 
 extension StatutMessageExtension on StatutMessage {

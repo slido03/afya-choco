@@ -306,16 +306,16 @@ class _FormPrendreRdvState extends State<FormPrendreRdv> {
                     ),
                   );
                 }
-              } else if(snapshot.hasError){
-              //en cas d'erreur quelconque (snapshot.hasError)
-              return Center(child: Text('Erreur: ${snapshot.error}'));
+              } else if (snapshot.hasError) {
+                //en cas d'erreur quelconque (snapshot.hasError)
+                return Center(child: Text('Erreur: ${snapshot.error}'));
               }
               return const Center(
                   child: Text('La récupération de données a échoué'));
             },
           );
         } else {
-          //si l'user est nul c'est que l'utilisateur est déconnecté et donc on le ramène à la page de login
+          //si l'userId est nul c'est que l'utilisateur est déconnecté et donc on le ramène à la page de login
           return const LoginPage();
         }
       },

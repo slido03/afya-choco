@@ -155,8 +155,8 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
 
   @override
   Future<RendezVous?> getLastForPatient(String uidPatient) async {
-    //liste des rendez-vous du patient du plus récent au plus ancien
-    List<RendezVous> liste = await listerPatient(uidPatient);
+    //liste des rendez-vous du patient en attente du plus récent au plus ancien
+    List<RendezVous> liste = await listerEnAttentePatient(uidPatient);
     if (liste.isNotEmpty) {
       return liste.first;
     } else {
