@@ -47,7 +47,7 @@ class MessageViewModel extends ChangeNotifier {
   }
 
   //liste de tous les messages reçus par l'utilisateur
-  Future<List<Message>> listerRecu( String uidDestinataire) async {
+  Future<List<Message>> listerRecu(String uidDestinataire) async {
     return await messageRep.listerRecu(uidDestinataire);
   }
 
@@ -62,18 +62,7 @@ class MessageViewModel extends ChangeNotifier {
     if (kDebugMode) {
       print('recherche du secretariat central');
     }
-    return secretaireRep.getSecretariatCentral();
-    // if (kDebugMode) {
-    //   print('fin de recherche du secretariat central');
-    //   //print(secretaire.toString());
-    // }
-    // if (secretaire == null) {
-    //   if (kDebugMode) {
-    //     print(
-    //         "erreur lors de la recherche du secretariat central : l'objet est nul");
-    //   }
-    // }
-    // return secretaire;
+    return await secretaireRep.getSecretariatCentral();
   }
 
   Future<void> supprimer(Message message) async {

@@ -63,12 +63,5 @@ class RendezVousViewModel extends ChangeNotifier {
   Future<Secretaire?> getSecretariatCentral() async {
     //faire en sorte que l'objet secretaire central existe en permanence
     return await secretaireRep.getSecretariatCentral();
-    // if (secretaire == null) {
-    //   if (kDebugMode) {
-    //     print(
-    //         "erreur lors de la recherche du secretariat central : l'objet est nul");
-    //   }
-    // }
-    //return secretaire;
   }
 }

@@ -43,18 +43,20 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   title: Text(widget.title),
                 ),
                 body: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      titleNotifications(context),
-                      ChangeNotifierProvider(
-                        create: (context) => MessageViewModel(),
-                        builder: ((context, child) => NotificationBuilder(
-                              userId: userId,
-                            )),
-                      ),
-                    ],
+                  child: Center(
+                    child: Column(
+                      // crossAxisAlignment: CrossAxisAlignment.center,
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        titleNotifications(context),
+                        ChangeNotifierProvider(
+                          create: (context) => MessageViewModel(),
+                          builder: ((context, child) => NotificationBuilder(
+                                userId: userId,
+                              )),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

@@ -42,22 +42,19 @@ class _NotificationBuilderState extends State<NotificationBuilder> {
               final msgRecus = snapshot.data;
               if (msgRecus != null) {
                 if (msgRecus.isNotEmpty) {
-                  return SingleChildScrollView(
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: msgRecus.length,
-                              itemBuilder: (context, index) {
-                                return NotificationView(
-                                  message: msgRecus[index],
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                  return Center(
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: msgRecus.length,
+                          itemBuilder: (context, index) {
+                            return NotificationView(
+                              message: msgRecus[index],
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   );
                 } else {

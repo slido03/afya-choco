@@ -16,14 +16,14 @@ class PersonnelSante extends Utilisateur {
 
   factory PersonnelSante.fromJson(Map<String, dynamic> json) {
     return PersonnelSante(
-      json['uid'] as String,
-      json['identifiant'] as String,
-      json['nom'] as String,
-      json['prenoms'] as String,
-      json['telephone'] as String,
-      json['email'] as String,
-      json['adresse'] as String,
-      json['clinique'] as String,
+      json['uid'],
+      json['identifiant'],
+      json['nom'],
+      json['prenoms'],
+      json['telephone'],
+      json['email'],
+      json['adresse'],
+      json['clinique'],
     );
   }
 

@@ -24,6 +24,8 @@ class _FormDemanderInfoState extends State<FormDemanderInfos> {
   final TextEditingController _telephoneController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
   String get message => _messageController.text;
+  final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -82,6 +84,7 @@ class _FormDemanderInfoState extends State<FormDemanderInfos> {
                           vertical: 20.0,
                         ),
                         child: Form(
+                          key: _formKey,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           child: Column(
                             children: [
@@ -139,19 +142,21 @@ class _FormDemanderInfoState extends State<FormDemanderInfos> {
                                     const ButtonCancel(),
                                     const SizedBox(width: 20),
                                     //submit button
-                                    OutlinedButton(
-                                        onPressed: () async {
-                                          await _sendPatientAndMessage(
-                                            widget.userId!,
-                                            messageViewModel,
-                                          );
-                                          // ignore: use_build_context_synchronously
-                                          _messageSentDialog(context);
-                                        },
-                                        style: OutlinedButton.styleFrom(
-                                          foregroundColor: Colors.green,
-                                        ),
-                                        child: const Text('Envoyer')),
+                                    _isLoading
+                                        ? const CircularProgressIndicator()
+                                        : OutlinedButton(
+                                            onPressed: () async {
+                                              await _sendPatientAndMessage(
+                                                widget.userId!,
+                                                messageViewModel,
+                                              );
+                                              // ignore: use_build_context_synchronously
+                                              await _messageSentDialog(context);
+                                            },
+                                            style: OutlinedButton.styleFrom(
+                                              foregroundColor: Colors.green,
+                                            ),
+                                            child: const Text('Envoyer')),
                                   ],
                                 ),
                               ),
@@ -176,6 +181,7 @@ class _FormDemanderInfoState extends State<FormDemanderInfos> {
                           vertical: 20.0,
                         ),
                         child: Form(
+                          key: _formKey,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           child: Column(
                             children: [
@@ -218,31 +224,35 @@ class _FormDemanderInfoState extends State<FormDemanderInfos> {
                                     const ButtonCancel(),
                                     const SizedBox(width: 20),
                                     //submit button
-                                    OutlinedButton(
-                                        onPressed: () async {
-                                          //on vérifie d'abord si le patient existe
-                                          if (patient != null) {
-                                            await _sendMessage(
-                                              patient,
-                                              messageViewModel,
-                                            );
-                                            // ignore: use_build_context_synchronously
-                                            _messageSentDialog(context);
-                                            //au cas contraire on envoie le message au nom du patient intermédiaire
-                                          } else if (patientIntermediaire !=
-                                              null) {
-                                            await _sendMessage(
-                                              patientIntermediaire,
-                                              messageViewModel,
-                                            );
-                                            // ignore: use_build_context_synchronously
-                                            _messageSentDialog(context);
-                                          }
-                                        },
-                                        style: OutlinedButton.styleFrom(
-                                          foregroundColor: Colors.green,
-                                        ),
-                                        child: const Text('Envoyer')),
+                                    _isLoading
+                                        ? const CircularProgressIndicator()
+                                        : OutlinedButton(
+                                            onPressed: () async {
+                                              //on vérifie d'abord si le patient existe
+                                              if (patient != null) {
+                                                await _sendMessage(
+                                                  patient,
+                                                  messageViewModel,
+                                                );
+                                                // ignore: use_build_context_synchronously
+                                                await _messageSentDialog(
+                                                    context);
+                                                //au cas contraire on envoie le message au nom du patient intermédiaire
+                                              } else if (patientIntermediaire !=
+                                                  null) {
+                                                await _sendMessage(
+                                                  patientIntermediaire,
+                                                  messageViewModel,
+                                                );
+                                                // ignore: use_build_context_synchronously
+                                                await _messageSentDialog(
+                                                    context);
+                                              }
+                                            },
+                                            style: OutlinedButton.styleFrom(
+                                              foregroundColor: Colors.green,
+                                            ),
+                                            child: const Text('Envoyer')),
                                   ],
                                 ),
                               ),
@@ -273,28 +283,39 @@ class _FormDemanderInfoState extends State<FormDemanderInfos> {
     Patient patient,
     MessageViewModel messageViewModel,
   ) async {
-    //si les champs sont non vides on procède à l'envoie
-    if (message.isNotEmpty) {
-      if (kDebugMode) {
-        print('message non nul');
-      }
-      try {
-        Secretaire? secretaire = await messageViewModel.getSecretariatCentral();
-        //puis on envoie le message de prise de rendez-vous
-        Future.microtask(() => messageViewModel.envoyer(Message(
-              patient,
-              secretaire!,
-              DateTime.now(),
-              ObjetMessage.demanderInformations,
-              message,
-              StatutMessage.nonTraite,
-            )));
+    final form = _formKey.currentState;
+    if (form!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      form.save();
+      //si les champs sont non vides on procède à l'envoie
+      if (message.isNotEmpty) {
         if (kDebugMode) {
-          print('message sent');
+          print('message non nul');
         }
-      } catch (e) {
-        if (kDebugMode) {
-          print(e.toString());
+        try {
+          Secretaire? secretaire =
+              await messageViewModel.getSecretariatCentral();
+          //puis on envoie le message de prise de rendez-vous
+          Future.microtask(() => messageViewModel.envoyer(Message(
+                patient,
+                secretaire!,
+                DateTime.now(),
+                ObjetMessage.demanderInformations,
+                message,
+                StatutMessage.nonTraite,
+              )));
+          if (kDebugMode) {
+            print('message sent');
+          }
+        } catch (e) {
+          setState(() {
+            _isLoading = false;
+          });
+          if (kDebugMode) {
+            print(e.toString());
+          }
         }
       }
     }
@@ -345,25 +366,32 @@ class _FormDemanderInfoState extends State<FormDemanderInfos> {
     );
   }
 
-  void _messageSentDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Confirmation d'envoie"),
-          content: const Text(
-              "Votre demande a bien été envoyée. \nLa clinique vous fera un retour dans les bref délais."),
-          actions: [
-            TextButton(
-              child: const Text("OK"),
-              onPressed: () {
-                Navigator.pop(context);
-                _navigateToHome(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
+  Future<void> _messageSentDialog(BuildContext context) async {
+    //pushed permet de savoir si l'utilisateur a bien cliqué sur le bouton OK
+    final pushed = await showDialog<bool?>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Confirmation d'envoie"),
+              content: const Text(
+                  "Votre demande a bien été envoyée. \nLa clinique vous fera un retour dans les bref délais."),
+              actions: [
+                TextButton(
+                  child: const Text("OK"),
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                    _navigateToHome(context);
+                  },
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
+    //si l'utilisateur n'a pas cliquer sur OK on le redirige quand même à la HomePage
+    if (!pushed) {
+      // ignore: use_build_context_synchronously
+      _navigateToHome(context);
+    }
   }
 }

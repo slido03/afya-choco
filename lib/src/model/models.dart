@@ -131,19 +131,19 @@ extension ObjetMessageExtension on ObjetMessage {
   String get value {
     switch (this) {
       case ObjetMessage.prendreRendezVous:
-        return 'Prendre un rendez-vous';
+        return 'Prise de rendez-vous';
       case ObjetMessage.modifierRendezVous:
-        return 'Modifier un rendez-vous';
+        return 'Changement de rendez-vous';
       case ObjetMessage.annulerRendezVous:
-        return 'Annuler un rendez-vous';
+        return 'Annulation de rendez-vous';
       case ObjetMessage.demanderInformations:
-        return 'Demander des informations';
+        return "Demande d'informations";
       case ObjetMessage.confirmerRendezVous:
-        return 'Confirmer un rendez-vous';
+        return 'Confirmation de rendez-vous';
       case ObjetMessage.donnerInformations:
-        return 'Donner des informations';
+        return 'Renseignements';
       case ObjetMessage.signalerMiseAJour:
-        return 'Signaler une mise à jour de documents personnels';
+        return 'Mise à jour de vos informations médicales';
       default:
         throw ArgumentError('Objet de message inconnu');
     }

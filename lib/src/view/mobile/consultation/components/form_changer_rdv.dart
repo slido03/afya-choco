@@ -24,6 +24,8 @@ class FormChangerRdv extends StatefulWidget {
 class _FormChangerRdvState extends State<FormChangerRdv> {
   late bool _isGoodRdv;
   late bool _dialogPushed;
+  final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
   final TextEditingController _messageController = TextEditingController();
   final TextEditingController _selectedController = TextEditingController();
   String get message => _messageController.text;
@@ -51,7 +53,7 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
         dialog = AlertDialog(
           title: const Text("Aucun rendez-vous à venir"),
           content: const Text(
-              "Désolé vous n'avez aucun rendez-vous à venir pour le momment."),
+              "Désolé vous n'avez aucun rendez-vous à venir pour le moment."),
           actions: [
             TextButton(
               child: const Text("OK"),
@@ -192,6 +194,7 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
             final rdvs = data[0];
             return Center(
               child: Form(
+                key: _formKey,
                 child: Column(
                   children: [
                     Visibility(
@@ -218,16 +221,18 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
                           const ButtonCancel(),
                           const SizedBox(width: 20),
                           //submit button
-                          OutlinedButton(
-                              onPressed: () async {
-                                await _sendMessage(patient, rdvs);
-                                // ignore: use_build_context_synchronously
-                                _messageSentDialog(context);
-                              },
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: Colors.green,
-                              ),
-                              child: const Text('Envoyer')),
+                          _isLoading
+                              ? const CircularProgressIndicator()
+                              : OutlinedButton(
+                                  onPressed: () async {
+                                    await _sendMessage(patient, rdvs);
+                                    // ignore: use_build_context_synchronously
+                                    await _messageSentDialog(context);
+                                  },
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: Colors.green,
+                                  ),
+                                  child: const Text('Envoyer')),
                         ],
                       ),
                     ),
@@ -245,30 +250,41 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
     Patient patient,
     List<RendezVous> rdvs,
   ) async {
-    //si les champs sont non vides on procède à l'enregistrement du message
-    if ((message.isNotEmpty) && (selected != null)) {
-      if (kDebugMode) {
-        print('message et sélection de rendez-vous non nuls');
-      }
-      try {
-        MessageViewModel messageViewModel = MessageViewModel();
-        Secretaire? secretaire = await messageViewModel.getSecretariatCentral();
-        RendezVous rdv = rdvs[selected!];
-        //puis on envoie le message de prise de rendez-vous
-        Future.microtask(() => messageViewModel.envoyer(Message(
-              patient,
-              secretaire!,
-              DateTime.now(),
-              ObjetMessage.modifierRendezVous,
-              '${rdv.dateHeure.millisecondsSinceEpoch}||${patient.identifiant}||${rdv.medecin.identifiant}||$message',
-              StatutMessage.nonTraite,
-            )));
+    final form = _formKey.currentState;
+    if (form!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      form.save();
+      //si les champs sont non vides on procède à l'enregistrement du message
+      if ((message.isNotEmpty) && (selected != null)) {
         if (kDebugMode) {
-          print('message sent');
+          print('message et sélection de rendez-vous non nuls');
         }
-      } catch (e) {
-        if (kDebugMode) {
-          print(e.toString());
+        try {
+          MessageViewModel messageViewModel = MessageViewModel();
+          Secretaire? secretaire =
+              await messageViewModel.getSecretariatCentral();
+          RendezVous rdv = rdvs[selected!];
+          //puis on envoie le message de prise de rendez-vous
+          Future.microtask(() => messageViewModel.envoyer(Message(
+                patient,
+                secretaire!,
+                DateTime.now(),
+                ObjetMessage.modifierRendezVous,
+                '${rdv.dateHeure.millisecondsSinceEpoch}||${patient.identifiant}||${rdv.medecin.identifiant}||$message',
+                StatutMessage.nonTraite,
+              )));
+          if (kDebugMode) {
+            print('message sent');
+          }
+        } catch (e) {
+          setState(() {
+            _isLoading = false;
+          });
+          if (kDebugMode) {
+            print(e.toString());
+          }
         }
       }
     }

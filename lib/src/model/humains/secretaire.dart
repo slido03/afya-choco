@@ -7,13 +7,13 @@ class Secretaire extends PersonnelSante {
 
   Secretaire(
     super._uid,
+    super._identifiant,
     super._nom,
     super._prenoms,
     super._telephone,
     super._email,
     super._adresse,
     super._clinique,
-    super._identifiant,
     this._numeroSecuriteSociale,
     //this._medecins,
   );
@@ -21,13 +21,13 @@ class Secretaire extends PersonnelSante {
   factory Secretaire.fromJson(Map<String, dynamic> json) {
     return Secretaire(
       json['uid'],
+      json['identifiant'],
       json['nom'],
       json['prenoms'],
       json['telephone'],
       json['email'],
       json['adresse'],
       json['clinique'],
-      json['identifiant'],
       json['numeroSecuriteSociale'],
       //medecinsFromJson(json['medecins']),
     );
@@ -47,13 +47,13 @@ class Secretaire extends PersonnelSante {
   @override
   Map<String, dynamic> toJson() => {
         'uid': uid,
+        'identifiant': identifiant,
         'nom': nom,
         'prenoms': prenoms,
         'telephone': telephone,
         'email': email,
         'adresse': adresse,
         'clinique': clinique,
-        'identifiant': identifiant,
         'numeroSecuriteSociale': numeroSecuriteSociale,
         //'medecins': medecinsJson,
       };
