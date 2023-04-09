@@ -20,14 +20,10 @@ class Evenement {
     );
   }
 
-  factory Evenement.faker(
-    Patient patient,
-    Medecin medecin,
-  ) {
+  factory Evenement.faker(RendezVous rendezVous) {
     var faker = Faker();
     var titre = faker.lorem.sentence();
     var description = faker.lorem.sentence();
-    var rendezVous = RendezVous.faker(patient, medecin);
     return Evenement(
       titre,
       description,
