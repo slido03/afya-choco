@@ -6,8 +6,8 @@ class StatutMedicalViewModel extends ChangeNotifier {
       StatutMedicalRepositoryImpl.instance;
 
   //ajout d'un statutmedical dans la base de données
-  void ajouter(StatutMedical statutmedical) {
-    statutmedicalRep.ajouter(statutmedical);
+  Future<void> ajouter(StatutMedical statutmedical) async {
+    await statutmedicalRep.ajouter(statutmedical);
     notifyListeners();
   }
 
@@ -15,8 +15,8 @@ class StatutMedicalViewModel extends ChangeNotifier {
     return await statutmedicalRep.trouver(identifiantPatient);
   }
 
-  void modifier(StatutMedical statutmedical) {
-    statutmedicalRep.modifier(statutmedical);
+  Future<void> modifier(StatutMedical statutmedical) async {
+    await statutmedicalRep.modifier(statutmedical);
     notifyListeners();
   }
 
@@ -25,8 +25,8 @@ class StatutMedicalViewModel extends ChangeNotifier {
     return await statutmedicalRep.lister();
   }
 
-  void supprimer(String identifiantPatient) {
-    statutmedicalRep.supprimer(identifiantPatient);
+  Future<void> supprimer(String identifiantPatient) async {
+    await statutmedicalRep.supprimer(identifiantPatient);
     notifyListeners();
   }
 }

@@ -5,8 +5,8 @@ class EvenementViewModel extends ChangeNotifier {
   EvenementRepository evenementRep = EvenementRepositoryImpl.instance;
 
   //ajout d'un evenement dans la base de données
-  void ajouter(Evenement evenement) {
-    evenementRep.ajouter(evenement);
+  Future<void> ajouter(Evenement evenement) async {
+    await evenementRep.ajouter(evenement);
     notifyListeners();
   }
 
@@ -14,8 +14,8 @@ class EvenementViewModel extends ChangeNotifier {
     return await evenementRep.trouver(rendezVous);
   }
 
-  void modifier(Evenement evenement) {
-    evenementRep.modifier(evenement);
+  Future<void> modifier(Evenement evenement) async {
+    await evenementRep.modifier(evenement);
     notifyListeners();
   }
 
@@ -29,8 +29,8 @@ class EvenementViewModel extends ChangeNotifier {
     return await evenementRep.listerMedecin(uidMedecin);
   }
 
-  void supprimer(RendezVous rendezVous) {
-    evenementRep.supprimer(rendezVous);
+  Future<void> supprimer(RendezVous rendezVous) async {
+    await evenementRep.supprimer(rendezVous);
     notifyListeners();
   }
 }

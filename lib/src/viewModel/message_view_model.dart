@@ -25,11 +25,11 @@ class MessageViewModel extends ChangeNotifier {
   }
 
   //change le statut d'un message de non traité à traité
-  void modifierStatut(Message message) {
+  Future<void> modifierStatut(Message message) async {
     //on vérifie le statut initial avant de faire la modification
     if (message.statut == StatutMessage.nonTraite) {
       message.changerStatut(StatutMessage.traite);
-      messageRep.modifierStatut(message);
+      await messageRep.modifierStatut(message);
       notifyListeners();
     }
   }

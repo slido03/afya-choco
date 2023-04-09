@@ -9,8 +9,8 @@ class RendezVousViewModel extends ChangeNotifier {
   PatientRepository patientRep = PatientRepositoryImpl.instance;
 
   //ajout d'un rendezvous dans la base de données
-  void ajouter(RendezVous rendezvous) {
-    rendezvousRep.ajouter(rendezvous);
+  Future<void> ajouter(RendezVous rendezvous) async {
+    await rendezvousRep.ajouter(rendezvous);
     notifyListeners();
   }
 
@@ -19,8 +19,8 @@ class RendezVousViewModel extends ChangeNotifier {
     return await rendezvousRep.trouver(dateHeure, patient, medecin);
   }
 
-  void modifier(RendezVous rendezvous) {
-    rendezvousRep.modifier(rendezvous);
+  Future<void> modifier(RendezVous rendezvous) async {
+    await rendezvousRep.modifier(rendezvous);
     notifyListeners();
   }
 

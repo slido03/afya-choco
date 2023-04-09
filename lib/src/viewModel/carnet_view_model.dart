@@ -5,8 +5,8 @@ class CarnetViewModel extends ChangeNotifier {
   CarnetRepository carnetRep = CarnetRepositoryImpl.instance;
 
   //ajout d'un carnet dans la base de données
-  void ajouter(Carnet carnet) {
-    carnetRep.ajouter(carnet);
+  Future<void> ajouter(Carnet carnet) async {
+    await carnetRep.ajouter(carnet);
     notifyListeners();
   }
 
@@ -19,8 +19,8 @@ class CarnetViewModel extends ChangeNotifier {
     return await carnetRep.lister();
   }
 
-  void supprimer(String identifiantPatient) {
-    carnetRep.supprimer(identifiantPatient);
+  Future<void> supprimer(String identifiantPatient) async {
+    await carnetRep.supprimer(identifiantPatient);
     notifyListeners();
   }
 }

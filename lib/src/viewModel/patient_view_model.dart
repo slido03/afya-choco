@@ -4,7 +4,7 @@ import '../repository/repositories.dart';
 class PatientViewModel extends ChangeNotifier {
   PatientRepository patientRep = PatientRepositoryImpl.instance;
 
-  void ajouter(Patient patient) async {
+  Future<void> ajouter(Patient patient) async {
     Patient? p;
     //on attribut un identifiant unique au patient
     patient.setIdentifiant();
@@ -12,7 +12,7 @@ class PatientViewModel extends ChangeNotifier {
     p = await patientRep.ajouter(patient);
     //Tant que l'ajout échoue à cause de la non-unicité de l'identifiant
     while (p == null) {
-      //on affecte un autre ientifiant au patient
+      //on affecte un autre identifiant au patient
       patient.setIdentifiant();
       //puis on essaie l'ajout à nouveau
       p = await patientRep.ajouter(patient);
@@ -31,13 +31,13 @@ class PatientViewModel extends ChangeNotifier {
     return patientRep.trouverUid(uid);
   }
 
-  void modifier(Patient patient) {
-    patientRep.modifier(patient);
+  Future<void> modifier(Patient patient) async {
+    await patientRep.modifier(patient);
     notifyListeners();
   }
 
-  void supprimer(String identifiant) {
-    patientRep.supprimer(identifiant);
+  Future<void> supprimer(String identifiant) async {
+    await patientRep.supprimer(identifiant);
     notifyListeners();
   }
 

@@ -5,8 +5,8 @@ class OrdonnanceViewModel extends ChangeNotifier {
   OrdonnanceRepository ordonnanceRep = OrdonnanceRepositoryImpl.instance;
 
   //ajout d'un ordonnance dans la base de données
-  void ajouter(Ordonnance ordonnance) {
-    ordonnanceRep.ajouter(ordonnance);
+  Future<void> ajouter(Ordonnance ordonnance) async {
+    await ordonnanceRep.ajouter(ordonnance);
     notifyListeners();
   }
 
@@ -14,8 +14,8 @@ class OrdonnanceViewModel extends ChangeNotifier {
     return await ordonnanceRep.trouver(diagnostic);
   }
 
-  void modifier(Ordonnance ordonnance) {
-    ordonnanceRep.modifier(ordonnance);
+  Future<void> modifier(Ordonnance ordonnance) async {
+    await ordonnanceRep.modifier(ordonnance);
     notifyListeners();
   }
 
@@ -29,8 +29,8 @@ class OrdonnanceViewModel extends ChangeNotifier {
     return await ordonnanceRep.listerMedecin(medecin);
   }
 
-  void supprimer(Ordonnance ordonnance) {
-    ordonnanceRep.supprimer(ordonnance);
+  Future<void> supprimer(Ordonnance ordonnance) async {
+    await ordonnanceRep.supprimer(ordonnance);
     notifyListeners();
   }
 }

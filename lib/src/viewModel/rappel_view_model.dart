@@ -5,8 +5,8 @@ class RappelViewModel extends ChangeNotifier {
   RappelRepository rappelRep = RappelRepositoryImpl.instance;
 
   //ajout d'un rappel dans la base de données
-  void ajouter(Rappel rappel) {
-    rappelRep.ajouter(rappel);
+  Future<void> ajouter(Rappel rappel) async {
+    await rappelRep.ajouter(rappel);
     notifyListeners();
   }
 
@@ -14,8 +14,8 @@ class RappelViewModel extends ChangeNotifier {
     return await rappelRep.trouver(dateHeure, evenement);
   }
 
-  void modifier(Rappel rappel) {
-    rappelRep.modifier(rappel);
+  Future<void> modifier(Rappel rappel) async {
+    await rappelRep.modifier(rappel);
     notifyListeners();
   }
 
@@ -24,8 +24,8 @@ class RappelViewModel extends ChangeNotifier {
     return await rappelRep.lister(evenement);
   }
 
-  void supprimer(Rappel rappel) {
-    rappelRep.supprimer(rappel);
+  Future<void> supprimer(Rappel rappel) async {
+    await rappelRep.supprimer(rappel);
     notifyListeners();
   }
 }

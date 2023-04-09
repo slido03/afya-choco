@@ -5,8 +5,8 @@ class DiagnosticViewModel extends ChangeNotifier {
   DiagnosticRepository diagnosticRep = DiagnosticRepositoryImpl.instance;
 
   //ajout d'un diagnostic dans la base de données
-  void ajouter(Diagnostic diagnostic) {
-    diagnosticRep.ajouter(diagnostic);
+  Future<void> ajouter(Diagnostic diagnostic) async {
+    await diagnosticRep.ajouter(diagnostic);
     notifyListeners();
   }
 
@@ -15,8 +15,8 @@ class DiagnosticViewModel extends ChangeNotifier {
     return await diagnosticRep.trouver(date, medecin, patient);
   }
 
-  void modifier(Diagnostic diagnostic) {
-    diagnosticRep.modifier(diagnostic);
+  Future<void> modifier(Diagnostic diagnostic) async {
+    await diagnosticRep.modifier(diagnostic);
     notifyListeners();
   }
 
@@ -30,8 +30,8 @@ class DiagnosticViewModel extends ChangeNotifier {
     return await diagnosticRep.listerMedecin(medecin);
   }
 
-  void supprimer(Diagnostic diagnostic) {
-    diagnosticRep.supprimer(diagnostic);
+  Future<void> supprimer(Diagnostic diagnostic) async {
+    await diagnosticRep.supprimer(diagnostic);
     notifyListeners();
   }
 }

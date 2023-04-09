@@ -4,7 +4,7 @@ import '../repository/repositories.dart';
 class MedecinViewModel extends ChangeNotifier {
   MedecinRepository medecinRep = MedecinRepositoryImpl.instance;
 
-  void ajouter(Medecin medecin) async {
+  Future<void> ajouter(Medecin medecin) async {
     Medecin? p;
     //on attribut un identifiant unique au medecin
     medecin.setIdentifiant();
@@ -23,21 +23,21 @@ class MedecinViewModel extends ChangeNotifier {
 
   //permet la recherche d'un medecin depuis l'UI à partir de son identifiant système
   Future<Medecin?> trouver(String identifiant) async {
-    return medecinRep.trouver(identifiant);
+    return await medecinRep.trouver(identifiant);
   }
 
   //permet de s'assurer si l'utilisateur courant est de ce type
   Future<Medecin?> trouverUid(String uid) async {
-    return medecinRep.trouverUid(uid);
+    return await medecinRep.trouverUid(uid);
   }
 
-  void modifier(Medecin medecin) {
-    medecinRep.modifier(medecin);
+  Future<void> modifier(Medecin medecin) async {
+    await medecinRep.modifier(medecin);
     notifyListeners();
   }
 
-  void supprimer(String identifiant) {
-    medecinRep.supprimer(identifiant);
+  Future<void> supprimer(String identifiant) async {
+    await medecinRep.supprimer(identifiant);
     notifyListeners();
   }
 

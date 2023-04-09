@@ -5,8 +5,8 @@ class ExamenViewModel extends ChangeNotifier {
   ExamenRepository examenRep = ExamenRepositoryImpl.instance;
 
   //ajout d'un examen dans la base de données
-  void ajouter(Examen examen) {
-    examenRep.ajouter(examen);
+  Future<void> ajouter(Examen examen) async {
+    await examenRep.ajouter(examen);
     notifyListeners();
   }
 
@@ -15,8 +15,8 @@ class ExamenViewModel extends ChangeNotifier {
     return await examenRep.trouver(medecin, patient, type, date);
   }
 
-  void modifier(Examen examen) {
-    examenRep.modifier(examen);
+  Future<void> modifier(Examen examen) async {
+    await examenRep.modifier(examen);
     notifyListeners();
   }
 
@@ -30,8 +30,8 @@ class ExamenViewModel extends ChangeNotifier {
     return await examenRep.listerMedecin(medecin);
   }
 
-  void supprimer(Examen examen) {
-    examenRep.supprimer(examen);
+  Future<void> supprimer(Examen examen) async {
+    await examenRep.supprimer(examen);
     notifyListeners();
   }
 }

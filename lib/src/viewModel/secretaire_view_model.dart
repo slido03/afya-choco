@@ -4,7 +4,7 @@ import '../repository/repositories.dart';
 class SecretaireViewModel extends ChangeNotifier {
   SecretaireRepository secretaireRep = SecretaireRepositoryImpl.instance;
 
-  void ajouter(Secretaire secretaire) async {
+  Future<void> ajouter(Secretaire secretaire) async {
     Secretaire? p;
     //on attribut un identifiant unique au secretaire
     secretaire.setIdentifiant();
@@ -23,21 +23,21 @@ class SecretaireViewModel extends ChangeNotifier {
 
   //permet la recherche d'un secretaire depuis l'UI à partir de son identifiant système
   Future<Secretaire?> trouver(String identifiant) async {
-    return secretaireRep.trouver(identifiant);
+    return await secretaireRep.trouver(identifiant);
   }
 
   //permet de s'assurer si l'utilisateur courant est de ce type
   Future<Secretaire?> trouverUid(String uid) async {
-    return secretaireRep.trouverUid(uid);
+    return await secretaireRep.trouverUid(uid);
   }
 
-  void modifier(Secretaire secretaire) {
-    secretaireRep.modifier(secretaire);
+  Future<void> modifier(Secretaire secretaire) async {
+    await secretaireRep.modifier(secretaire);
     notifyListeners();
   }
 
-  void supprimer(String identifiant) {
-    secretaireRep.supprimer(identifiant);
+  Future<void> supprimer(String identifiant) async {
+    await secretaireRep.supprimer(identifiant);
     notifyListeners();
   }
 
