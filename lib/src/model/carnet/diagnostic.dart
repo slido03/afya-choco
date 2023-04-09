@@ -1,4 +1,5 @@
 import '../models.dart';
+import 'package:faker/faker.dart';
 
 class Diagnostic {
   final DateTime _date;
@@ -22,6 +23,23 @@ class Diagnostic {
       Medecin.fromJson(json['medecin']),
       examensFromJson(json['examens']),
       parseStatut(json['statut']),
+    );
+  }
+
+  factory Diagnostic.faker(
+    Medecin medecin,
+    Examen examen,
+  ) {
+    var faker = Faker();
+    var date = faker.date.dateTime(minYear: 2022, maxYear: 2023);
+    var description = faker.lorem.sentence();
+    List<Examen> examens = [examen];
+    return Diagnostic(
+      date,
+      description,
+      medecin,
+      examens,
+      StatutDiagnosticExtension.faker(),
     );
   }
 

@@ -38,7 +38,6 @@ class CardEvenement extends StatelessWidget {
         "La sante meilleure",
         true,
         Specialite.anesthesiologie,
-        "34827DE",
         Secretaire(
           "ES7284D", //uid
           "6382BY3",
@@ -48,7 +47,6 @@ class CardEvenement extends StatelessWidget {
           "edmond234@hotmail.com", //email
           "12 rue de la paix, 75000 Paris", //adresse
           "La sante meilleure",
-          "34827DE",
         ),
       ), //clinique
       "12 rue de la paix, 75000 Paris",

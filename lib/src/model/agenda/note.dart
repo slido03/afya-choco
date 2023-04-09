@@ -1,4 +1,5 @@
 import '../models.dart';
+import 'package:faker/faker.dart';
 
 class Note {
   String _titre;
@@ -16,6 +17,17 @@ class Note {
       json['titre'] as String,
       json['description'] as String,
       Evenement.fromJson(json['evenement']),
+    );
+  }
+
+  factory Note.faker(Evenement evenement) {
+    var faker = Faker();
+    var titre = faker.lorem.sentence();
+    var description = faker.lorem.sentence();
+    return Note(
+      titre,
+      description,
+      evenement,
     );
   }
 

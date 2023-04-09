@@ -1,4 +1,6 @@
 import '../models.dart';
+import 'package:faker/faker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PersonnelSante extends Utilisateur {
   final String _clinique;
@@ -24,6 +26,27 @@ class PersonnelSante extends Utilisateur {
       json['email'],
       json['adresse'],
       json['clinique'],
+    );
+  }
+
+  factory PersonnelSante.faker(User user) {
+    var faker = Faker();
+    var uid = user.uid;
+    var nom = faker.person.name();
+    var prenoms = faker.person.firstName();
+    var telephone = faker.phoneNumber.us();
+    var email = user.email!;
+    var adresse = faker.address.streetAddress();
+    var clinique = faker.company.name();
+    return PersonnelSante(
+      uid,
+      null,
+      nom,
+      prenoms,
+      telephone,
+      email,
+      adresse,
+      clinique,
     );
   }
 

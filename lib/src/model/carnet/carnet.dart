@@ -19,6 +19,20 @@ class Carnet {
     );
   }
 
+  factory Carnet.faker(
+    Patient proprietaire,
+    Examen examen,
+    Ordonnance ordonnance,
+  ) {
+    List<Examen> examens = [examen];
+    List<Ordonnance> ordonnances = [ordonnance];
+    return Carnet(
+      proprietaire,
+      examens,
+      ordonnances,
+    );
+  }
+
   Patient get proprietaire => _proprietaire;
   List<Examen> get examens => _examens;
   List<Ordonnance> get ordonnances => _ordonnances;

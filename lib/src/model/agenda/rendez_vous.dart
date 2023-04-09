@@ -1,4 +1,5 @@
 import '../models.dart';
+import 'package:faker/faker.dart';
 
 class RendezVous {
   DateTime _dateHeure;
@@ -28,6 +29,25 @@ class RendezVous {
       json['lieu'] as String,
       parseObjet(json['objet']),
       parseStatut(json['statut']),
+    );
+  }
+
+  factory RendezVous.faker(
+    Patient patient,
+    Medecin medecin,
+  ) {
+    var faker = Faker();
+    var dateHeure = faker.date.dateTime(minYear: 2022, maxYear: 2023);
+    var duree = faker.randomGenerator.integer(50, min: 15);
+    var lieu = faker.company.name();
+    return RendezVous(
+      dateHeure,
+      duree,
+      patient,
+      medecin,
+      lieu,
+      ObjetRendezVousExtension.faker(),
+      StatutRendezVousExtension.faker(),
     );
   }
 

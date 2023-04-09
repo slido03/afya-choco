@@ -1,4 +1,5 @@
 import '../models.dart';
+import 'package:faker/faker.dart';
 
 class StatutMedical {
   final Patient _patient;
@@ -19,6 +20,18 @@ class StatutMedical {
       parseGroupeSanguin(json['groupeSanguin']),
       json['allergies'] as List<String>,
       json['maladiesHereditaires'] as List<String>,
+    );
+  }
+
+  factory StatutMedical.faker(Patient patient) {
+    var faker = Faker();
+    var allergies = faker.lorem.words(3);
+    var maladiesHereditaires = faker.lorem.words(4);
+    return StatutMedical(
+      patient,
+      GroupeSanguinExtension.faker(),
+      allergies,
+      maladiesHereditaires,
     );
   }
 

@@ -1,4 +1,5 @@
 import '../models.dart';
+import 'package:faker/faker.dart';
 
 class Ordonnance {
   final DateTime _date;
@@ -22,6 +23,28 @@ class Ordonnance {
       Patient.fromJson(json['patient']),
       Diagnostic.fromJson(json['diagnostic']),
       json['instructions'] as Map<String, String>,
+    );
+  }
+
+  factory Ordonnance.faker(
+    Medecin medecin,
+    Patient patient,
+    Diagnostic diagnostic,
+  ) {
+    var faker = Faker();
+    var date = faker.date.dateTime(minYear: 2022, maxYear: 2023);
+    var instructions = {
+      'Repos médical': faker.lorem.word(),
+      'Vitamine C': faker.lorem.word(),
+      "Doliprane": faker.lorem.word(),
+      'Artemisia': faker.lorem.sentence(),
+    };
+    return Ordonnance(
+      date,
+      medecin,
+      patient,
+      diagnostic,
+      instructions,
     );
   }
 

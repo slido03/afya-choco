@@ -1,5 +1,7 @@
 import '../models.dart';
 import 'package:uuid/uuid.dart';
+import 'package:faker/faker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PatientIntermediaire extends Patient {
   //l'identifiant temporaire permet de remplacer l'identifiant final
@@ -20,16 +22,37 @@ class PatientIntermediaire extends Patient {
 
   factory PatientIntermediaire.fromJson(Map<String, dynamic> json) {
     return PatientIntermediaire(
-      json['uid'] as String,
+      json['uid'],
       null,
-      json['nom'] as String,
-      json['prenoms'] as String,
-      json['telephone'] as String,
-      json['email'] as String,
+      json['nom'],
+      json['prenoms'],
+      json['telephone'],
+      json['email'],
       null,
       null,
       null,
-      json['identifiant'] as String,
+      json['identifiant'],
+    );
+  }
+
+  factory PatientIntermediaire.faker(User user) {
+    var faker = Faker();
+    var uid = user.uid;
+    var nom = faker.person.name();
+    var prenoms = faker.person.firstName();
+    var telephone = faker.phoneNumber.us();
+    var email = user.email!;
+    return PatientIntermediaire(
+      uid,
+      null,
+      nom,
+      prenoms,
+      telephone,
+      email,
+      null,
+      null,
+      null,
+      null,
     );
   }
 

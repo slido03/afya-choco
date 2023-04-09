@@ -1,3 +1,5 @@
+import 'dart:math';
+
 export 'humains/utilisateur.dart';
 export 'humains/personnel_sante.dart';
 export 'humains/patient.dart';
@@ -30,6 +32,13 @@ extension SexeExtension on Sexe {
       default:
         throw ArgumentError('Sexe inconnu');
     }
+  }
+
+  //génère un Sexe aléatoire de l'enum
+  static Sexe faker() {
+    var values = Sexe.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
   }
 }
 
@@ -115,6 +124,13 @@ extension SpecialiteExtension on Specialite {
         throw ArgumentError('Spécialité inconnue');
     }
   }
+
+  //génère une Spécialité aléatoire de l'enum
+  static Specialite faker() {
+    var values = Specialite.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
+  }
 }
 
 enum ObjetMessage {
@@ -148,6 +164,13 @@ extension ObjetMessageExtension on ObjetMessage {
         throw ArgumentError('Objet de message inconnu');
     }
   }
+
+  //génère un ObjetMessage aléatoire de l'enum
+  static ObjetMessage faker() {
+    var values = ObjetMessage.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
+  }
 }
 
 enum StatutMessage {
@@ -165,6 +188,13 @@ extension StatutMessageExtension on StatutMessage {
       default:
         throw ArgumentError('Statut de message inconnu');
     }
+  }
+
+  //génère un StatutMessage aléatoire de l'enum
+  static StatutMessage faker() {
+    var values = StatutMessage.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
   }
 }
 
@@ -187,6 +217,13 @@ extension ObjetRendezVousExtension on ObjetRendezVous {
         throw ArgumentError('Objet de rendez-vous inconnu');
     }
   }
+
+  //génère un ObjetRendezVous aléatoire de l'enum
+  static ObjetRendezVous faker() {
+    var values = ObjetRendezVous.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
+  }
 }
 
 enum StatutRendezVous {
@@ -207,6 +244,13 @@ extension StatutRendezVousExtension on StatutRendezVous {
       default:
         throw ArgumentError('Statut de rendez-vous inconnu');
     }
+  }
+
+  //génère un StatutRendezVous aléatoire de l'enum
+  static StatutRendezVous faker() {
+    var values = StatutRendezVous.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
   }
 }
 
@@ -244,6 +288,13 @@ extension GroupeSanguinExtension on GroupeSanguin {
         throw ArgumentError('Groupe sanguin inconnu');
     }
   }
+
+  //génère un GroupeSanguin aléatoire de l'enum
+  static GroupeSanguin faker() {
+    var values = GroupeSanguin.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
+  }
 }
 
 enum StatutDiagnostic {
@@ -251,7 +302,7 @@ enum StatutDiagnostic {
   confirme,
 }
 
-extension StatutDagnosticExtension on StatutDiagnostic {
+extension StatutDiagnosticExtension on StatutDiagnostic {
   String get value {
     switch (this) {
       case StatutDiagnostic.enCours:
@@ -261,5 +312,12 @@ extension StatutDagnosticExtension on StatutDiagnostic {
       default:
         throw ArgumentError('Statut de diagnostic inconnu');
     }
+  }
+
+  //génère un StatutDagnostic aléatoire de l'enum
+  static StatutDiagnostic faker() {
+    var values = StatutDiagnostic.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
   }
 }

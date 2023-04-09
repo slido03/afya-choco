@@ -75,7 +75,6 @@ class MedecinRepositoryImpl extends MedecinRepository {
               'clinique',
               'admin',
               'specialite',
-              'numeroLicence',
               'secretaire',
             ]));
       }

@@ -96,7 +96,6 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
               'email',
               'adresse',
               'clinique',
-              'numeroSecuriteSociale',
               //'medecins',
             ]));
       }

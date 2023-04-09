@@ -1,7 +1,8 @@
 import '../models.dart';
+import 'package:faker/faker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Secretaire extends PersonnelSante {
-  String _numeroSecuriteSociale;
   // ignore: prefer_final_fields
   List<Medecin> _medecins = [];
 
@@ -14,7 +15,6 @@ class Secretaire extends PersonnelSante {
     super._email,
     super._adresse,
     super._clinique,
-    this._numeroSecuriteSociale,
     //this._medecins,
   );
 
@@ -28,19 +28,36 @@ class Secretaire extends PersonnelSante {
       json['email'],
       json['adresse'],
       json['clinique'],
-      json['numeroSecuriteSociale'],
       //medecinsFromJson(json['medecins']),
     );
   }
 
-  String get numeroSecuriteSociale => _numeroSecuriteSociale;
+  factory Secretaire.faker(User user) {
+    var faker = Faker();
+    var uid = user.uid;
+    var nom = faker.person.name();
+    var prenoms = faker.person.firstName();
+    var telephone = faker.phoneNumber.us();
+    var email = user.email!;
+    var adresse = faker.address.streetAddress();
+    var clinique = faker.company.name();
+    return Secretaire(
+      uid,
+      null,
+      nom,
+      prenoms,
+      telephone,
+      email,
+      adresse,
+      clinique,
+    );
+  }
+
   List<Medecin> get medecins => _medecins;
   int get nombreMedecins => _medecins.length;
   List<Map<String, dynamic>> get medecinsJson =>
       medecins.map((m) => m.toJson()).toList();
 
-  void setNumeroSecuriteSociale(String numeroSecuriteSociale) =>
-      _numeroSecuriteSociale = numeroSecuriteSociale;
   void ajouterMedecin(Medecin medecin) => _medecins.add(medecin);
   void supprimerMedecin(Medecin medecin) => _medecins.remove(medecin);
 
@@ -54,7 +71,6 @@ class Secretaire extends PersonnelSante {
         'email': email,
         'adresse': adresse,
         'clinique': clinique,
-        'numeroSecuriteSociale': numeroSecuriteSociale,
         //'medecins': medecinsJson,
       };
 
