@@ -24,7 +24,7 @@ class Message {
       Utilisateur.fromJson(json['destinataire']),
       DateTime.fromMillisecondsSinceEpoch(json['dateHeure']),
       parseObjet(json['objet']),
-      json['contenu'] as String,
+      json['contenu'],
       parseStatut(json['statut']),
     );
   }
@@ -34,7 +34,7 @@ class Message {
     Utilisateur destinataire,
   ) {
     var faker = Faker();
-    var dateHeure = faker.date.dateTime(minYear: 2022, maxYear: 2023);
+    var dateHeure = faker.date.dateTime(minYear: 2022, maxYear: 2024);
     var contenu = faker.lorem.sentence();
     return Message(
       expediteur,
@@ -57,7 +57,7 @@ class Message {
 
   Map<String, dynamic> toJson() => {
         'expediteur': expediteur.toJson(),
-        'destinaire': destinataire.toJson(),
+        'destinataire': destinataire.toJson(),
         'dateHeure': dateHeure.millisecondsSinceEpoch,
         'objet': objet.name,
         'contenu': contenu,

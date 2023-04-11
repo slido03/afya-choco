@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -27,11 +29,12 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
   @override
   Future<Ordonnance?> trouver(Diagnostic diagnostic) async {
     return await ordonnances
+        .where('diagnostic.medecin.identifiant',
+            isEqualTo: diagnostic.medecin.identifiant)
+        .where('diagnostic.patient.identifiant',
+            isEqualTo: diagnostic.patient!.identifiant)
         .where('diagnostic.date',
             isEqualTo: diagnostic.date.millisecondsSinceEpoch)
-        .where('medecin.identifiant', isEqualTo: diagnostic.medecin.identifiant)
-        .where('patient.identifiant',
-            isEqualTo: diagnostic.patient!.identifiant)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -41,18 +44,23 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
   Future<void> modifier(Ordonnance ordonnance) {
     return ordonnances
-        .where('diagnostic.date',
-            isEqualTo: ordonnance.diagnostic.date.millisecondsSinceEpoch)
         .where('diagnostic.medecin.identifiant',
             isEqualTo: ordonnance.diagnostic.medecin.identifiant)
         .where('diagnostic.patient.identifiant',
             isEqualTo: ordonnance.diagnostic.patient!.identifiant)
+        .where('diagnostic.date',
+            isEqualTo: ordonnance.diagnostic.date.millisecondsSinceEpoch)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -62,13 +70,18 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
               'instructions',
             ]));
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
-  Future<List<Ordonnance>> listerPatient(Patient patient) async {
+  Future<List<Ordonnance>> listerPatient(String uidPatient) async {
     return await ordonnances
-        .where('diagnostic.patient.identifiant', isEqualTo: patient.identifiant)
+        .where('patient.uid', isEqualTo: uidPatient)
         .orderBy('date', descending: true)
         .get()
         .then((snapshot) {
@@ -87,9 +100,9 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
   }
 
   @override
-  Future<List<Ordonnance>> listerMedecin(Medecin medecin) async {
+  Future<List<Ordonnance>> listerMedecin(String uidMedecin) async {
     return await ordonnances
-        .where('diagnostic.medecin.identifiant', isEqualTo: medecin.identifiant)
+        .where('medecin.uid', isEqualTo: uidMedecin)
         .orderBy('date', descending: true)
         .get()
         .then((snapshot) {
@@ -123,6 +136,11 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
           document.reference.delete();
         }
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 }

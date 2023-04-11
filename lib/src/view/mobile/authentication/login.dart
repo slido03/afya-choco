@@ -204,7 +204,6 @@ class _LoginPageState extends State<LoginPage> {
                 size: 14,
               )
             : const Icon(Icons.arrow_forward),
-
         back: const Icon(Icons.arrow_back),
         dotsFlex: 2,
         controlsPadding: MediaQuery.of(context).size.width < 335
@@ -479,7 +478,7 @@ class _LoginPageState extends State<LoginPage> {
 Future<void> logout(BuildContext context) async {
   AuthService authService = AuthService();
   //l'utilisateur est déconnecté
-  authService.signOut();
+  await authService.signOut();
   // ignore: use_build_context_synchronously
   Navigator.of(context).pushReplacement(
     MaterialPageRoute(builder: (context) => const LoginPage()),

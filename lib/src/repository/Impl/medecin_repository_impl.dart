@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -43,7 +45,12 @@ class MedecinRepositoryImpl extends MedecinRepository {
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -54,7 +61,12 @@ class MedecinRepositoryImpl extends MedecinRepository {
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -78,7 +90,12 @@ class MedecinRepositoryImpl extends MedecinRepository {
               'secretaire',
             ]));
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -109,7 +126,12 @@ class MedecinRepositoryImpl extends MedecinRepository {
           document.reference.delete();
         }
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   bool _checkID(Medecin medecin) {
@@ -124,7 +146,12 @@ class MedecinRepositoryImpl extends MedecinRepository {
       } else {
         return true;
       }
-    }).catchError((error) => error);
+    }).catchError((error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+      return false;
+    });
     return true;
   }
 }

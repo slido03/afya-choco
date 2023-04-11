@@ -20,13 +20,13 @@ class OrdonnanceViewModel extends ChangeNotifier {
   }
 
   //liste des ordonnance du patient courant du plus récent au plus ancien
-  Future<List<Ordonnance>> listerPatient(Patient patient) async {
-    return await ordonnanceRep.listerPatient(patient);
+  Future<List<Ordonnance>> listerPatient(String uidPatient) async {
+    return await ordonnanceRep.listerPatient(uidPatient);
   }
 
   //liste des ordonnance du medecin courant du plus récent au plus ancien
-  Future<List<Ordonnance>> listerMedecin(Medecin medecin) async {
-    return await ordonnanceRep.listerMedecin(medecin);
+  Future<List<Ordonnance>> listerMedecin(String uidMedecin) async {
+    return await ordonnanceRep.listerMedecin(uidMedecin);
   }
 
   Future<void> supprimer(Ordonnance ordonnance) async {

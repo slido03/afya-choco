@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -45,7 +47,12 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -56,7 +63,12 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -77,7 +89,12 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
               'clinique',
             ]));
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -108,7 +125,12 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
           document.reference.delete();
         }
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   bool _checkID(PersonnelSante personnelsante) {
@@ -123,7 +145,12 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
       } else {
         return true;
       }
-    }).catchError((error) => error);
+    }).catchError((error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+      return false;
+    });
     return true;
   }
 }

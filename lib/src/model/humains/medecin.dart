@@ -31,7 +31,7 @@ class Medecin extends PersonnelSante {
       json['email'],
       json['adresse'],
       json['clinique'],
-      json['admin'] as bool,
+      json['admin'],
       parseSpecialite(json['specialite']),
       Secretaire.fromJson(json['secretaire']),
     );

@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -40,7 +42,12 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -62,7 +69,12 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
               'statut',
             ]));
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -189,6 +201,11 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
           document.reference.delete();
         }
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 }

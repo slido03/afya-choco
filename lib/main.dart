@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'src/view/mobile/afya_app.dart'; //importing the main mobile app
 //import 'package:provider/provider.dart';
-//import '../src/application_state.dart';
 //import './src/repository/repositories.dart';
 //import 'package:afya/src/seeder/seeders.dart';
 
@@ -15,7 +14,7 @@ Future<void> main() async {
     print('firebase initialized');
   }
   // AppSeeder appSeeder =
-  //     AppSeeder(email: 'birregahcredo@gmail.com', password: '');
+  //     AppSeeder(email: 'stentechnology@gmail.com', password: '');
   // await appSeeder.seed();
 
   runApp(const AfyaApp());

@@ -50,19 +50,18 @@ class Carnet {
       _ordonnances.remove(ordonnance);
 
   Map<String, dynamic> toJson() => {
-        'propietaire': proprietaire.toJson(),
+        'proprietaire': proprietaire.toJson(),
         'examens': examensJson,
         'ordonnances': ordonnancesJson,
       };
 
-  static List<Examen> examensFromJson(List<Map<String, dynamic>> examensJson) {
+  static List<Examen> examensFromJson(List<dynamic> examensJson) {
     List<Examen> examens =
         examensJson.map((examen) => Examen.fromJson(examen)).toList();
     return examens;
   }
 
-  static List<Ordonnance> ordonnancesFromJson(
-      List<Map<String, dynamic>> ordonnancesJson) {
+  static List<Ordonnance> ordonnancesFromJson(List<dynamic> ordonnancesJson) {
     List<Ordonnance> ordonnances = ordonnancesJson
         .map((ordonnance) => Ordonnance.fromJson(ordonnance))
         .toList();

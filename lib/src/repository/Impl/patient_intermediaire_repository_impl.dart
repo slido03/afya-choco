@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -49,7 +51,12 @@ class PatientIntermediaireRepositoryImpl
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -60,7 +67,12 @@ class PatientIntermediaireRepositoryImpl
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -80,7 +92,12 @@ class PatientIntermediaireRepositoryImpl
               'email',
             ]));
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -111,7 +128,12 @@ class PatientIntermediaireRepositoryImpl
           document.reference.delete();
         }
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   bool _checkTempID(PatientIntermediaire patient) {
@@ -126,7 +148,12 @@ class PatientIntermediaireRepositoryImpl
       } else {
         return true;
       }
-    }).catchError((error) => error);
+    }).catchError((error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+      return false;
+    });
     return true;
   }
 }

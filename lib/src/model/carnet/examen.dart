@@ -17,12 +17,15 @@ class Examen {
   );
 
   factory Examen.fromJson(Map<String, dynamic> json) {
+    Map<String, String> resultats = json['resultats'].map((key, value) {
+      return MapEntry(key, value.toString());
+    }).cast<String, String>();
     return Examen(
       DateTime.fromMillisecondsSinceEpoch(json['date']),
       parseType(json['type']),
       Patient.fromJson(json['patient']),
       Medecin.fromJson(json['medecin']),
-      json['resultats'] as Map<String, String>,
+      resultats,
     );
   }
 
@@ -31,12 +34,12 @@ class Examen {
     Medecin medecin,
   ) {
     var faker = Faker();
-    var date = faker.date.dateTime(minYear: 2022, maxYear: 2023);
+    var date = faker.date.dateTime(minYear: 2022, maxYear: 2024);
     var resultats = {
       'Test PCR': faker.lorem.word(),
       'Electrophorèse': faker.lorem.word(),
-      "Taux d'hématies": faker.lorem.word(),
-      'VIH': faker.lorem.sentence(),
+      "Hémogramme": faker.lorem.word(),
+      'Cardiogramme': faker.lorem.sentence(),
     };
     return Examen(
       date,

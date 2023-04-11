@@ -2,7 +2,7 @@ import 'package:afya/src/model/models.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:afya/src/viewModel/view_models.dart';
-import 'package:afya/src/repository/repositories.dart';
+//import 'package:afya/src/repository/repositories.dart';
 
 class AppSeeder {
   final String email;

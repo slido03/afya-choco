@@ -14,8 +14,8 @@ class Evenement {
 
   factory Evenement.fromJson(Map<String, dynamic> json) {
     return Evenement(
-      json['titre'] as String,
-      json['description'] as String,
+      json['titre'],
+      json['description'],
       RendezVous.fromJson(json['rendezVous']),
     );
   }

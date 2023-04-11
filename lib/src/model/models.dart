@@ -26,9 +26,9 @@ extension SexeExtension on Sexe {
   String get value {
     switch (this) {
       case Sexe.homme:
-        return 'homme';
+        return 'Masculin';
       case Sexe.femme:
-        return 'femme';
+        return 'Féminin';
       default:
         throw ArgumentError('Sexe inconnu');
     }
@@ -73,53 +73,53 @@ extension SpecialiteExtension on Specialite {
   String get value {
     switch (this) {
       case Specialite.cardiologie:
-        return 'cardiologie';
+        return 'Cardiologie';
       case Specialite.anesthesiologie:
-        return 'anesthesiologie';
+        return 'Anesthesiologie';
       case Specialite.chirurgieCardiothoracique:
-        return 'chirurgie cardiothoracique';
+        return 'Chirurgie cardiothoracique';
       case Specialite.chirurgieGenerale:
-        return 'chirurgie générale';
+        return 'Chirurgie générale';
       case Specialite.chirurgieOrthopedique:
-        return 'chirurgie orthopédique';
+        return 'Chirurgie orthopédique';
       case Specialite.dermatologie:
-        return 'dermatologie';
+        return 'Dermatologie';
       case Specialite.endocrinologie:
-        return 'endocrinologie';
+        return 'Endocrinologie';
       case Specialite.gastroEnterologie:
-        return 'gastro-enterologie';
+        return 'Gastro-enterologie';
       case Specialite.geriatrie:
-        return 'geriatrie';
+        return 'Geriatrie';
       case Specialite.gynecologieObstetrique:
-        return 'gynécologie obstétrique';
+        return 'Gynécologie obstétrique';
       case Specialite.hematologie:
-        return 'hématologie';
+        return 'Hématologie';
       case Specialite.infectiologie:
-        return 'infectiologie';
+        return 'Infectiologie';
       case Specialite.medecineInterne:
-        return 'médecine interne';
+        return 'Médecine interne';
       case Specialite.nephrologie:
-        return 'néphrologie';
+        return 'Néphrologie';
       case Specialite.neurologie:
-        return 'neurologie';
+        return 'Neurologie';
       case Specialite.oncologie:
-        return 'oncologie';
+        return 'Oncologie';
       case Specialite.ophtalmologie:
-        return 'ophtalmologie';
+        return 'Ophtalmologie';
       case Specialite.orl:
         return 'Otho-rhyno-laryngologie';
       case Specialite.pediatrie:
-        return 'pédiatrie';
+        return 'Pédiatrie';
       case Specialite.pneumologie:
-        return 'pneumologie';
+        return 'Pneumologie';
       case Specialite.psychiatrie:
-        return 'psychiatrie';
+        return 'Psychiatrie';
       case Specialite.radiologie:
-        return 'radiologie';
+        return 'Radiologie';
       case Specialite.rhumatologie:
-        return 'rhumatologie';
+        return 'Rhumatologie';
       case Specialite.toxicologie:
-        return 'toxicologie';
+        return 'Toxicologie';
       default:
         throw ArgumentError('Spécialité inconnue');
     }
@@ -184,7 +184,7 @@ extension StatutMessageExtension on StatutMessage {
       case StatutMessage.nonTraite:
         return 'Non traité';
       case StatutMessage.traite:
-        return 'traité';
+        return 'Traité';
       default:
         throw ArgumentError('Statut de message inconnu');
     }

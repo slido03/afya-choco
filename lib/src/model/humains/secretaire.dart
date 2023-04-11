@@ -74,8 +74,7 @@ class Secretaire extends PersonnelSante {
         //'medecins': medecinsJson,
       };
 
-  static List<Medecin> medecinsFromJson(
-      List<Map<String, dynamic>> medecinsJson) {
+  static List<Medecin> medecinsFromJson(List<dynamic> medecinsJson) {
     List<Medecin> medecins =
         medecinsJson.map((medecin) => Medecin.fromJson(medecin)).toList();
     return medecins;

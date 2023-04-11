@@ -15,6 +15,10 @@ class StatutMedicalViewModel extends ChangeNotifier {
     return await statutmedicalRep.trouver(identifiantPatient);
   }
 
+  Future<StatutMedical?> trouverUid(String uidPatient) async {
+    return await statutmedicalRep.trouverUid(uidPatient);
+  }
+
   Future<void> modifier(StatutMedical statutmedical) async {
     await statutmedicalRep.modifier(statutmedical);
     notifyListeners();

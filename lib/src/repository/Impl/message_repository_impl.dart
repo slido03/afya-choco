@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -42,7 +44,12 @@ class MessageRepositoryImpl extends MessageRepository {
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   //modifie uniquement le statut d'un message
@@ -61,7 +68,12 @@ class MessageRepositoryImpl extends MessageRepository {
               'statut',
             ]));
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   //lister les messages envoyés en fonction de l'objet
@@ -112,14 +124,12 @@ class MessageRepositoryImpl extends MessageRepository {
     });
   }
 
-   //lister tous les messages reçus
+  //lister tous les messages reçus
   @override
-  Future<List<Message>> listerRecu(
-      String uidDestinataire) async {
+  Future<List<Message>> listerRecu(String uidDestinataire) async {
     return await messages
         .where('destinataire.uid', isEqualTo: uidDestinataire)
         .orderBy('dateHeure', descending: true)
-        .orderBy('statut')
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -173,6 +183,11 @@ class MessageRepositoryImpl extends MessageRepository {
           document.reference.delete();
         }
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 }

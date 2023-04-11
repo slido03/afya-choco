@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -32,13 +34,35 @@ class StatutMedicalRepositoryImpl extends StatutMedicalRepository {
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        if (snapshot.docs.first.exists) {
-          return snapshot.docs.first.data();
-        }
+        return snapshot.docs.first.data();
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
+  }
+
+  @override
+  Future<StatutMedical?> trouverUid(String uidPatient) async {
+    return await statutmedicaux
+        .where('patient.uid', isEqualTo: uidPatient)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        return snapshot.docs.first.data();
+      } else {
+        return null;
+      }
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -57,7 +81,12 @@ class StatutMedicalRepositoryImpl extends StatutMedicalRepository {
               'maladiesHereditaires',
             ]));
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -88,6 +117,11 @@ class StatutMedicalRepositoryImpl extends StatutMedicalRepository {
           document.reference.delete();
         }
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 }

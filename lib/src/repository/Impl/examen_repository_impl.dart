@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -40,7 +42,12 @@ class ExamenRepositoryImpl extends ExamenRepository {
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -59,13 +66,18 @@ class ExamenRepositoryImpl extends ExamenRepository {
               'resultats',
             ]));
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
-  Future<List<Examen>> listerMedecin(Medecin medecin) async {
+  Future<List<Examen>> listerMedecin(String uidMedecin) async {
     return await examens
-        .where('medecin.identifiant', isEqualTo: medecin.identifiant)
+        .where('medecin.uid', isEqualTo: uidMedecin)
         .orderBy('date', descending: true)
         .get()
         .then((snapshot) {
@@ -84,9 +96,9 @@ class ExamenRepositoryImpl extends ExamenRepository {
   }
 
   @override
-  Future<List<Examen>> listerPatient(Patient patient) async {
+  Future<List<Examen>> listerPatient(String uidPatient) async {
     return await examens
-        .where('patient.identifiant', isEqualTo: patient.identifiant)
+        .where('patient.uid', isEqualTo: uidPatient)
         .orderBy('date', descending: true)
         .get()
         .then((snapshot) {
@@ -106,9 +118,9 @@ class ExamenRepositoryImpl extends ExamenRepository {
 
   @override
   Future<List<Examen>> listerSpecialite(
-      Specialite type, Patient patient) async {
+      Specialite type, String uidPatient) async {
     return await examens
-        .where('patient.identifiant', isEqualTo: patient.identifiant)
+        .where('patient.uid', isEqualTo: uidPatient)
         .where('type', isEqualTo: type.name)
         .orderBy('date', descending: true)
         .get()
@@ -141,6 +153,11 @@ class ExamenRepositoryImpl extends ExamenRepository {
           document.reference.delete();
         }
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 }

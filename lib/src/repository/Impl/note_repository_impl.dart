@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -43,7 +45,12 @@ class NoteRepositoryImpl extends NoteRepository {
               'description',
             ]));
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -55,7 +62,6 @@ class NoteRepositoryImpl extends NoteRepository {
             isEqualTo: evenement.rendezVous.patient.uid)
         .where('evenement.rendezVous.dateHeure',
             isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
-        .orderBy('evenement.rendezVous.dateHeure', descending: true)
         .get()
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -88,6 +94,11 @@ class NoteRepositoryImpl extends NoteRepository {
           document.reference.delete();
         }
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 }

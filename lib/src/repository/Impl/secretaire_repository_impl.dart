@@ -45,7 +45,12 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -56,7 +61,12 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -74,7 +84,7 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
-        print(onError);
+        print(onError.toString());
       }
       return null;
     });
@@ -99,7 +109,12 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
               //'medecins',
             ]));
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -130,7 +145,12 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
           document.reference.delete();
         }
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   bool _checkID(Secretaire secretaire) {
@@ -145,7 +165,12 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
       } else {
         return true;
       }
-    }).catchError((error) => error);
+    }).catchError((error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+      return false;
+    });
     return true;
   }
 }
