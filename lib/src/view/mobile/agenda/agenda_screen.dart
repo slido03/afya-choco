@@ -9,11 +9,10 @@ import 'pages/historiques.dart';
 class AgendaScreen extends StatefulWidget {
   const AgendaScreen({
     super.key,
-    this.tabIndex = 0,
+    this.index = 0,
   });
 
-  final int tabIndex;
-
+  final int index;
   @override
   State<AgendaScreen> createState() => _AgendaScreenState();
 }
@@ -26,23 +25,23 @@ class _AgendaScreenState extends State<AgendaScreen>
   void initState() {
     super.initState();
     _pageController = PageController(
-      initialPage: widget.tabIndex,
+      initialPage: widget.index,
     );
 
     _tabController = TabController(
       length: tabs[2].length,
       vsync: this,
-      initialIndex: widget.tabIndex,
+      initialIndex: widget.index,
     );
   }
 
-  void _onTabTapped(int index) {
-    setState(() {
-      _tabController.index = index;
-      _pageController.animateToPage(index,
-          duration: const Duration(milliseconds: 300), curve: Curves.ease);
-    });
-  }
+  // void _onTabTapped(int index) {
+  //   setState(() {
+  //     _tabController.index = index;
+  //     _pageController.animateToPage(index,
+  //         duration: const Duration(milliseconds: 300), curve: Curves.ease);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +50,12 @@ class _AgendaScreenState extends State<AgendaScreen>
         TabBar(
           tabs: tabs[2],
           controller: _tabController,
-          onTap: _onTabTapped,
+          onTap: (index) {
+            _tabController.index = index;
+            _pageController.animateToPage(index,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.ease);
+          },
           labelColor: Colors.black,
           unselectedLabelColor: Colors.grey,
         ),
@@ -59,10 +63,8 @@ class _AgendaScreenState extends State<AgendaScreen>
           child: PageView(
             controller: _pageController,
             onPageChanged: (index) {
-              setState(() {
                 _tabController.index = index;
                 _tabController.animateTo(index);
-              });
             },
             children: const <Widget>[
               Evenements(),

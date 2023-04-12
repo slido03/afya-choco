@@ -10,10 +10,10 @@ import 'pages/profile.dart';
 class CarnetScreen extends StatefulWidget {
   const CarnetScreen({
     super.key,
-    this.tabIndex = 0,
+    this.index = 0,
   });
 
-  final int tabIndex;
+  final int index;
 
   @override
   State<CarnetScreen> createState() => _CarnetScreenState();
@@ -29,23 +29,30 @@ class _CarnetScreenState extends State<CarnetScreen>
   void initState() {
     super.initState();
     _pageController = PageController(
-      initialPage: widget.tabIndex,
+      initialPage: widget.index,
     );
 
     _tabController = TabController(
       length: tabs[1].length,
       vsync: this,
-      initialIndex: widget.tabIndex,
+      initialIndex: widget.index,
     );
   }
 
-  void _onTabTapped(int index) {
+  @override
+  void dispose() {
+    _pageController.dispose();
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  /*void _onTabTapped(int index) {
     setState(() {
       _tabController.index = index;
       _pageController.animateToPage(index,
           duration: const Duration(milliseconds: 300), curve: Curves.ease);
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +76,12 @@ class _CarnetScreenState extends State<CarnetScreen>
                   TabBar(
                     tabs: tabs[1],
                     controller: _tabController,
-                    onTap: _onTabTapped,
+                    onTap: (index) {
+                      _tabController.index = index;
+                      _pageController.animateToPage(index,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.ease);
+                    },
                     labelColor: Colors.black,
                     unselectedLabelColor: Colors.grey,
                   ),
@@ -77,10 +89,8 @@ class _CarnetScreenState extends State<CarnetScreen>
                     child: PageView(
                       controller: _pageController,
                       onPageChanged: (index) {
-                        setState(() {
-                          _tabController.index = index;
-                          _tabController.animateTo(index);
-                        });
+                        _tabController.index = index;
+                        _tabController.animateTo(index);
                       },
                       children: <Widget>[
                         Center(

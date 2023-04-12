@@ -9,6 +9,9 @@ class BannerImg extends StatelessWidget {
 
   const BannerImg({super.key, required this.imagePath});
 
+  // cache the image that path is passed in the constructor
+  // to avoid loading the image each time the widget is built
+  
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +21,8 @@ class BannerImg extends StatelessWidget {
       decoration:  BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         image: DecorationImage(
+          // cache the image that path is passed in the constructor
+          // to avoid loading the image each time the widget is built
           image: AssetImage(imagePath),
           fit: BoxFit.cover,
         ),
