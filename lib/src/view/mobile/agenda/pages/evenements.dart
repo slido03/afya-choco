@@ -23,7 +23,7 @@ class _EvenementsState extends State<Evenements> {
   @override
   Widget build(BuildContext context) {
     Future<List<Evenement>> events =
-        evenementViewModel.listerPatient(widget.userId);
+        evenementViewModel.listerEnAttentePatient(widget.userId);
 
     return FutureBuilder(
         future: Future.wait([

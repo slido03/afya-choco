@@ -5,7 +5,11 @@ abstract class EvenementRepository {
   Future<Evenement> ajouter(Evenement evenement);
   Future<Evenement?> trouver(RendezVous rendezVous);
   Future<void> modifier(Evenement evenement);
-  Future<List<Evenement>> listerPatient(String uidPatient);
-  Future<List<Evenement>> listerMedecin(String uidMedecin);
+  //évnements en attente
+  Future<List<Evenement>> listerEnAttentePatient(String uidPatient);
+  Future<List<Evenement>> listerEnAttenteMedecin(String uidMedecin);
+  //évènements passés
+  Future<List<Evenement>> listerPassePatient(String uidPatient);
+  Future<List<Evenement>> listerPasseMedecin(String uidMedecin);
   Future<void> supprimer(RendezVous rendezVous);
 }

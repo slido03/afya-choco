@@ -20,13 +20,23 @@ class EvenementViewModel extends ChangeNotifier {
   }
 
   //liste des evenements du patient courant du plus récent au plus ancien
-  Future<List<Evenement>> listerPatient(String uidPatient) async {
-    return await evenementRep.listerPatient(uidPatient);
+  Future<List<Evenement>> listerEnAttentePatient(String uidPatient) async {
+    return await evenementRep.listerEnAttentePatient(uidPatient);
   }
 
   //liste des evenements du medecin courant du plus récent au plus ancien
-  Future<List<Evenement>> listerMedecin(String uidMedecin) async {
-    return await evenementRep.listerMedecin(uidMedecin);
+  Future<List<Evenement>> listerEnAttenteMedecin(String uidMedecin) async {
+    return await evenementRep.listerEnAttenteMedecin(uidMedecin);
+  }
+
+  //historique des évènements du patient
+  Future<List<Evenement>> listerPassePatient(String uidPatient) async {
+    return await evenementRep.listerPassePatient(uidPatient);
+  }
+
+  //historique des évènements du patient
+  Future<List<Evenement>> listerPasseMedecin(String uidMedecin) async {
+    return await evenementRep.listerPasseMedecin(uidMedecin);
   }
 
   Future<void> supprimer(RendezVous rendezVous) async {

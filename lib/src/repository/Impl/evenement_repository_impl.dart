@@ -85,9 +85,11 @@ class EvenementRepositoryImpl extends EvenementRepository {
   }
 
   @override
-  Future<List<Evenement>> listerPatient(String uidPatient) async {
+  Future<List<Evenement>> listerEnAttentePatient(String uidPatient) async {
     return await evenements
         .where('rendezVous.patient.uid', isEqualTo: uidPatient)
+        .where('rendezVous.dateHeure',
+            isGreaterThan: DateTime.now().millisecondsSinceEpoch)
         .orderBy('rendezVous.dateHeure', descending: true)
         .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
@@ -106,9 +108,57 @@ class EvenementRepositoryImpl extends EvenementRepository {
   }
 
   @override
-  Future<List<Evenement>> listerMedecin(String uidMedecin) async {
+  Future<List<Evenement>> listerEnAttenteMedecin(String uidMedecin) async {
     return await evenements
         .where('rendezVous.medecin.uid', isEqualTo: uidMedecin)
+        .where('rendezVous.dateHeure',
+            isGreaterThan: DateTime.now().millisecondsSinceEpoch)
+        .orderBy('rendezVous.dateHeure', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Evenement> liste = [];
+        for (var document in snapshot.docs) {
+          Evenement evenement = document.data();
+          liste.add(evenement);
+        }
+        return liste;
+      } else {
+        List<Evenement> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<List<Evenement>> listerPassePatient(String uidPatient) async {
+    return await evenements
+        .where('rendezVous.patient.uid', isEqualTo: uidPatient)
+        .where('rendezVous.dateHeure',
+            isLessThan: DateTime.now().millisecondsSinceEpoch)
+        .orderBy('rendezVous.dateHeure', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Evenement> liste = [];
+        for (var document in snapshot.docs) {
+          Evenement evenement = document.data();
+          liste.add(evenement);
+        }
+        return liste;
+      } else {
+        List<Evenement> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<List<Evenement>> listerPasseMedecin(String uidMedecin) async {
+    return await evenements
+        .where('rendezVous.medecin.uid', isEqualTo: uidMedecin)
+        .where('rendezVous.dateHeure',
+            isLessThan: DateTime.now().millisecondsSinceEpoch)
         .orderBy('rendezVous.dateHeure', descending: true)
         .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {

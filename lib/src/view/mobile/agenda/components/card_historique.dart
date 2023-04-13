@@ -1,60 +1,14 @@
 import 'package:afya/src/repository/repositories.dart';
+import 'package:afya/src/view/mobile/agenda/pages/historiques.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import '../../../../model/models.dart';
+import 'package:afya/src/viewModel/view_models.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class CardHistorique extends StatelessWidget {
-  //final Evenement historique;evenement.
-
-  //const CardHistorique({super.key, required this.historique}evenement.);
-
-  CardHistorique({super.key});
-
-  final historique = Evenement(
-    "consultation du Dr. Jean",
-    "consultation pour un mal de tête, je suis malade depuis 3 jours"
-        "Rendez-vous du 12/12/2020 à 12h, pour des examens approfondis"
-        "être à l'heure, et ne pas oublier votre carte vitale",
-    RendezVous(
-      DateTime.now(),
-      30,
-      Patient(
-          "ES7284D", //uid
-          "6382BY3", //id
-          "Jean",
-          "Dupont",
-          "93750300",
-          "felindelaplace@hotmail.com", //email
-          "12 rue de la paix, 75000 Paris", //adresse
-          DateTime.now(), //date de naissance
-          Sexe.homme),
-      Medecin(
-        "ES7284D", //uid
-        "6382BY3",
-        "Jean",
-        "Dupont",
-        "93750300",
-        "edmond234@hotmail.com", //email
-        "12 rue de la paix, 75000 Paris", //adresse
-        "La sante meilleure",
-        true,
-        Specialite.anesthesiologie,
-        Secretaire(
-          "ES7284D", //uid
-          "6382BY3",
-          "Jean",
-          "Dupont",
-          "93750300",
-          "edmond234@hotmail.com", //email
-          "12 rue de la paix, 75000 Paris", //adresse
-          "La sante meilleure",
-        ),
-      ), //clinique
-      "12 rue de la paix, 75000 Paris",
-      ObjetRendezVous.consultation,
-      StatutRendezVous.enAttente,
-    ),
-  );
+  const CardHistorique({super.key, required this.evenement});
+  final Evenement evenement;
 
   void _showDialog(BuildContext context) {
     showDialog(
@@ -65,10 +19,10 @@ class CardHistorique extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          title: Text(historique.titre),
+          title: Text(evenement.titre),
           content: RichText(
             text: TextSpan(
-              text: '${historique.description}\n',
+              text: '${evenement.description}\n',
               style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w300,
@@ -76,7 +30,7 @@ class CardHistorique extends StatelessWidget {
               children: <TextSpan>[
                 TextSpan(
                   text:
-                      "\nDate: ${historique.rendezVous.dateHeure.toString().split(" ")[0]}\n",
+                      "\nDate: ${evenement.rendezVous.dateHeure.dateFormatted}\n",
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     color: Colors.black,
@@ -84,14 +38,14 @@ class CardHistorique extends StatelessWidget {
                 ),
                 TextSpan(
                   text:
-                      "Heure: ${historique.rendezVous.dateHeure.toString().split(" ")[1].split(":").sublist(0, 2).join(":")}\n",
+                      "Heure: ${evenement.rendezVous.dateHeure.timeFormatted}\n",
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     color: Colors.black,
                   ),
                 ),
                 TextSpan(
-                  text: "Durée: ${historique.rendezVous.duree} minutes\n",
+                  text: "Durée: ${evenement.rendezVous.duree} minutes\n",
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     color: Colors.black,
@@ -99,7 +53,7 @@ class CardHistorique extends StatelessWidget {
                 ),
                 TextSpan(
                   text:
-                      "Avec: Dr. ${historique.rendezVous.medecin.nom} ${historique.rendezVous.medecin.prenoms}\n",
+                      "Avec: Dr. ${evenement.rendezVous.medecin.nom} ${evenement.rendezVous.medecin.prenoms}\n",
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     color: Colors.black,
@@ -116,47 +70,6 @@ class CardHistorique extends StatelessWidget {
               },
             ),
           ],
-        );
-      },
-    );
-  }
-
-  // ignore: unused_element
-  void _showBottomSheetMenu(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        // ignore: sized_box_for_whitespace
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.3,
-          child: Column(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.event_available),
-                title: const Text("Rendez-vous"),
-                subtitle: Text(historique.rendezVous.dateHeure.toString()),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const ListTile(
-                title: Text("Créer un historique"),
-                subtitle: Text(
-                    "Un historique evenement.sera créé pour vous 30 minutes avant le rendez-vous"),
-                onTap:
-                    null, // a modifier lors de la connexion avec la base de données
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              const ListTile(
-                title: Text("Ajouter une note"),
-                subtitle: Text("Ajouter une note pour ce rendez-vous"),
-                onTap:
-                    null, // a modifier lors de la connexion avec la base de données
-              ),
-            ],
-          ),
         );
       },
     );
@@ -196,26 +109,36 @@ class CardHistorique extends StatelessWidget {
                 ),
               ];
             },
-            onSelected: (int value) {
+            onSelected: (int value) async {
               if (value == 1) {
                 _showDialog(context);
               } else if (value == 2) {
-                // a modifier lors de la connexion avec la base de données
-                // supprimer le historique
+                EvenementViewModel evenementViewModel = EvenementViewModel();
+                String userId = evenement.rendezVous.patient.uid;
+                EasyLoading.show(status: 'suppression en cours');
+                await evenementViewModel
+                    .supprimer(evenement.rendezVous); //on supprime l'évènement
+                EasyLoading.dismiss();
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => Historiques(userId: userId),
+                  ),
+                );
               }
             },
           ),
           title: Text(
-            "${historique.titre}\n"
-            "${historique.rendezVous.dateHeure.toString().split(" ")[0]} à "
-            "${historique.rendezVous.dateHeure.toString().split(" ")[1].split(":").sublist(0, 2).join(":")}\n",
+            "${evenement.titre}\n"
+            "${evenement.rendezVous.dateHeure.dateFormatted} à "
+            "${evenement.rendezVous.dateHeure.timeFormatted}\n",
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),
           ),
           subtitle: Text(
-            historique.description,
+            evenement.description,
             style: const TextStyle(
               fontSize: 14,
             ),
@@ -231,56 +154,57 @@ class CardHistorique extends StatelessWidget {
   }
 }
 
-/*
+extension DateFormattedHistorique on DateTime {
+  String get numberJourMois {
+    String? number;
+    String? jour;
+    String? mois;
+    number = DateFormat('EEE').format(this);
+    if (day < 10) {
+      String j = '0$day';
+      jour = ' $j ';
+    }
+    switch (month) {
+      case 1:
+        mois = 'Jan';
+        break;
+      case 2:
+        mois = 'Fev';
+        break;
+      case 3:
+        mois = 'Mar';
+        break;
+      case 4:
+        mois = 'Avr';
+        break;
+      case 5:
+        mois = 'Mai';
+        break;
+      case 6:
+        mois = 'Juin';
+        break;
+      case 7:
+        mois = 'Jul';
+        break;
+      case 8:
+        mois = 'Aôut';
+        break;
+      case 9:
+        mois = 'Sep';
+        break;
+      case 10:
+        mois = 'Oct';
+        break;
+      case 11:
+        mois = 'Nov';
+        break;
+      case 12:
+        mois = 'Dec';
+        break;
+    }
+    return '$number$jour$mois';
+  }
 
-              Text(
-                historique.rendezVous.dateHeure.toString().split(" ")[
-                    0], // a modifier lors de la connexion avec la base de données; format de date : lun 12 oct
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-              const SizedBox(height: 5),
-              
-              const SizedBox(height: 5),
-              Text(
-                historique.description,
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-              ),
-              const SizedBox(height: 5),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    historique.rendezVous.dateHeure
-                        .toString()
-                        .split(" ")[1]
-                        .split(":")
-                        .sublist(0, 2)
-                        .join(":"),
-                    // a modifier lors de la connexion avec la base de données; format de date : lun 12 oct
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                  IconButton(
-                    visualDensity: VisualDensity.compact,
-                    alignment: Alignment.centerRight,
-                    padding: EdgeInsets.zero,
-                    icon: const Icon(
-                      Icons.more_vert,
-                      color: Colors.black,
-                      size: 20,
-                    ),
-                    onPressed: () {
-                      _showBottomSheetMenu(context);
-                    },
-                  )
-                ],
-              ), 
-*/
+  String get dateFormatted => DateFormat('dd/MM/yyyy').format(this);
+  String get timeFormatted => DateFormat('HH:mm').format(this);
+}
