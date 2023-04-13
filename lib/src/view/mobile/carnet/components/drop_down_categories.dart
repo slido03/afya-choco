@@ -34,48 +34,49 @@ class DropDownCategories extends StatelessWidget {
       borderRadius: BorderRadius.circular(10.0),
       value: filterState['categorie'],
       focusColor: Colors.white38,
-      items: [
-        const DropdownMenuItem(
-          value: 1,
-          child: Text(
-            'Tous',
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        DropdownMenuItem(
-          value: 2,
-          child: Text(
-            Specialite.cardiologie.value,
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        DropdownMenuItem(
-          value: 3,
-          child: Text(
-            Specialite.hematologie.value,
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        DropdownMenuItem(
-          value: 4,
-          child: Text(
-            Specialite.gynecologieObstetrique.value,
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        const DropdownMenuItem(
-          value: 5,
-          child: Text(
-            'Autres',
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ],
+      items: specialiteItems(),
+      // items: [
+      //   const DropdownMenuItem(
+      //     value: 1,
+      //     child: Text(
+      //       'Tous',
+      //       softWrap: true,
+      //       overflow: TextOverflow.ellipsis,
+      //     ),
+      //   ),
+      //   DropdownMenuItem(
+      //     value: 2,
+      //     child: Text(
+      //       Specialite.cardiologie.value,
+      //       softWrap: true,
+      //       overflow: TextOverflow.ellipsis,
+      //     ),
+      //   ),
+      //   DropdownMenuItem(
+      //     value: 3,
+      //     child: Text(
+      //       Specialite.hematologie.value,
+      //       softWrap: true,
+      //       overflow: TextOverflow.ellipsis,
+      //     ),
+      //   ),
+      //   DropdownMenuItem(
+      //     value: 4,
+      //     child: Text(
+      //       Specialite.gynecologieObstetrique.value,
+      //       softWrap: true,
+      //       overflow: TextOverflow.ellipsis,
+      //     ),
+      //   ),
+      //   const DropdownMenuItem(
+      //     value: 5,
+      //     child: Text(
+      //       'Autres',
+      //       softWrap: true,
+      //       overflow: TextOverflow.ellipsis,
+      //     ),
+      //   ),
+      // ],
       onChanged: (value) {
         onChanged(value, 'categorie');
       },
@@ -92,9 +93,9 @@ class DropDownCategories extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
       ),
     ));
-    for (int index = 2; index < Specialite.values.length + 2; index++) {
+    for (int index = 0; index < Specialite.values.length - 1; index++) {
       DropdownMenuItem<int> item = DropdownMenuItem<int>(
-        value: index,
+        value: index+2,
         child: Text(
           Specialite.values[index].value,
           softWrap: true,
