@@ -18,7 +18,7 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   final String title;
-
+  
   // the name of app is afya
   //Widget miniLogo = const Text('Afya');
 
