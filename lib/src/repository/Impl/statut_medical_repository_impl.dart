@@ -5,15 +5,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class StatutMedicalRepositoryImpl extends StatutMedicalRepository {
   static StatutMedicalRepository? _instance;
-  final statutmedicaux = FirebaseFirestore.instance
-      .collection('statutmedicaux')
-      .withConverter<StatutMedical>(
-        fromFirestore: (snapshot, _) =>
-            StatutMedical.fromJson(snapshot.data()!),
-        toFirestore: (statutmedical, _) => statutmedical.toJson(),
-      ); //collection statutmedicaux
+  static final _firestore = FirebaseFirestore.instance;
+  final statutmedicaux =
+      _firestore.collection('statutmedicaux').withConverter<StatutMedical>(
+            fromFirestore: (snapshot, _) =>
+                StatutMedical.fromJson(snapshot.data()!),
+            toFirestore: (statutmedical, _) => statutmedical.toJson(),
+          ); //collection statutmedicaux
 
-  StatutMedicalRepositoryImpl._(); //constructeur privé
+  StatutMedicalRepositoryImpl._() {
+    //on initialise le cache local de firestore
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: 70 * 1024 * 1024,
+    );
+  } //constructeur privé
 
   static StatutMedicalRepository get instance {
     _instance ??= StatutMedicalRepositoryImpl._();
@@ -31,7 +37,7 @@ class StatutMedicalRepositoryImpl extends StatutMedicalRepository {
   Future<StatutMedical?> trouver(String identifiantPatient) async {
     return await statutmedicaux
         .where('patient.identifiant', isEqualTo: identifiantPatient)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         return snapshot.docs.first.data();
@@ -50,7 +56,7 @@ class StatutMedicalRepositoryImpl extends StatutMedicalRepository {
   Future<StatutMedical?> trouverUid(String uidPatient) async {
     return await statutmedicaux
         .where('patient.uid', isEqualTo: uidPatient)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         return snapshot.docs.first.data();
@@ -70,7 +76,7 @@ class StatutMedicalRepositoryImpl extends StatutMedicalRepository {
     return statutmedicaux
         .where('patient.identifiant',
             isEqualTo: statutmedical.patient.identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs.first.reference.set(
@@ -91,7 +97,9 @@ class StatutMedicalRepositoryImpl extends StatutMedicalRepository {
 
   @override
   Future<List<StatutMedical>> lister() async {
-    return await statutmedicaux.get().then((snapshot) {
+    return await statutmedicaux
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<StatutMedical> liste = [];
         for (var document in snapshot.docs) {
@@ -110,7 +118,7 @@ class StatutMedicalRepositoryImpl extends StatutMedicalRepository {
   Future<void> supprimer(String identifiantPatient) {
     return statutmedicaux
         .where('patient.identifiant', isEqualTo: identifiantPatient)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var document in snapshot.docs) {

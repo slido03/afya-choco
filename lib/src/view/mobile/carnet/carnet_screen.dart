@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:afya/src/view/mobile/authentication/authentication.dart';
 //import 'package:afya/src/viewModel/view_models.dart';
+import 'dart:async';
 import '../tabs.dart';
 import 'pages/examens.dart';
 import 'pages/ordonnances.dart';
@@ -23,7 +24,7 @@ class _CarnetScreenState extends State<CarnetScreen>
     with TickerProviderStateMixin {
   late PageController _pageController;
   late TabController _tabController;
-  AuthService authService = AuthService();
+  AuthService authService = AuthService.instance;
 
   @override
   void initState() {

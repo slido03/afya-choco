@@ -5,14 +5,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
   static OrdonnanceRepository? _instance;
-  final ordonnances = FirebaseFirestore.instance
+  static final _firestore = FirebaseFirestore.instance;
+  final ordonnances = _firestore
       .collection('ordonnances')
       .withConverter<Ordonnance>(
         fromFirestore: (snapshot, _) => Ordonnance.fromJson(snapshot.data()!),
         toFirestore: (ordonnance, _) => ordonnance.toJson(),
       ); //collection ordonnances
 
-  OrdonnanceRepositoryImpl._(); //constructeur privé
+  OrdonnanceRepositoryImpl._() {
+    //on initialise le cache local de firestore
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: 40 * 1024 * 1024,
+    );
+  } //constructeur privé
 
   static OrdonnanceRepository get instance {
     _instance ??= OrdonnanceRepositoryImpl._();
@@ -35,7 +42,7 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
             isEqualTo: diagnostic.patient!.identifiant)
         .where('diagnostic.date',
             isEqualTo: diagnostic.date.millisecondsSinceEpoch)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         if (snapshot.docs.first.exists) {
@@ -61,7 +68,7 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
             isEqualTo: ordonnance.diagnostic.patient!.identifiant)
         .where('diagnostic.date',
             isEqualTo: ordonnance.diagnostic.date.millisecondsSinceEpoch)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs.first.reference.set(
@@ -83,7 +90,7 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
     return await ordonnances
         .where('patient.uid', isEqualTo: uidPatient)
         .orderBy('date', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Ordonnance> liste = [];
@@ -104,7 +111,7 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
     return await ordonnances
         .where('medecin.uid', isEqualTo: uidMedecin)
         .orderBy('date', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Ordonnance> liste = [];
@@ -129,7 +136,7 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
             isEqualTo: ordonnance.diagnostic.medecin.identifiant)
         .where('diagnostic.patient.identifiant',
             isEqualTo: ordonnance.diagnostic.patient!.identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var document in snapshot.docs) {

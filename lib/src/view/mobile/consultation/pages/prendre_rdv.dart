@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'dart:async';
+//import 'package:provider/provider.dart';
 import 'package:afya/src/view/mobile/authentication/authentication.dart';
-import 'package:afya/src/viewModel/message_view_model.dart';
+//import 'package:afya/src/viewModel/message_view_model.dart';
 import 'package:afya/src/view/mobile/consultation/components/components.dart';
 
 class PrendreRdv extends StatefulWidget {
@@ -14,7 +15,7 @@ class PrendreRdv extends StatefulWidget {
 }
 
 class _PrendreRdvState extends State<PrendreRdv> {
-  AuthService authService = AuthService();
+  AuthService authService = AuthService.instance;
 
   @override
   void initState() {
@@ -53,12 +54,9 @@ class _PrendreRdvState extends State<PrendreRdv> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       titlePriseRdv(),
-                      ChangeNotifierProvider(
-                        create: (context) => MessageViewModel(),
-                        builder: ((context, child) => FormPrendreRdv(
-                              userId: userId,
-                              email: userEmail,
-                            )),
+                      FormPrendreRdv(
+                        userId: userId,
+                        email: userEmail,
                       ),
                     ],
                   ),

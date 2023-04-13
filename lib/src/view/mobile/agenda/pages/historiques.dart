@@ -1,6 +1,6 @@
 import 'package:afya/src/model/models.dart';
 import 'package:flutter/material.dart';
-
+//import 'dart:async';
 //import '../components/card_evenement.dart';
 //import '../components/card_rappel.dart';
 import '../components/card_historique.dart';
@@ -9,7 +9,8 @@ import '../components/card_historique.dart';
 /// avec en entete le des boutons de filtre pour classer les evenements
 /// selon les 3 derniers jours, la semaine en cours, le mois en cours
 class Historiques extends StatefulWidget {
-  const Historiques({super.key});
+  const Historiques({super.key, required this.userId});
+  final String userId;
 
   @override
   State<Historiques> createState() => _HistoriquesState();
@@ -84,7 +85,7 @@ class _HistoriquesState extends State<Historiques> {
                       'Aucun Rappel',
                       style: TextStyle(
                         color: Colors.grey,
-                        fontSize: 24,
+                        fontSize: 16,
                       ),
                     ),
                   )

@@ -1,10 +1,11 @@
 import 'package:afya/src/view/mobile/consultation/components/title_demande_infos.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'dart:async';
+//import 'package:provider/provider.dart';
 import 'package:afya/src/view/mobile/authentication/authentication.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:afya/src/application_state.dart';
-import 'package:afya/src/viewModel/message_view_model.dart';
+//import 'package:afya/src/viewModel/message_view_model.dart';
 import 'package:afya/src/view/mobile/consultation/components/components.dart';
 
 class DemanderInfos extends StatefulWidget {
@@ -17,7 +18,7 @@ class DemanderInfos extends StatefulWidget {
 }
 
 class _DemanderInfosState extends State<DemanderInfos> {
-  AuthService authService = AuthService();
+  AuthService authService = AuthService.instance;
 
   @override
   void initState() {
@@ -56,12 +57,9 @@ class _DemanderInfosState extends State<DemanderInfos> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       titleDemandeInfo(),
-                      ChangeNotifierProvider(
-                        create: (context) => MessageViewModel(),
-                        builder: ((context, child) => FormDemanderInfos(
-                              userId: userId,
-                              email: userEmail,
-                            )),
+                      FormDemanderInfos(
+                        userId: userId,
+                        email: userEmail,
                       ),
                     ],
                   ),

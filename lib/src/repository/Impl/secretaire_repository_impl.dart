@@ -4,14 +4,21 @@ import 'package:flutter/foundation.dart';
 
 class SecretaireRepositoryImpl extends SecretaireRepository {
   static SecretaireRepository? _instance;
-  final secretaires = FirebaseFirestore.instance
+  static final _firestore = FirebaseFirestore.instance;
+  final secretaires = _firestore
       .collection('secretaires')
       .withConverter<Secretaire>(
         fromFirestore: (snapshot, _) => Secretaire.fromJson(snapshot.data()!),
         toFirestore: (secretaire, _) => secretaire.toJson(),
       ); //collection secretaires
 
-  SecretaireRepositoryImpl._(); //constructeur privé
+  SecretaireRepositoryImpl._() {
+    //on initialise le cache local de firestore
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: 70 * 1024 * 1024,
+    );
+  } //constructeur privé
 
   static SecretaireRepository get instance {
     _instance ??= SecretaireRepositoryImpl._();
@@ -36,7 +43,7 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
   Future<Secretaire?> trouver(String identifiant) async {
     return await secretaires
         .where('identifiant', isEqualTo: identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         if (snapshot.docs.first.exists) {
@@ -55,7 +62,10 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
 
   @override
   Future<Secretaire?> trouverUid(String uid) async {
-    return await secretaires.doc(uid).get().then((snapshot) {
+    return await secretaires
+        .doc(uid)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
       if (snapshot.exists) {
         return snapshot.data();
       } else {
@@ -73,7 +83,7 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
   Future<Secretaire?> getSecretariatCentral() async {
     return await secretaires
         .where('identifiant', isEqualTo: 'AAAA1111')
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         if (snapshot.docs.first.exists) {
@@ -94,7 +104,7 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
   Future<void> modifier(Secretaire secretaire) {
     return secretaires
         .where('identifiant', isEqualTo: secretaire.identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs.first.reference.set(
@@ -119,7 +129,9 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
 
   @override
   Future<List<Secretaire>> lister() async {
-    return await secretaires.get().then((snapshot) {
+    return await secretaires
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Secretaire> liste = [];
         for (var document in snapshot.docs) {
@@ -138,7 +150,7 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
   Future<void> supprimer(String identifiant) {
     return secretaires
         .where('identifiant', isEqualTo: identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var document in snapshot.docs) {
@@ -154,7 +166,7 @@ class SecretaireRepositoryImpl extends SecretaireRepository {
   }
 
   bool _checkID(Secretaire secretaire) {
-    secretaires.get().then((snapshot) {
+    secretaires.get(const GetOptions(source: Source.server)).then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var doc in snapshot.docs) {
           if (doc['identifiant'] == secretaire.identifiant) {

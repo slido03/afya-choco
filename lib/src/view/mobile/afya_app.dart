@@ -4,6 +4,7 @@ import 'agenda/agenda_screen.dart';
 import 'carnet/carnet_screen.dart';
 import 'intro_screen.dart';
 import 'notifications_screen.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class AfyaApp extends StatelessWidget {
   const AfyaApp({super.key});
@@ -13,6 +14,7 @@ class AfyaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Afya Demo',
+      builder: EasyLoading.init(),
       theme: ThemeData(
         //const Color.fromARGB(255, 33, 243, 156)
         primarySwatch: Colors.green,

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'firebase_options.dart';
+import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'src/view/mobile/afya_app.dart'; //importing the main mobile app

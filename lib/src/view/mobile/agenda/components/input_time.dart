@@ -1,49 +1,47 @@
 import 'package:flutter/material.dart';
 
-// import for formatting the date
-// ignore: depend_on_referenced_packages
-import 'package:intl/intl.dart';
-
 /*
-  * This class is a widget that displays the date input
-  * and the date picker
+  * This class is a widget that displays the time input
+  * and the time picker
 */
-class InputDate extends StatefulWidget {
-  const InputDate({
+class InputTime extends StatefulWidget {
+  const InputTime({
     super.key,
     this.maxwidth,
     required String labelText,
     required String hintText,
     required this.controller,
+    required this.initialTime,
   });
 
   final double? maxwidth;
   final TextEditingController controller;
+  final TimeOfDay initialTime;
 
   @override
-  State<InputDate> createState() => _InputDateState();
+  State<InputTime> createState() => _InputTimeState();
 }
 
-class _InputDateState extends State<InputDate> {
-  DateTime _date = DateTime.now();
+class _InputTimeState extends State<InputTime> {
+  late TimeOfDay _time;
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != _date) {
-      setState(() {
-        _date = picked;
-        widget.controller.text = formatDate(_date);
-      });
-    }
+  @override
+  void initState() {
+    super.initState();
+    _time = widget.initialTime;
   }
 
-  formatDate(DateTime date) {
-    return DateFormat('dd/MM/yyyy').format(date);
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: widget.initialTime,
+    );
+    if (picked != null && picked != _time) {
+      setState(() {
+        _time = picked;
+        widget.controller.text = _time.timeFormatted;
+      });
+    }
   }
 
   @override
@@ -55,7 +53,7 @@ class _InputDateState extends State<InputDate> {
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
-            labelText: 'Date',
+            labelText: 'Heure',
             labelStyle: TextStyle(
               color: Theme.of(context).primaryColorDark,
             ),
@@ -68,20 +66,36 @@ class _InputDateState extends State<InputDate> {
             contentPadding: const EdgeInsets.all(10.0),
           ),
           // ignore: unnecessary_null_comparison
-          isEmpty: _date == null,
+          isEmpty: _time == null,
           child: InkWell(
-            onTap: () => _selectDate(context),
+            onTap: () => _selectTime(context),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Text(formatDate(_date)),
-                const Icon(Icons.calendar_today, color: Colors.black87),
+                Text(_time.timeFormatted),
+                const Icon(Icons.timer, color: Colors.black87),
               ],
             ),
           ),
         );
       }),
     );
+  }
+}
+
+extension TimeOfDayExtension on TimeOfDay {
+  String get timeFormatted {
+    String? newHour;
+    String? newMinute;
+    if (hour < 10) {
+      newHour = '0$hour';
+    }
+    newHour = '$hour';
+    if (minute < 10) {
+      newMinute = '0$minute';
+    }
+    newMinute = '$minute';
+    return '$newHour:$newMinute';
   }
 }

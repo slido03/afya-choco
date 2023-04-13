@@ -1,33 +1,31 @@
 import 'package:afya/src/model/models.dart';
-import 'package:afya/src/viewModel/evenement_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:afya/src/viewModel/view_models.dart';
 import 'dart:async';
-//import 'package:flutter/foundation.dart';
-//import 'package:intl/intl.dart';
-import '../components/card_evenement.dart';
+import '../components/card_note.dart';
 
-/// la page de l'onglet "Evenements" de l'agenda
-/// avec en entete le des boutons de filtre pour classer les evenements
+/// la page de l'onglet "Notes" de l'agenda
+/// avec en entete des boutons de filtre pour classer les Notes
 /// selon les 3 derniers jours, la semaine en cours, le mois en cours
-class Evenements extends StatefulWidget {
-  const Evenements({super.key, required this.userId});
+class Notes extends StatefulWidget {
+  const Notes({super.key, required this.userId, required this.evenement});
   final String userId;
+  final Evenement evenement;
 
   @override
-  State<Evenements> createState() => _EvenementsState();
+  State<Notes> createState() => _NotesState();
 }
 
-class _EvenementsState extends State<Evenements> {
-  EvenementViewModel evenementViewModel = EvenementViewModel();
+class _NotesState extends State<Notes> {
+  NoteViewModel noteViewModel = NoteViewModel();
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Evenement>> events =
-        evenementViewModel.listerPatient(widget.userId);
+    Future<List<Note>> not = noteViewModel.lister(widget.evenement);
 
     return FutureBuilder(
         future: Future.wait([
-          events,
+          not,
         ]),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -37,10 +35,9 @@ class _EvenementsState extends State<Evenements> {
               child: const CircularProgressIndicator(),
             ));
           } else if (snapshot.hasData) {
-            final List<List<Evenement>> data = snapshot.data!;
-            final evenements = data[0];
-            if (evenements.isNotEmpty) {
-              //liste non vide
+            final List<List<Note>> data = snapshot.data!;
+            final notes = data[0];
+            if (notes.isNotEmpty) {
               // ignore: avoid_unnecessary_containers
               return Container(
                 child: Center(
@@ -77,22 +74,11 @@ class _EvenementsState extends State<Evenements> {
                             ),
                             color: Color.fromRGBO(37, 211, 102, 0.12),
                           ),
-                          child: GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount:
-                                  (MediaQuery.of(context).size.width < 390)
-                                      ? 2
-                                      : 3,
-                              crossAxisSpacing: 5,
-                              mainAxisSpacing: 5,
-                              mainAxisExtent: 185,
-                            ),
-                            itemCount: evenements.length,
+                          child: ListView.builder(
+                            itemCount: notes.length,
                             itemBuilder: (context, index) {
-                              return CardEvenement(
-                                userId: widget.userId,
-                                evenement: evenements[index],
+                              return CardNote(
+                                note: notes[index],
                               );
                             },
                           ),
@@ -105,7 +91,7 @@ class _EvenementsState extends State<Evenements> {
             } else {
               return const Center(
                 child: Text(
-                  'Aucun évènement pour le moment',
+                  'Aucune Note pour le moment',
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 16,

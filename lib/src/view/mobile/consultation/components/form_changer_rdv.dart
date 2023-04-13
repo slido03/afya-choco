@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 //import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
 import 'package:afya/src/view/mobile/consultation/components/components.dart';
 import 'package:afya/src/model/models.dart';
 import 'package:afya/src/viewModel/rendez_vous_view_model.dart';
@@ -28,6 +28,8 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
   bool _isLoading = false;
   final TextEditingController _messageController = TextEditingController();
   final TextEditingController _selectedController = TextEditingController();
+  RendezVousViewModel rendezVousViewModel = RendezVousViewModel();
+
   String get message => _messageController.text;
   int? get selected => int.tryParse(_selectedController.text);
 
@@ -39,7 +41,6 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
   }
 
   Future<void> _showRdvDialog(BuildContext context, Patient? patient) async {
-    RendezVousViewModel rendezVousViewModel = RendezVousViewModel();
     RendezVous? rendezVous;
     final Widget dialog;
 
@@ -115,60 +116,55 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RendezVousViewModel>(
-      builder: (context, rendezVousViewModel, child) {
-        if (widget.userId != null) {
-          Future<Patient?> p =
-              rendezVousViewModel.trouverPatientUid(widget.userId!);
-          Future<PatientIntermediaire?> patientI = rendezVousViewModel
-              .trouverPatientIntermediaireUid(widget.userId!);
-          Future<List<RendezVous>> liste =
-              rendezVousViewModel.listerEnAttentePatient(widget.userId!);
-          return FutureBuilder(
-            future: Future.wait([
-              p,
-              patientI,
-            ]),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                    child: Container(
-                  alignment: Alignment.center,
-                  child: const CircularProgressIndicator(),
-                ));
-              } else if (snapshot.hasData) {
-                final List<Patient?> data = snapshot.data!;
-                final patient = data[0];
-                final patientIntermediaire = data[1];
-                if (patient != null) {
-                  if (_dialogPushed) {
-                    return _changerRdv(context, liste, patient);
-                  }
-                  return _formChanger(context, liste, patient);
-                } else if (patientIntermediaire != null) {
-                  if (_dialogPushed) {
-                    return _changerRdv(context, liste, patientIntermediaire);
-                  }
-                  return _formChanger(context, liste, patientIntermediaire);
-                } else {
-                  //patient et patient intermédiaire nuls
-                  _showRdvDialog(context, null);
-                }
-              } else if (snapshot.hasError) {
-                //en cas d'erreur quelconque (snapshot.hasError)
-                return Center(
-                    child: Text('Erreur: ${snapshot.error.toString()}'));
+    if (widget.userId != null) {
+      Future<Patient?> p =
+          rendezVousViewModel.trouverPatientUid(widget.userId!);
+      Future<PatientIntermediaire?> patientI =
+          rendezVousViewModel.trouverPatientIntermediaireUid(widget.userId!);
+      Future<List<RendezVous>> liste =
+          rendezVousViewModel.listerEnAttentePatient(widget.userId!);
+      return FutureBuilder(
+        future: Future.wait([
+          p,
+          patientI,
+        ]),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: Container(
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator(),
+            ));
+          } else if (snapshot.hasData) {
+            final List<Patient?> data = snapshot.data!;
+            final patient = data[0];
+            final patientIntermediaire = data[1];
+            if (patient != null) {
+              if (_dialogPushed) {
+                return _changerRdv(context, liste, patient);
               }
-              return const Center(
-                  child: Text('La récupération de données a échoué'));
-            },
-          );
-        } else {
-          //si l'userId est nul c'est que l'utilisateur est déconnecté et donc on le ramène à la page de login
-          return const LoginPage();
-        }
-      },
-    );
+              return _formChanger(context, liste, patient);
+            } else if (patientIntermediaire != null) {
+              if (_dialogPushed) {
+                return _changerRdv(context, liste, patientIntermediaire);
+              }
+              return _formChanger(context, liste, patientIntermediaire);
+            } else {
+              //patient et patient intermédiaire nuls
+              _showRdvDialog(context, null);
+            }
+          } else if (snapshot.hasError) {
+            //en cas d'erreur quelconque (snapshot.hasError)
+            return Center(child: Text('Erreur: ${snapshot.error.toString()}'));
+          }
+          return const Center(
+              child: Text('La récupération de données a échoué'));
+        },
+      );
+    } else {
+      //si l'userId est nul c'est que l'utilisateur est déconnecté et donc on le ramène à la page de login
+      return const LoginPage();
+    }
   }
 
   Widget _formChanger(

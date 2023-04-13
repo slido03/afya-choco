@@ -1,8 +1,9 @@
-import 'package:afya/src/viewModel/rendez_vous_view_model.dart';
+//import 'package:afya/src/viewModel/rendez_vous_view_model.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:afya/src/view/mobile/authentication/authentication.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
+//import 'package:provider/provider.dart';
 //import 'package:afya/src/application_state.dart';
 import 'package:afya/src/view/mobile/consultation/components/components.dart';
 
@@ -16,7 +17,7 @@ class ChangerRdv extends StatefulWidget {
 }
 
 class _ChangerRdvState extends State<ChangerRdv> {
-  AuthService authService = AuthService();
+  AuthService authService = AuthService.instance;
 
   @override
   void initState() {
@@ -50,11 +51,8 @@ class _ChangerRdvState extends State<ChangerRdv> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       titleChangerRdv(),
-                      ChangeNotifierProvider(
-                        create: (context) => RendezVousViewModel(),
-                        builder: ((context, child) => FormChangerRdv(
-                              userId: userId,
-                            )),
+                      FormChangerRdv(
+                        userId: userId,
                       ),
                     ],
                   ),

@@ -5,13 +5,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RappelRepositoryImpl extends RappelRepository {
   static RappelRepository? _instance;
-  final rappels =
-      FirebaseFirestore.instance.collection('rappels').withConverter<Rappel>(
-            fromFirestore: (snapshot, _) => Rappel.fromJson(snapshot.data()!),
-            toFirestore: (rappel, _) => rappel.toJson(),
-          ); //collection rappels
+  static final _firestore = FirebaseFirestore.instance;
+  final rappels = _firestore.collection('rappels').withConverter<Rappel>(
+        fromFirestore: (snapshot, _) => Rappel.fromJson(snapshot.data()!),
+        toFirestore: (rappel, _) => rappel.toJson(),
+      ); //collection rappels
 
-  RappelRepositoryImpl._(); //constructeur privé
+  RappelRepositoryImpl._() {
+    //on initialise le cache local de firestore
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: 30 * 1024 * 1024,
+    );
+  } //constructeur privé
 
   static RappelRepository get instance {
     _instance ??= RappelRepositoryImpl._();
@@ -35,7 +41,7 @@ class RappelRepositoryImpl extends RappelRepository {
             isEqualTo: evenement.rendezVous.medecin.uid)
         .where('evenement.rendezVous.patient.uid',
             isEqualTo: evenement.rendezVous.patient.uid)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         if (snapshot.docs.first.exists) {
@@ -63,7 +69,7 @@ class RappelRepositoryImpl extends RappelRepository {
             isEqualTo: rappel.evenement.rendezVous.medecin.uid)
         .where('evenement.rendezVous.patient.uid',
             isEqualTo: rappel.evenement.rendezVous.patient.uid)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs.first.reference.set(
@@ -82,7 +88,27 @@ class RappelRepositoryImpl extends RappelRepository {
   }
 
   @override
-  Future<List<Rappel>> lister(Evenement evenement) async {
+  Future<List<Rappel>> lister() async {
+    return await rappels
+        .orderBy('dateHeure', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Rappel> liste = [];
+        for (var document in snapshot.docs) {
+          Rappel rappel = document.data();
+          liste.add(rappel);
+        }
+        return liste;
+      } else {
+        List<Rappel> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<List<Rappel>> listerEvenement(Evenement evenement) async {
     return await rappels
         .where('evenement.rendezVous.dateHeure',
             isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
@@ -91,7 +117,7 @@ class RappelRepositoryImpl extends RappelRepository {
         .where('evenement.rendezVous.patient.uid',
             isEqualTo: evenement.rendezVous.patient.uid)
         .orderBy('dateHeure', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Rappel> liste = [];
@@ -118,7 +144,7 @@ class RappelRepositoryImpl extends RappelRepository {
             isEqualTo: rappel.evenement.rendezVous.medecin.uid)
         .where('evenement.rendezVous.patient.uid',
             isEqualTo: rappel.evenement.rendezVous.patient.uid)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var document in snapshot.docs) {

@@ -19,9 +19,13 @@ class RappelViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<List<Rappel>> lister() async {
+    return await rappelRep.lister();
+  }
+
   //liste des rappels de l'évènement spécifié du plus récent au plus ancien
-  Future<List<Rappel>> lister(Evenement evenement) async {
-    return await rappelRep.lister(evenement);
+  Future<List<Rappel>> listerEvenement(Evenement evenement) async {
+    return await rappelRep.listerEvenement(evenement);
   }
 
   Future<void> supprimer(Rappel rappel) async {
