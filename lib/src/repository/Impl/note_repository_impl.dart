@@ -5,13 +5,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NoteRepositoryImpl extends NoteRepository {
   static NoteRepository? _instance;
-  final notes =
-      FirebaseFirestore.instance.collection('notes').withConverter<Note>(
-            fromFirestore: (snapshot, _) => Note.fromJson(snapshot.data()!),
-            toFirestore: (note, _) => note.toJson(),
-          ); //collection notes
+  static final _firestore = FirebaseFirestore.instance;
+  final notes = _firestore.collection('notes').withConverter<Note>(
+        fromFirestore: (snapshot, _) => Note.fromJson(snapshot.data()!),
+        toFirestore: (note, _) => note.toJson(),
+      ); //collection notes
 
-  NoteRepositoryImpl._(); //constructeur privé
+  NoteRepositoryImpl._() {
+    //on initialise le cache local de firestore
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: 40 * 1024 * 1024,
+    );
+  } //constructeur privé
 
   static NoteRepository get instance {
     _instance ??= NoteRepositoryImpl._();
@@ -35,7 +41,7 @@ class NoteRepositoryImpl extends NoteRepository {
         .where('evenement.rendezVous.dateHeure',
             isEqualTo:
                 note.evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs.first.reference.set(
@@ -62,7 +68,7 @@ class NoteRepositoryImpl extends NoteRepository {
             isEqualTo: evenement.rendezVous.patient.uid)
         .where('evenement.rendezVous.dateHeure',
             isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Note> liste = [];
@@ -79,7 +85,33 @@ class NoteRepositoryImpl extends NoteRepository {
   }
 
   @override
-  Future<void> supprimer(Evenement evenement) {
+  Future<void> supprimer(Note note) {
+    return notes
+        .where('titre', isEqualTo: note.titre)
+        .where('evenement.rendezVous.medecin.uid',
+            isEqualTo: note.evenement.rendezVous.medecin.uid)
+        .where('evenement.rendezVous.patient.uid',
+            isEqualTo: note.evenement.rendezVous.patient.uid)
+        .where('evenement.rendezVous.dateHeure',
+            isEqualTo:
+                note.evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        for (var document in snapshot.docs) {
+          document.reference.delete();
+        }
+      }
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
+  }
+
+  @override
+  Future<void> supprimerEvenement(Evenement evenement) {
     return notes
         .where('evenement.rendezVous.medecin.uid',
             isEqualTo: evenement.rendezVous.medecin.uid)
@@ -87,7 +119,7 @@ class NoteRepositoryImpl extends NoteRepository {
             isEqualTo: evenement.rendezVous.patient.uid)
         .where('evenement.rendezVous.dateHeure',
             isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var document in snapshot.docs) {

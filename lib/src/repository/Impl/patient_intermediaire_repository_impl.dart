@@ -6,7 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class PatientIntermediaireRepositoryImpl
     extends PatientIntermediaireRepository {
   static PatientIntermediaireRepository? _instance;
-  final patientintermediaires = FirebaseFirestore.instance
+  static final _firestore = FirebaseFirestore.instance;
+  final patientintermediaires = _firestore
       .collection('patientintermediaires')
       .withConverter<PatientIntermediaire>(
         fromFirestore: (snapshot, _) =>
@@ -14,7 +15,13 @@ class PatientIntermediaireRepositoryImpl
         toFirestore: (patientintermediaire, _) => patientintermediaire.toJson(),
       ); //collection patientintermediaires
 
-  PatientIntermediaireRepositoryImpl._(); //constructeur privé
+  PatientIntermediaireRepositoryImpl._() {
+    //on initialise le cache local de firestore
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: 40 * 1024 * 1024,
+    );
+  } //constructeur privé
 
   static PatientIntermediaireRepository get instance {
     _instance ??= PatientIntermediaireRepositoryImpl._();
@@ -42,7 +49,7 @@ class PatientIntermediaireRepositoryImpl
   Future<PatientIntermediaire?> trouver(String identifiantTemporaire) async {
     return await patientintermediaires
         .where('identifiant', isEqualTo: identifiantTemporaire)
-        .get()
+        .get(const GetOptions(source: Source.server))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         if (snapshot.docs.first.exists) {
@@ -61,7 +68,10 @@ class PatientIntermediaireRepositoryImpl
 
   @override
   Future<PatientIntermediaire?> trouverUid(String uid) async {
-    return await patientintermediaires.doc(uid).get().then((snapshot) {
+    return await patientintermediaires
+        .doc(uid)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
       if (snapshot.exists) {
         return snapshot.data();
       } else {
@@ -80,7 +90,7 @@ class PatientIntermediaireRepositoryImpl
     return patientintermediaires
         .where('identifiant',
             isEqualTo: patientintermediaire.identifiantTemporaire)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs.first.reference.set(
@@ -102,7 +112,9 @@ class PatientIntermediaireRepositoryImpl
 
   @override
   Future<List<PatientIntermediaire>> lister() async {
-    return await patientintermediaires.get().then((snapshot) {
+    return await patientintermediaires
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<PatientIntermediaire> liste = [];
         for (var document in snapshot.docs) {
@@ -121,7 +133,7 @@ class PatientIntermediaireRepositoryImpl
   Future<void> supprimer(String identifiantTemporaire) {
     return patientintermediaires
         .where('identifiant', isEqualTo: identifiantTemporaire)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var document in snapshot.docs) {
@@ -137,7 +149,9 @@ class PatientIntermediaireRepositoryImpl
   }
 
   bool _checkTempID(PatientIntermediaire patient) {
-    patientintermediaires.get().then((snapshot) {
+    patientintermediaires
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var doc in snapshot.docs) {
           if (doc['identifiant'] == patient.identifiantTemporaire) {

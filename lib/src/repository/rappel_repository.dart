@@ -5,6 +5,7 @@ abstract class RappelRepository {
   Future<Rappel> ajouter(Rappel rappel);
   Future<Rappel?> trouver(DateTime dateHeure, Evenement evenement);
   Future<void> modifier(Rappel rappel);
-  Future<List<Rappel>> lister(Evenement evenement);
+  Future<List<Rappel>> lister();
+  Future<List<Rappel>> listerEvenement(Evenement evenement);
   Future<void> supprimer(Rappel rappel);
 }

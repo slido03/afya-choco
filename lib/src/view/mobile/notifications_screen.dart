@@ -1,4 +1,5 @@
 //import 'package:afya/src/model/models.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:afya/src/view/mobile/consultation/components/components.dart';
@@ -14,7 +15,7 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
-  AuthService authService = AuthService();
+  AuthService authService = AuthService.instance;
 
   @override
   void initState() {

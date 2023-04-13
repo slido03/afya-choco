@@ -1,11 +1,20 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'dart:async';
 
 //service d'authentification avec mise en cache
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final storage = const FlutterSecureStorage();
+  static AuthService? _instance;
+
+  AuthService._(); //constructeur privé
+
+  static AuthService get instance {
+    _instance ??= AuthService._();
+    return _instance!;
+  }
 
   // Connexion avec email et mot de passe et renvoie l'uid après l'avoir stocké en cache
   Future<User?> signInWithEmailAndPassword(

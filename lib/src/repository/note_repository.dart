@@ -5,5 +5,6 @@ abstract class NoteRepository {
   Future<Note> ajouter(Note note);
   Future<void> modifier(Note note);
   Future<List<Note>> lister(Evenement evenement);
-  Future<void> supprimer(Evenement evenement);
+  Future<void> supprimer(Note note);
+  Future<void> supprimerEvenement(Evenement evenement);
 }

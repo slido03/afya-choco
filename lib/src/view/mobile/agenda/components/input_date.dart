@@ -15,22 +15,30 @@ class InputDate extends StatefulWidget {
     required String labelText,
     required String hintText,
     required this.controller,
+    required this.initialDate,
   });
 
   final double? maxwidth;
   final TextEditingController controller;
+  final DateTime initialDate;
 
   @override
   State<InputDate> createState() => _InputDateState();
 }
 
 class _InputDateState extends State<InputDate> {
-  DateTime _date = DateTime.now();
+  late DateTime _date;
+
+  @override
+  void initState() {
+    super.initState();
+    _date = widget.initialDate;
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: widget.initialDate,
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
     );

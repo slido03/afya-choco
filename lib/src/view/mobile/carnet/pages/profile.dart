@@ -1,8 +1,9 @@
-import 'package:flutter/foundation.dart';
+//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:afya/src/viewModel/view_models.dart';
+import 'package:afya/src/view/mobile/carnet/profile_storage.dart';
 import 'package:afya/src/model/models.dart';
 import 'package:intl/intl.dart';
+import 'dart:async';
 // import de Material Symbols
 import 'package:flutter_material_symbols/flutter_material_symbols.dart';
 
@@ -15,18 +16,11 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  StatutMedicalViewModel statutMedicalViewModel = StatutMedicalViewModel();
-  PatientViewModel patientViewModel = PatientViewModel();
-
   @override
   Widget build(BuildContext context) {
-    //on récupère le patient et le statut médical correspond à ce userId s'ils existent
-    Future<Patient?> p = patientViewModel.trouverUid(widget.userId);
-    Future<StatutMedical?> statutM =
-        statutMedicalViewModel.trouverUid('Q04OI0EsIvXgSliCinyvN5FyBdv1');
     return FutureBuilder(
         future: Future.wait([
-          p,
+          ProfileStorage.patientInitialized(widget.userId),
         ]),
         builder: (context, result) {
           if (result.connectionState == ConnectionState.waiting) {
@@ -38,7 +32,6 @@ class _ProfileState extends State<Profile> {
           } else if (result.hasData) {
             final List<Patient?> data = result.data!;
             final patient = data[0];
-
             return Container(
               padding: const EdgeInsets.all(20.0),
               child: Center(
@@ -263,7 +256,8 @@ class _ProfileState extends State<Profile> {
                     const SizedBox(
                       height: 10,
                     ),
-                    statutMedicalWidget(context, statutM),
+                    statutMedicalWidget(
+                        context, ProfileStorage.statutInialized(widget.userId)),
                   ])))),
             );
           }
@@ -288,12 +282,6 @@ class _ProfileState extends State<Profile> {
           } else if (result.hasData) {
             final List<StatutMedical?> data = result.data!;
             final statutMedical = data[0];
-            if (statutMedical == null) {
-              if (kDebugMode) {
-                print('statut médical nul');
-              }
-            }
-
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Card(

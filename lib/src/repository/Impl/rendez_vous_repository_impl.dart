@@ -5,14 +5,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RendezVousRepositoryImpl extends RendezVousRepository {
   static RendezVousRepository? _instance;
-  final rendezvous = FirebaseFirestore.instance
+  static final _firestore = FirebaseFirestore.instance;
+  final rendezvous = _firestore
       .collection('rendezvous')
       .withConverter<RendezVous>(
         fromFirestore: (snapshot, _) => RendezVous.fromJson(snapshot.data()!),
         toFirestore: (rendezvous, _) => rendezvous.toJson(),
       ); //collection rendezvous
 
-  RendezVousRepositoryImpl._(); //constructeur privé
+  RendezVousRepositoryImpl._() {
+    //on initialise le cache local de firestore
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: 50 * 1024 * 1024,
+    );
+  } //constructeur privé
 
   static RendezVousRepository get instance {
     _instance ??= RendezVousRepositoryImpl._();
@@ -33,7 +40,7 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
         .where('dateHeure', isEqualTo: dateHeure.millisecondsSinceEpoch)
         .where('medecin.uid', isEqualTo: medecin.uid)
         .where('patient.uid', isEqualTo: patient.uid)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         if (snapshot.docs.first.exists) {
@@ -57,7 +64,7 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
             isEqualTo: rendezVous.dateHeure.millisecondsSinceEpoch)
         .where('medecin.uid', isEqualTo: rendezVous.medecin.uid)
         .where('patient.uid', isEqualTo: rendezVous.patient.uid)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs.first.reference.set(
@@ -82,7 +89,7 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
     return await rendezvous
         .where('patient.uid', isEqualTo: uidPatient)
         .orderBy('dateHeure', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<RendezVous> liste = [];
@@ -103,7 +110,7 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
     return await rendezvous
         .where('medecin.uid', isEqualTo: uidMedecin)
         .orderBy('dateHeure', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<RendezVous> liste = [];
@@ -126,7 +133,7 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
         .where('dateHeure',
             isGreaterThan: DateTime.now().millisecondsSinceEpoch)
         .orderBy('dateHeure', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<RendezVous> liste = [];
@@ -149,7 +156,7 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
         .where('dateHeure',
             isGreaterThan: DateTime.now().millisecondsSinceEpoch)
         .orderBy('dateHeure', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<RendezVous> liste = [];
@@ -194,7 +201,7 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
             isEqualTo: rendezVous.dateHeure.millisecondsSinceEpoch)
         .where('medecin.uid', isEqualTo: rendezVous.medecin.uid)
         .where('patient.uid', isEqualTo: rendezVous.patient.uid)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var document in snapshot.docs) {

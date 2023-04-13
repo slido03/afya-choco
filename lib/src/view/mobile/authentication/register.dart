@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './authentication.dart';
+import 'dart:async';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -169,6 +170,8 @@ class _RegisterPageState extends State<RegisterPage> {
         );
         // Si l'utilisateur a été créé avec succès
         if (userCredential.user != null) {
+          //envoie de l'email de vérification au nouvel utilisateur
+          await userCredential.user!.sendEmailVerification();
           // ignore: use_build_context_synchronously
           showDialog(
             context: context,
@@ -189,8 +192,6 @@ class _RegisterPageState extends State<RegisterPage> {
               );
             },
           );
-          //envoie de l'email de vérification au nouvel utilisateur
-          await userCredential.user!.sendEmailVerification();
           return true;
         }
         // L'utilisateur est créé avec succès.

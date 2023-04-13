@@ -11,7 +11,7 @@ class PopupMenuUser extends StatefulWidget {
 }
 
 class _PopupMenuUserState extends State<PopupMenuUser> {
-  AuthService authService = AuthService();
+  AuthService authService = AuthService.instance;
 
   @override
   void initState() {

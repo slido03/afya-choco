@@ -1,8 +1,9 @@
 import 'package:afya/src/view/mobile/agenda/pages/evenements.dart';
 import 'package:afya/src/view/mobile/agenda/pages/rappels.dart';
 import 'package:flutter/material.dart';
-
+import 'package:afya/src/view/mobile/authentication/authentication.dart';
 import '../tabs.dart';
+import 'dart:async';
 import 'pages/historiques.dart';
 
 // placeholder
@@ -21,6 +22,8 @@ class _AgendaScreenState extends State<AgendaScreen>
     with TickerProviderStateMixin {
   late PageController _pageController;
   late TabController _tabController;
+  AuthService authService = AuthService.instance;
+
   @override
   void initState() {
     super.initState();
@@ -45,7 +48,23 @@ class _AgendaScreenState extends State<AgendaScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    Future<String?> uid = authService.getCurrentUserUid();
+
+    return FutureBuilder(
+        future: Future.wait([uid]),
+        builder: (context, result) {
+          if (result.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: Container(
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator(),
+            ));
+          } else if (result.hasData) {
+            final List<String?> data = result.data!;
+            final userId = data[0];
+            //si l'utilisateur est connecté
+            if (userId != null) {
+               return Column(
       children: [
         TabBar(
           tabs: tabs[2],
@@ -66,14 +85,29 @@ class _AgendaScreenState extends State<AgendaScreen>
                 _tabController.index = index;
                 _tabController.animateTo(index);
             },
-            children: const <Widget>[
-              Evenements(),
-              Rappels(),
-              Historiques(),
-            ],
-          ),
-        ),
-      ],
-    );
+                      children: <Widget>[
+                        Evenements(
+                          userId: userId,
+                        ),
+                        Rappels(
+                          userId: userId,
+                        ),
+                        Historiques(
+                          userId: userId,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+              );
+            }
+          }
+          //en cas d'erreur quelconque (result.hasError)
+          return Center(child: Text('Erreur: ${result.error}'));
+        });
   }
 }

@@ -1,10 +1,12 @@
+import 'package:afya/src/view/mobile/carnet/profile_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './authentication.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+//import 'package:afya/src/view/mobile/authentication/login.dart';
 import '../home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -358,7 +360,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<bool> signInWithEmailAndPassword(String email, String password) async {
-    AuthService authService = AuthService();
+    AuthService authService = AuthService.instance;
     final form = _formKey.currentState;
     if (form!.validate()) {
       setState(() {
@@ -476,7 +478,8 @@ class _LoginPageState extends State<LoginPage> {
 }
 
 Future<void> logout(BuildContext context) async {
-  AuthService authService = AuthService();
+  AuthService authService = AuthService.instance;
+  ProfileStorage.clear();
   //l'utilisateur est déconnecté
   await authService.signOut();
   // ignore: use_build_context_synchronously

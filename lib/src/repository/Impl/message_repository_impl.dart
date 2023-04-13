@@ -5,13 +5,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessageRepositoryImpl extends MessageRepository {
   static MessageRepository? _instance;
+  static final _firestore = FirebaseFirestore.instance;
   final messages =
       FirebaseFirestore.instance.collection('messages').withConverter<Message>(
             fromFirestore: (snapshot, _) => Message.fromJson(snapshot.data()!),
             toFirestore: (message, _) => message.toJson(),
           ); //collection messages
 
-  MessageRepositoryImpl._(); //constructeur privé
+  MessageRepositoryImpl._() {
+    //on initialise le cache local de firestore
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: 60 * 1024 * 1024,
+    );
+  } //constructeur privé
 
   static MessageRepository get instance {
     _instance ??= MessageRepositoryImpl._();
@@ -35,7 +42,7 @@ class MessageRepositoryImpl extends MessageRepository {
         .where('expediteur.uid', isEqualTo: uidExpediteur)
         .where('destinataire.uid', isEqualTo: uidDestinataire)
         .where('dateHeure', isEqualTo: dateHeure.millisecondsSinceEpoch)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         if (snapshot.docs.first.exists) {
@@ -59,7 +66,7 @@ class MessageRepositoryImpl extends MessageRepository {
         .where('expediteur.uid', isEqualTo: message.expediteur.uid)
         .where('destinataire.uid', isEqualTo: message.destinataire.uid)
         .where('dateHeure', isEqualTo: message.dateHeure.millisecondsSinceEpoch)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs.first.reference.set(
@@ -84,7 +91,7 @@ class MessageRepositoryImpl extends MessageRepository {
         .where('expediteur.uid', isEqualTo: uidExpediteur)
         .where('objet', isEqualTo: objet.name)
         .orderBy('dateHeure', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Message> liste = [];
@@ -108,7 +115,7 @@ class MessageRepositoryImpl extends MessageRepository {
         .where('destinataire.uid', isEqualTo: uidDestinataire)
         .where('objet', isEqualTo: objet.name)
         .orderBy('dateHeure', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Message> liste = [];
@@ -130,7 +137,7 @@ class MessageRepositoryImpl extends MessageRepository {
     return await messages
         .where('destinataire.uid', isEqualTo: uidDestinataire)
         .orderBy('dateHeure', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Message> liste = [];
@@ -154,7 +161,7 @@ class MessageRepositoryImpl extends MessageRepository {
         .where('destinataire.uid', isEqualTo: uidDestinataire)
         .where('statut', isEqualTo: statut.name)
         .orderBy('dateHeure', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Message> liste = [];
@@ -176,7 +183,7 @@ class MessageRepositoryImpl extends MessageRepository {
         .where('expediteur.uid', isEqualTo: message.expediteur.uid)
         .where('destinataire.uid', isEqualTo: message.destinataire.uid)
         .where('dateHeure', isEqualTo: message.dateHeure.millisecondsSinceEpoch)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var document in snapshot.docs) {

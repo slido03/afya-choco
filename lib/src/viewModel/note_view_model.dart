@@ -20,8 +20,13 @@ class NoteViewModel extends ChangeNotifier {
     return await noteRep.lister(evenement);
   }
 
-  Future<void> supprimer(Evenement evenement) async {
-    await noteRep.supprimer(evenement);
+  Future<void> supprimer(Note note) async {
+    await noteRep.supprimer(note);
+    notifyListeners();
+  }
+
+  Future<void> supprimerEvenement(Evenement evenement) async {
+    await noteRep.supprimerEvenement(evenement);
     notifyListeners();
   }
 }

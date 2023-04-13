@@ -5,13 +5,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ExamenRepositoryImpl extends ExamenRepository {
   static ExamenRepository? _instance;
-  final examens =
-      FirebaseFirestore.instance.collection('examens').withConverter<Examen>(
-            fromFirestore: (snapshot, _) => Examen.fromJson(snapshot.data()!),
-            toFirestore: (examen, _) => examen.toJson(),
-          ); //collection examens
+  static final _firestore = FirebaseFirestore.instance;
+  final examens = _firestore.collection('examens').withConverter<Examen>(
+        fromFirestore: (snapshot, _) => Examen.fromJson(snapshot.data()!),
+        toFirestore: (examen, _) => examen.toJson(),
+      ); //collection examens
 
-  ExamenRepositoryImpl._(); //constructeur privé
+  ExamenRepositoryImpl._() {
+    //on initialise le cache local de firestore
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: 40 * 1024 * 1024,
+    );
+  } //constructeur privé
 
   static ExamenRepository get instance {
     _instance ??= ExamenRepositoryImpl._();
@@ -33,7 +39,7 @@ class ExamenRepositoryImpl extends ExamenRepository {
         .where('patient.identifiant', isEqualTo: patient.identifiant)
         .where('type', isEqualTo: type.name)
         .where('date', isEqualTo: date.millisecondsSinceEpoch)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         if (snapshot.docs.first.exists) {
@@ -57,7 +63,7 @@ class ExamenRepositoryImpl extends ExamenRepository {
         .where('patient.identifiant', isEqualTo: examen.patient.identifiant)
         .where('type', isEqualTo: examen.type.name)
         .where('date', isEqualTo: examen.date.millisecondsSinceEpoch)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs.first.reference.set(
@@ -79,7 +85,7 @@ class ExamenRepositoryImpl extends ExamenRepository {
     return await examens
         .where('medecin.uid', isEqualTo: uidMedecin)
         .orderBy('date', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Examen> liste = [];
@@ -100,7 +106,7 @@ class ExamenRepositoryImpl extends ExamenRepository {
     return await examens
         .where('patient.uid', isEqualTo: uidPatient)
         .orderBy('date', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Examen> liste = [];
@@ -123,7 +129,7 @@ class ExamenRepositoryImpl extends ExamenRepository {
         .where('patient.uid', isEqualTo: uidPatient)
         .where('type', isEqualTo: type.name)
         .orderBy('date', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Examen> liste = [];
@@ -146,7 +152,7 @@ class ExamenRepositoryImpl extends ExamenRepository {
         .where('patient.identifiant', isEqualTo: examen.patient.identifiant)
         .where('type', isEqualTo: examen.type.name)
         .where('date', isEqualTo: examen.date.millisecondsSinceEpoch)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var document in snapshot.docs) {

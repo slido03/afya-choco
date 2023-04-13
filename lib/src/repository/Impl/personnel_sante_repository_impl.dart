@@ -5,15 +5,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
   static PersonnelSanteRepository? _instance;
-  final personnelsantes = FirebaseFirestore.instance
-      .collection('personnelsantes')
-      .withConverter<PersonnelSante>(
-        fromFirestore: (snapshot, _) =>
-            PersonnelSante.fromJson(snapshot.data()!),
-        toFirestore: (personnelsante, _) => personnelsante.toJson(),
-      ); //collection personnelsantes
+  static final _firestore = FirebaseFirestore.instance;
+  final personnelsantes =
+      _firestore.collection('personnelsantes').withConverter<PersonnelSante>(
+            fromFirestore: (snapshot, _) =>
+                PersonnelSante.fromJson(snapshot.data()!),
+            toFirestore: (personnelsante, _) => personnelsante.toJson(),
+          ); //collection personnelsantes
 
-  PersonnelSanteRepositoryImpl._(); //constructeur privé
+  PersonnelSanteRepositoryImpl._() {
+    //on initialise le cache local de firestore
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: 70 * 1024 * 1024,
+    );
+  } //constructeur privé
 
   static PersonnelSanteRepository get instance {
     _instance ??= PersonnelSanteRepositoryImpl._();
@@ -38,7 +44,7 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
   Future<PersonnelSante?> trouver(String identifiant) async {
     return await personnelsantes
         .where('identifiant', isEqualTo: identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         if (snapshot.docs.first.exists) {
@@ -57,7 +63,10 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
 
   @override
   Future<PersonnelSante?> trouverUid(String uid) async {
-    return await personnelsantes.doc(uid).get().then((snapshot) {
+    return await personnelsantes
+        .doc(uid)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
       if (snapshot.exists) {
         return snapshot.data();
       } else {
@@ -75,7 +84,7 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
   Future<void> modifier(PersonnelSante personnelsante) {
     return personnelsantes
         .where('identifiant', isEqualTo: personnelsante.identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs.first.reference.set(
@@ -99,7 +108,9 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
 
   @override
   Future<List<PersonnelSante>> lister() async {
-    return await personnelsantes.get().then((snapshot) {
+    return await personnelsantes
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<PersonnelSante> liste = [];
         for (var document in snapshot.docs) {
@@ -118,7 +129,7 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
   Future<void> supprimer(String identifiant) {
     return personnelsantes
         .where('identifiant', isEqualTo: identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var document in snapshot.docs) {
@@ -134,7 +145,9 @@ class PersonnelSanteRepositoryImpl extends PersonnelSanteRepository {
   }
 
   bool _checkID(PersonnelSante personnelsante) {
-    personnelsantes.get().then((snapshot) {
+    personnelsantes
+        .get(const GetOptions(source: Source.server))
+        .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var doc in snapshot.docs) {
           if (doc['identifiant'] == personnelsante.identifiant) {

@@ -3,6 +3,7 @@ import 'package:afya/src/viewModel/view_models.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:async';
 //import 'package:afya/src/viewModel/examen_view_model.dart';
 import 'package:afya/src/model/models.dart';
 

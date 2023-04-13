@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-class CardRappel extends StatelessWidget {
-  const CardRappel({super.key, required this.rappel});
-  final Rappel rappel;
+class CardNote extends StatelessWidget {
+  const CardNote({super.key, required this.note});
+  final Note note;
 
   void _showDialog(BuildContext context) {
     showDialog(
@@ -19,10 +19,10 @@ class CardRappel extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          title: Text(rappel.evenement.titre),
+          title: Text(note.evenement.titre),
           content: RichText(
             text: TextSpan(
-              text: '${rappel.evenement.description}\n',
+              text: '${note.evenement.description}\n',
               style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w300,
@@ -30,7 +30,7 @@ class CardRappel extends StatelessWidget {
               children: <TextSpan>[
                 TextSpan(
                   text:
-                      "\nDate: ${rappel.evenement.rendezVous.dateHeure.dateFormatted}\n",
+                      "\nDate: ${note.evenement.rendezVous.dateHeure.dateFormatted}\n",
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     color: Colors.black,
@@ -38,14 +38,7 @@ class CardRappel extends StatelessWidget {
                 ),
                 TextSpan(
                   text:
-                      "Heure: ${rappel.evenement.rendezVous.dateHeure.timeFormatted}\n",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
-                  ),
-                ),
-                TextSpan(
-                  text: "Durée: ${rappel.evenement.rendezVous.duree} minutes\n",
+                      "Heure: ${note.evenement.rendezVous.dateHeure.timeFormatted}\n",
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     color: Colors.black,
@@ -53,7 +46,7 @@ class CardRappel extends StatelessWidget {
                 ),
                 TextSpan(
                   text:
-                      "Avec: Dr. ${rappel.evenement.rendezVous.medecin.nom} ${rappel.evenement.rendezVous.medecin.prenoms}\n",
+                      "Avec: Dr. ${note.evenement.rendezVous.medecin.nom} ${note.evenement.rendezVous.medecin.prenoms}\n",
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     color: Colors.black,
@@ -113,10 +106,10 @@ class CardRappel extends StatelessWidget {
               if (value == 1) {
                 _showDialog(context);
               } else if (value == 2) {
-                RappelViewModel rappelViewModel = RappelViewModel();
-                String userId = rappel.evenement.rendezVous.patient.uid;
+                NoteViewModel noteViewModel = NoteViewModel();
+                String userId = note.evenement.rendezVous.patient.uid;
                 EasyLoading.show(status: 'suppression en cours');
-                await rappelViewModel.supprimer(rappel); //on supprime le rappel
+                await noteViewModel.supprimer(note); //on supprime le rappel
                 EasyLoading.dismiss();
                 // ignore: use_build_context_synchronously
                 Navigator.of(context).pushReplacement(
@@ -128,18 +121,14 @@ class CardRappel extends StatelessWidget {
             },
           ),
           title: Text(
-            "${rappel.titre}\n"
-            "${rappel.dateHeure.dateFormatted} à "
-            "${rappel.dateHeure.timeFormatted}\n",
+            "${note.titre}\n",
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),
           ),
           subtitle: Text(
-            rappel.description!.isEmpty
-                ? "Pas de description"
-                : rappel.description!,
+            note.description.isEmpty ? "Pas de description" : note.description,
             style: const TextStyle(
               fontSize: 14,
             ),
@@ -155,7 +144,7 @@ class CardRappel extends StatelessWidget {
   }
 }
 
-extension DateFormattedRappel on DateTime {
+extension DateFormattedNote on DateTime {
   String get numberJourMois {
     String? number;
     String? jour;
