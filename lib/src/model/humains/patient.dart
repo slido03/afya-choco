@@ -40,7 +40,7 @@ class Patient extends Utilisateur {
     var telephone = faker.phoneNumber.us();
     var email = user.email!;
     var adresse = faker.address.streetAddress();
-    var dateNaissance = faker.date.dateTime(minYear: 1980, maxYear: 2022);
+    var dateNaissance = faker.date.dateTime(minYear: 1960, maxYear: 2022);
     return Patient(
       uid,
       null,

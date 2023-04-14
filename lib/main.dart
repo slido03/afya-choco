@@ -14,9 +14,12 @@ Future<void> main() async {
   if (kDebugMode) {
     print('firebase initialized');
   }
-  // AppSeeder appSeeder =
+  // AppSeeder appSeeder1 =
   //     AppSeeder(email: 'stentechnology@gmail.com', password: '');
-  // await appSeeder.seed();
+  // AppSeeder appSeeder2 =
+  //     AppSeeder(email: 'birregahcredo@gmail.com', password: '');
+  // await appSeeder1.seed();
+  // await appSeeder2.seed();
 
   runApp(const AfyaApp());
 }
