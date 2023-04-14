@@ -113,7 +113,7 @@ class _ExamensState extends State<Examens> {
                   child: Padding(
                 padding: EdgeInsets.only(top: 40),
                 child: Text(
-                  'Aucun examen enregistré pour le moment',
+                  'Aucun examen enregistré',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,

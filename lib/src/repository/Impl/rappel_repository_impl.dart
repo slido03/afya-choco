@@ -15,7 +15,7 @@ class RappelRepositoryImpl extends RappelRepository {
     //on initialise le cache local de firestore
     _firestore.settings = const Settings(
       persistenceEnabled: true,
-      cacheSizeBytes: 30 * 1024 * 1024,
+      cacheSizeBytes: 20 * 1024 * 1024,
     );
   } //constructeur privé
 
@@ -90,6 +90,96 @@ class RappelRepositoryImpl extends RappelRepository {
   @override
   Future<List<Rappel>> lister() async {
     return await rappels
+        .orderBy('dateHeure', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Rappel> liste = [];
+        for (var document in snapshot.docs) {
+          Rappel rappel = document.data();
+          liste.add(rappel);
+        }
+        return liste;
+      } else {
+        List<Rappel> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<List<Rappel>> listerEnAttentePatient(String uidPatient) async {
+    return await rappels
+        .where('evenement.rendezVous.patient.uid', isEqualTo: uidPatient)
+        .where('dateHeure',
+            isGreaterThan: DateTime.now().millisecondsSinceEpoch)
+        .orderBy('dateHeure', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Rappel> liste = [];
+        for (var document in snapshot.docs) {
+          Rappel rappel = document.data();
+          liste.add(rappel);
+        }
+        return liste;
+      } else {
+        List<Rappel> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<List<Rappel>> listerEnAttenteMedecin(String uidMedecin) async {
+    return await rappels
+        .where('evenement.rendezVous.medecin.uid', isEqualTo: uidMedecin)
+        .where('dateHeure',
+            isGreaterThan: DateTime.now().millisecondsSinceEpoch)
+        .orderBy('dateHeure', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Rappel> liste = [];
+        for (var document in snapshot.docs) {
+          Rappel rappel = document.data();
+          liste.add(rappel);
+        }
+        return liste;
+      } else {
+        List<Rappel> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<List<Rappel>> listerPassePatient(String uidPatient) async {
+    return await rappels
+        .where('evenement.rendezVous.patient.uid', isEqualTo: uidPatient)
+        .where('dateHeure', isLessThan: DateTime.now().millisecondsSinceEpoch)
+        .orderBy('dateHeure', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Rappel> liste = [];
+        for (var document in snapshot.docs) {
+          Rappel rappel = document.data();
+          liste.add(rappel);
+        }
+        return liste;
+      } else {
+        List<Rappel> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<List<Rappel>> listerPasseMedecin(String uidMedecin) async {
+    return await rappels
+        .where('evenement.rendezVous.medecin.uid', isEqualTo: uidMedecin)
+        .where('dateHeure', isLessThan: DateTime.now().millisecondsSinceEpoch)
         .orderBy('dateHeure', descending: true)
         .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {

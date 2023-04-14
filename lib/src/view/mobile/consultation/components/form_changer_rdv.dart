@@ -31,7 +31,7 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
   RendezVousViewModel rendezVousViewModel = RendezVousViewModel();
 
   String get message => _messageController.text;
-  int? get selected => int.tryParse(_selectedController.text);
+  int? get selected => int.parse(_selectedController.text);
 
   @override
   initState() {
@@ -67,6 +67,7 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
         );
       }
     } else {
+      //if patient == null
       dialog = AlertDialog(
         title: const Text("Aucun rendez-vous pris"),
         content: const Text(
@@ -93,7 +94,7 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
 
     //si le patient est nul ou il est non nul et n'a aucun rendez-vous en attente
     //et de plus il a appuyé hors de la zone du dialog on le ramène à la HomePage
-    if (((patient == null) || (rendezVous == null)) && (isGoodRdv_ == false)) {
+    if ((rendezVous == null) && (isGoodRdv_ == false)) {
       // ignore: use_build_context_synchronously
       _navigateToHome(context);
     }
@@ -158,7 +159,14 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
             return Center(child: Text('Erreur: ${snapshot.error.toString()}'));
           }
           return const Center(
-              child: Text('La récupération de données a échoué'));
+            child: Text(
+              'Aucune donnée disponible',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          );
         },
       );
     } else {

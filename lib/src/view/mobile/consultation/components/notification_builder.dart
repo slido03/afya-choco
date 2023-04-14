@@ -62,7 +62,7 @@ class _NotificationBuilderState extends State<NotificationBuilder> {
                       child: Padding(
                     padding: EdgeInsets.only(top: 40),
                     child: Text(
-                      'Aucune notification disponible pour le moment',
+                      'Aucune notification disponible',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -75,7 +75,7 @@ class _NotificationBuilderState extends State<NotificationBuilder> {
                     child: Padding(
                   padding: EdgeInsets.only(top: 40),
                   child: Text(
-                    'Aucune notification disponible pour le moment',
+                    'Aucune notification disponible',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,

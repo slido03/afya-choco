@@ -261,8 +261,63 @@ class _ProfileState extends State<Profile> {
                   ])))),
             );
           }
-          //en cas d'erreur quelconque (result.hasError)
-          return Center(child: Text('Erreur: ${result.error}'));
+          //en cas d'erreur quelconque (result.hasError) dans ce cas patient == null
+          return Container(
+              padding: const EdgeInsets.all(20.0),
+              child: Center(
+                  // ignore: avoid_unnecessary_containers
+                  child: Container(
+                      //padding: const EdgeInsets.all(10),
+                      child: SingleChildScrollView(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                    const Text(
+                      "Informations civiques",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 20.0,
+                                horizontal: 10,
+                              ),
+                              child: Text(
+                                  "Vos informations civiques n'ont pas encore été renseignées par un professionnel de santé",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                            ))),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      "Statut médical",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    statutMedicalWidget(
+                        context, ProfileStorage.statutInialized(widget.userId)),
+                  ])))));
         });
   }
 
@@ -419,8 +474,27 @@ class _ProfileState extends State<Profile> {
               ),
             );
           }
-          //en cas d'erreur quelconque (result.hasError)
-          return Center(child: Text('Erreur: ${result.error}'));
+          //en cas d'erreur quelconque (result.hasError) dans ce cas statut == null
+          return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 20.0,
+                      horizontal: 10,
+                    ),
+                    child: Text(
+                        "Votre statut médical n'a pas encore été renseigné par un professionnel de santé",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        )),
+                  )));
         });
   }
 }

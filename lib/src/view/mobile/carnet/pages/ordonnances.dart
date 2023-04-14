@@ -84,7 +84,7 @@ class _OrdonnancesState extends State<Ordonnances> {
                   child: Padding(
                 padding: EdgeInsets.only(top: 40),
                 child: Text(
-                  'Aucune ordonnance enregistrée pour le moment',
+                  'Aucune ordonnance enregistrée',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,

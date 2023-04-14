@@ -15,7 +15,7 @@ class ExamenRepositoryImpl extends ExamenRepository {
     //on initialise le cache local de firestore
     _firestore.settings = const Settings(
       persistenceEnabled: true,
-      cacheSizeBytes: 40 * 1024 * 1024,
+      cacheSizeBytes: 20 * 1024 * 1024,
     );
   } //constructeur privé
 
