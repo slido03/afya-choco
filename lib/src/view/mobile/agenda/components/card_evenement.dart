@@ -83,7 +83,7 @@ class CardEvenement extends StatelessWidget {
       builder: (BuildContext context) {
         // ignore: sized_box_for_whitespace
         return Container(
-          height: MediaQuery.of(context).size.height * 0.3,
+          height: MediaQuery.of(context).size.height * 0.42,
           child: Column(
             children: [
               ListTile(
@@ -243,6 +243,7 @@ extension DateFormattedEvenement on DateTime {
       String j = '0$day';
       jour = ' $j ';
     }
+    jour = ' $day ';
     switch (month) {
       case 1:
         mois = 'Jan';

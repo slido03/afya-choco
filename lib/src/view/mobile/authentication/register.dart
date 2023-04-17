@@ -83,7 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Column(
                       children: <Widget>[
                         const Text(
-                          'Veuillez vous inscrire.',
+                          'Veuillez vous inscrire',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 22,

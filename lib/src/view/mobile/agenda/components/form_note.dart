@@ -9,9 +9,13 @@ import 'package:afya/src/view/mobile/consultation/components/input_text_area.dar
 import 'package:afya/src/view/mobile/consultation/components/button_cancel.dart';
 
 class FormNote extends StatefulWidget {
+  const FormNote({
+    super.key,
+    required this.evenement,
+    this.title = 'Ajouter une note',
+  });
   final Evenement evenement;
-
-  const FormNote({super.key, required this.evenement});
+  final String title;
 
   @override
   State<FormNote> createState() => _FormNoteState();
@@ -42,86 +46,90 @@ class _FormNoteState extends State<FormNote> {
   @override
   Widget build(BuildContext context) {
     double maxwidth = MediaQuery.of(context).size.width * .80;
-    return SingleChildScrollView(
-      child: Center(
-        child: Container(
-          width: maxwidth * 1.115,
-          margin: const EdgeInsets.symmetric(
-            vertical: 30.0,
-            horizontal: 3,
-          ),
-          padding: const EdgeInsets.symmetric(
-            vertical: 20.0,
-          ),
-          child: Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 25.0,
-                    horizontal: 10.0,
-                  ),
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 231, 248, 232),
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 10.0,
-                        spreadRadius: 0.0,
-                        offset: Offset(0.0, 0.0),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Container(
+              width: maxwidth * 1.115,
+              margin: const EdgeInsets.symmetric(
+                vertical: 30.0,
+                horizontal: 3,
+              ),
+              padding: const EdgeInsets.symmetric(
+                vertical: 20.0,
+              ),
+              child: Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 25.0,
+                        horizontal: 10.0,
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      InputText(
-                        labelText: 'Titre',
-                        hintText: 'Titre de la note',
-                        controller: _titreController,
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 231, 248, 232),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 10.0,
+                            spreadRadius: 0.0,
+                            offset: Offset(0.0, 0.0),
+                          ),
+                        ],
                       ),
-                      InputTextArea(
-                        labelText: 'Description',
-                        hintText: 'Description de la note',
-                        controller: _descriptionController,
+                      child: Column(
+                        children: <Widget>[
+                          InputText(
+                            labelText: 'Titre',
+                            hintText: 'Titre de la note',
+                            controller: _titreController,
+                          ),
+                          InputTextArea(
+                            labelText: 'Description',
+                            hintText: 'Description de la note',
+                            controller: _descriptionController,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    // Submit and cancel buttons
+                    Container(
+                      width: maxwidth,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 3),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          const ButtonCancel(),
+                          const SizedBox(width: 20),
+                          //submit button
+                          _isLoading
+                              ? const CircularProgressIndicator()
+                              : OutlinedButton(
+                                  onPressed: () async {
+                                    await _addNote(noteViewModel);
+                                    // ignore: use_build_context_synchronously
+                                    await _noteAddedDialog(context);
+                                  },
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: Colors.green,
+                                  ),
+                                  child: const Text('Envoyer')),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                // Submit and cancel buttons
-                Container(
-                  width: maxwidth,
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 15.0, horizontal: 3),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      const ButtonCancel(),
-                      const SizedBox(width: 20),
-                      //submit button
-                      _isLoading
-                          ? const CircularProgressIndicator()
-                          : OutlinedButton(
-                              onPressed: () async {
-                                await _addNote(noteViewModel);
-                                // ignore: use_build_context_synchronously
-                                await _noteAddedDialog(context);
-                              },
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: Colors.green,
-                              ),
-                              child: const Text('Envoyer')),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Future<void> _addNote(NoteViewModel noteViewModel) async {

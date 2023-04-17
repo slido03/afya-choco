@@ -50,7 +50,7 @@ class _SelectRdvState extends State<SelectRdv> {
                   RichText(
                     text: TextSpan(
                       text:
-                          '${widget.rdvs[int.parse(option)].dateHeure.jourMois}, Dr', // la vrai date est dans la base de donnée et doit être formaté : 01 Jan
+                          '${widget.rdvs[int.parse(option)].dateHeure.jourMois}, Dr. ',
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 14,

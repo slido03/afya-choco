@@ -105,7 +105,6 @@ class _LoginPageState extends State<LoginPage> {
                 "Vous pouvez prendre rendez-vous avec votre médecin, demander des informations à votre Clinique ou à votre pharmacie, et bien plus encore.",
             image: const Center(
               child: Icon(
-                //FlutterMaterialSymbols.calendar,
                 Icons.medical_services_rounded,
                 size: 100,
                 color: Colors.green,
@@ -274,7 +273,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: Column(
                       children: <Widget>[
-                         RichText(
+                        RichText(
                           textAlign: TextAlign.center,
                           text: const TextSpan(
                             text: 'Bienvenue sur AFYA Mobile \n\n',
@@ -291,12 +290,10 @@ class _LoginPageState extends State<LoginPage> {
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.italic,
-
                                 ),
                               ),
                             ],
                           ),
-
                         ),
                         const SizedBox(
                           height: 20,

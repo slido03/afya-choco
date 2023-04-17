@@ -11,9 +11,10 @@ import 'package:afya/src/view/mobile/agenda/components/input_date.dart';
 import 'package:afya/src/view/mobile/agenda/components/input_time.dart';
 
 class FormRappel extends StatefulWidget {
+  const FormRappel(
+      {super.key, required this.evenement, this.title = 'Créer un rappel'});
   final Evenement evenement;
-
-  const FormRappel({super.key, required this.evenement});
+  final String title;
 
   @override
   State<FormRappel> createState() => _FormRappelState();
@@ -50,99 +51,103 @@ class _FormRappelState extends State<FormRappel> {
   @override
   Widget build(BuildContext context) {
     double maxwidth = MediaQuery.of(context).size.width * .80;
-    return SingleChildScrollView(
-      child: Center(
-        child: Container(
-          width: maxwidth * 1.115,
-          margin: const EdgeInsets.symmetric(
-            vertical: 30.0,
-            horizontal: 3,
-          ),
-          padding: const EdgeInsets.symmetric(
-            vertical: 20.0,
-          ),
-          child: Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 25.0,
-                    horizontal: 10.0,
-                  ),
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 231, 248, 232),
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 10.0,
-                        spreadRadius: 0.0,
-                        offset: Offset(0.0, 0.0),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Container(
+              width: maxwidth * 1.115,
+              margin: const EdgeInsets.symmetric(
+                vertical: 30.0,
+                horizontal: 3,
+              ),
+              padding: const EdgeInsets.symmetric(
+                vertical: 20.0,
+              ),
+              child: Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 25.0,
+                        horizontal: 10.0,
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      InputDate(
-                        labelText: 'Date',
-                        hintText: 'Date du rappel',
-                        controller: _dateController,
-                        initialDate: widget.evenement.rendezVous.dateHeure,
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 231, 248, 232),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 10.0,
+                            spreadRadius: 0.0,
+                            offset: Offset(0.0, 0.0),
+                          ),
+                        ],
                       ),
-                      InputTime(
-                        labelText: 'Heure',
-                        hintText: 'Heure du rappel',
-                        controller: _timeController,
-                        initialTime: TimeOfDay.fromDateTime(
-                            widget.evenement.rendezVous.dateHeure),
+                      child: Column(
+                        children: <Widget>[
+                          InputDate(
+                            labelText: 'Date',
+                            hintText: 'Date du rappel',
+                            controller: _dateController,
+                            initialDate: widget.evenement.rendezVous.dateHeure,
+                          ),
+                          InputTime(
+                            labelText: 'Heure',
+                            hintText: 'Heure du rappel',
+                            controller: _timeController,
+                            initialTime: TimeOfDay.fromDateTime(
+                                widget.evenement.rendezVous.dateHeure),
+                          ),
+                          InputText(
+                            labelText: 'Titre',
+                            hintText: 'Titre du rappel',
+                            controller: _titreController,
+                          ),
+                          InputTextArea(
+                            labelText: 'Description',
+                            hintText: 'Description du rappel (optionnel)',
+                            controller: _descriptionController,
+                          ),
+                        ],
                       ),
-                      InputText(
-                        labelText: 'Titre',
-                        hintText: 'Titre du rappel',
-                        controller: _titreController,
+                    ),
+                    // Submit and cancel buttons
+                    Container(
+                      width: maxwidth,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 3),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          const ButtonCancel(),
+                          const SizedBox(width: 20),
+                          //submit button
+                          _isLoading
+                              ? const CircularProgressIndicator()
+                              : OutlinedButton(
+                                  onPressed: () async {
+                                    await _addRappel(rappelViewModel);
+                                    // ignore: use_build_context_synchronously
+                                    await _rappelAddedDialog(context);
+                                  },
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: Colors.green,
+                                  ),
+                                  child: const Text('Envoyer')),
+                        ],
                       ),
-                      InputTextArea(
-                        labelText: 'Description',
-                        hintText: 'Description du rappel (optionnel)',
-                        controller: _descriptionController,
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                // Submit and cancel buttons
-                Container(
-                  width: maxwidth,
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 15.0, horizontal: 3),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      const ButtonCancel(),
-                      const SizedBox(width: 20),
-                      //submit button
-                      _isLoading
-                          ? const CircularProgressIndicator()
-                          : OutlinedButton(
-                              onPressed: () async {
-                                await _addRappel(rappelViewModel);
-                                // ignore: use_build_context_synchronously
-                                await _rappelAddedDialog(context);
-                              },
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: Colors.green,
-                              ),
-                              child: const Text('Envoyer')),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Future<void> _addRappel(RappelViewModel rappelViewModel) async {

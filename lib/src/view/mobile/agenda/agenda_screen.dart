@@ -6,7 +6,6 @@ import '../tabs.dart';
 import 'dart:async';
 import 'pages/historiques.dart';
 
-// placeholder
 class AgendaScreen extends StatefulWidget {
   const AgendaScreen({
     super.key,
@@ -64,27 +63,27 @@ class _AgendaScreenState extends State<AgendaScreen>
             final userId = data[0];
             //si l'utilisateur est connecté
             if (userId != null) {
-               return Column(
-      children: [
-        TabBar(
-          tabs: tabs[2],
-          controller: _tabController,
-          onTap: (index) {
-            _tabController.index = index;
-            _pageController.animateToPage(index,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.ease);
-          },
-          labelColor: Colors.black,
-          unselectedLabelColor: Colors.grey,
-        ),
-        Expanded(
-          child: PageView(
-            controller: _pageController,
-            onPageChanged: (index) {
-                _tabController.index = index;
-                _tabController.animateTo(index);
-            },
+              return Column(
+                children: [
+                  TabBar(
+                    tabs: tabs[2],
+                    controller: _tabController,
+                    onTap: (index) {
+                      _tabController.index = index;
+                      _pageController.animateToPage(index,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.ease);
+                    },
+                    labelColor: Colors.black,
+                    unselectedLabelColor: Colors.grey,
+                  ),
+                  Expanded(
+                    child: PageView(
+                      controller: _pageController,
+                      onPageChanged: (index) {
+                        _tabController.index = index;
+                        _tabController.animateTo(index);
+                      },
                       children: <Widget>[
                         Evenements(
                           userId: userId,

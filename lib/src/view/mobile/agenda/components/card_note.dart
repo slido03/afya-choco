@@ -84,7 +84,7 @@ class CardNote extends StatelessWidget {
         ),
         child: ListTile(
           leading: Icon(
-            Icons.alarm,
+            Icons.note_alt_outlined,
             color: Theme.of(context).primaryColor,
             size: 20,
           ),
@@ -154,6 +154,7 @@ extension DateFormattedNote on DateTime {
       String j = '0$day';
       jour = ' $j ';
     }
+    jour = ' $day ';
     switch (month) {
       case 1:
         mois = 'Jan';

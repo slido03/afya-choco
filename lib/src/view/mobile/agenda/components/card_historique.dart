@@ -164,6 +164,7 @@ extension DateFormattedHistorique on DateTime {
       String j = '0$day';
       jour = ' $j ';
     }
+    jour = ' $day ';
     switch (month) {
       case 1:
         mois = 'Jan';
