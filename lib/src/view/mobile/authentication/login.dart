@@ -274,12 +274,29 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: Column(
                       children: <Widget>[
-                        const Text(
-                          'Bienvenu(e) dans Afya, votre santé en poche.',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
+                         RichText(
+                          textAlign: TextAlign.center,
+                          text: const TextSpan(
+                            text: 'Bienvenue sur AFYA Mobile \n\n',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'Votre parcours de soins simplifié',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.italic,
+
+                                ),
+                              ),
+                            ],
                           ),
+
                         ),
                         const SizedBox(
                           height: 20,
@@ -340,7 +357,7 @@ class _LoginPageState extends State<LoginPage> {
                                         padding: EdgeInsets.only(
                                             bottom: 50, top: 30),
                                         content: Text(
-                                            'Désolé votre email ou mot de passe sont invalides ou non vérifiés ou votre compte a été désactivé'));
+                                            'Email ou mot de passe invalides ou non vérifiés ou compte désactivé'));
                                     // ignore: use_build_context_synchronously
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBar);

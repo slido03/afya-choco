@@ -83,10 +83,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Column(
                       children: <Widget>[
                         const Text(
-                          'Nous sommes heureux de vous accueillir dans Afya.\nVeuillez entrer vos information de connexion.',
+                          'Veuillez vous inscrire.',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            fontSize: 18,
+                            fontSize: 22,
                           ),
                         ),
                         const SizedBox(
@@ -116,7 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ? const CircularProgressIndicator()
                             : ElevatedButton(
                                 child: const Text(
-                                  'Créer un compte',
+                                  'S\'inscrire',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 16,
