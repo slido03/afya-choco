@@ -168,6 +168,9 @@ class CardEvenement extends StatelessWidget {
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
+                maxLines: 2,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 5),
               Text(
@@ -238,7 +241,7 @@ extension DateFormattedEvenement on DateTime {
     String? number;
     String? jour;
     String? mois;
-    number = DateFormat('EEE').format(this);
+    number = DateFormat('EEE', 'fr_FR').format(this);
     if (day < 10) {
       String j = '0$day';
       jour = ' $j ';
