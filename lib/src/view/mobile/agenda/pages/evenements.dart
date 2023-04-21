@@ -1,5 +1,6 @@
 import 'package:afya/src/model/models.dart';
 import 'package:afya/src/viewModel/evenement_view_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 //import 'package:flutter/foundation.dart';
@@ -19,15 +20,25 @@ class Evenements extends StatefulWidget {
 
 class _EvenementsState extends State<Evenements> {
   EvenementViewModel evenementViewModel = EvenementViewModel();
+  late Future<List<Evenement>> _events;
+  late bool _joursSelected;
+  late bool _semaineSelected;
+  late bool _moisSelected;
+
+  @override
+  initState() {
+    super.initState();
+    _joursSelected = true;
+    _semaineSelected = false;
+    _moisSelected = false;
+    _events = evenementViewModel.listerEnAttentePatient3Jours(widget.userId);
+  }
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Evenement>> events =
-        evenementViewModel.listerEnAttentePatient(widget.userId);
-
     return FutureBuilder(
         future: Future.wait([
-          events,
+          _events,
         ]),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -52,17 +63,25 @@ class _EvenementsState extends State<Evenements> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             FilterChip(
+                              selected: _joursSelected,
                               label: const Text('3 jours'),
-                              onSelected: (bool selected) {},
+                              onSelected: (bool selected) {
+                                _select3Jours();
+                              },
                             ),
                             FilterChip(
+                              selected: _semaineSelected,
                               label: const Text('Semaine'),
-                              onSelected: (bool selected) {},
+                              onSelected: (bool selected) {
+                                _selectSemaine();
+                              },
                             ),
                             FilterChip(
-                              selected: true,
+                              selected: _moisSelected,
                               label: const Text('Mois'),
-                              onSelected: (bool selected) {},
+                              onSelected: (bool selected) {
+                                _selectMois();
+                              },
                             ),
                           ],
                         ),
@@ -100,12 +119,62 @@ class _EvenementsState extends State<Evenements> {
                 ),
               );
             } else {
-              return const Center(
-                child: Text(
-                  'Aucun évènement pour le moment',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
+              // ignore: avoid_unnecessary_containers
+              return Container(
+                child: Center(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            FilterChip(
+                              selected: _joursSelected,
+                              label: const Text('3 jours'),
+                              onSelected: (bool selected) {
+                                _select3Jours();
+                              },
+                            ),
+                            FilterChip(
+                              selected: _semaineSelected,
+                              label: const Text('Semaine'),
+                              onSelected: (bool selected) {
+                                _selectSemaine();
+                              },
+                            ),
+                            FilterChip(
+                              selected: _moisSelected,
+                              label: const Text('Mois'),
+                              onSelected: (bool selected) {
+                                _selectMois();
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                              left: 10, right: 10, top: 20),
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(30),
+                            ),
+                            color: Color.fromRGBO(37, 211, 102, 0.12),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Aucun évènement pour le moment',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );
@@ -114,5 +183,42 @@ class _EvenementsState extends State<Evenements> {
           //en cas d'erreur quelconque (snapshot.hasError)
           return Center(child: Text('Erreur: ${snapshot.error}'));
         });
+  }
+
+  void _select3Jours() {
+    if (kDebugMode) {
+      print('3 jours selected');
+    }
+    setState(() {
+      _joursSelected = true;
+      _semaineSelected = false;
+      _moisSelected = false;
+      _events = evenementViewModel.listerEnAttentePatient3Jours(widget.userId);
+    });
+  }
+
+  void _selectSemaine() {
+    if (kDebugMode) {
+      print('semaine selected');
+    }
+    setState(() {
+      _semaineSelected = true;
+      _moisSelected = false;
+      _joursSelected = false;
+      _events = evenementViewModel.listerEnAttentePatientSemaine(widget.userId);
+    });
+  }
+
+  void _selectMois() {
+    if (kDebugMode) {
+      print('mois selected');
+    }
+    setState(() {
+      _moisSelected = true;
+      _semaineSelected = false;
+      _joursSelected = false;
+      _events = evenementViewModel.lister(); //test
+      //_events = evenementViewModel.listerEnAttentePatientMois(widget.userId);
+    });
   }
 }

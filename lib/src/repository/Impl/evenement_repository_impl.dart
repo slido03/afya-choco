@@ -85,11 +85,8 @@ class EvenementRepositoryImpl extends EvenementRepository {
   }
 
   @override
-  Future<List<Evenement>> listerEnAttentePatient(String uidPatient) async {
+  Future<List<Evenement>> lister() async {
     return await evenements
-        .where('rendezVous.patient.uid', isEqualTo: uidPatient)
-        .where('rendezVous.dateHeure',
-            isGreaterThan: DateTime.now().millisecondsSinceEpoch)
         .orderBy('rendezVous.dateHeure', descending: true)
         .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
@@ -107,12 +104,161 @@ class EvenementRepositoryImpl extends EvenementRepository {
     });
   }
 
+  //liste des évènements en attente dans les 3 jours suivants
   @override
-  Future<List<Evenement>> listerEnAttenteMedecin(String uidMedecin) async {
+  Future<List<Evenement>> listerEnAttentePatient3Jours(
+      String uidPatient) async {
+    return await evenements
+        .where('rendezVous.patient.uid', isEqualTo: uidPatient)
+        .where('rendezVous.dateHeure',
+            isGreaterThan: DateTime.now().millisecondsSinceEpoch)
+        .where('rendezVous.dateHeure',
+            isLessThan: DateTime.now()
+                .add(const Duration(days: 3))
+                .millisecondsSinceEpoch)
+        .orderBy('rendezVous.dateHeure', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Evenement> liste = [];
+        for (var document in snapshot.docs) {
+          Evenement evenement = document.data();
+          liste.add(evenement);
+        }
+        return liste;
+      } else {
+        List<Evenement> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  //liste des évènements en attente dans la semaine suivante
+  @override
+  Future<List<Evenement>> listerEnAttentePatientSemaine(
+      String uidPatient) async {
+    return await evenements
+        .where('rendezVous.patient.uid', isEqualTo: uidPatient)
+        .where('rendezVous.dateHeure',
+            isGreaterThan: DateTime.now().millisecondsSinceEpoch)
+        .where('rendezVous.dateHeure',
+            isLessThan: DateTime.now()
+                .add(const Duration(days: 7))
+                .millisecondsSinceEpoch)
+        .orderBy('rendezVous.dateHeure', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Evenement> liste = [];
+        for (var document in snapshot.docs) {
+          Evenement evenement = document.data();
+          liste.add(evenement);
+        }
+        return liste;
+      } else {
+        List<Evenement> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  //liste des évènements en attente dans le mois suivant
+  @override
+  Future<List<Evenement>> listerEnAttentePatientMois(String uidPatient) async {
+    return await evenements
+        .where('rendezVous.patient.uid', isEqualTo: uidPatient)
+        .where('rendezVous.dateHeure',
+            isGreaterThan: DateTime.now().millisecondsSinceEpoch)
+        .where('rendezVous.dateHeure',
+            isLessThan: DateTime.now()
+                .add(const Duration(days: 30))
+                .millisecondsSinceEpoch)
+        .orderBy('rendezVous.dateHeure', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Evenement> liste = [];
+        for (var document in snapshot.docs) {
+          Evenement evenement = document.data();
+          liste.add(evenement);
+        }
+        return liste;
+      } else {
+        List<Evenement> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  //liste des évènements en attente dans les 3 jours suivants
+  @override
+  Future<List<Evenement>> listerEnAttenteMedecin3Jours(
+      String uidMedecin) async {
     return await evenements
         .where('rendezVous.medecin.uid', isEqualTo: uidMedecin)
         .where('rendezVous.dateHeure',
             isGreaterThan: DateTime.now().millisecondsSinceEpoch)
+        .where('rendezVous.dateHeure',
+            isLessThan: DateTime.now()
+                .add(const Duration(days: 3))
+                .millisecondsSinceEpoch)
+        .orderBy('rendezVous.dateHeure', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Evenement> liste = [];
+        for (var document in snapshot.docs) {
+          Evenement evenement = document.data();
+          liste.add(evenement);
+        }
+        return liste;
+      } else {
+        List<Evenement> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  //liste des évènements en attente dans la semaine suivante
+  @override
+  Future<List<Evenement>> listerEnAttenteMedecinSemaine(
+      String uidMedecin) async {
+    return await evenements
+        .where('rendezVous.medecin.uid', isEqualTo: uidMedecin)
+        .where('rendezVous.dateHeure',
+            isGreaterThan: DateTime.now().millisecondsSinceEpoch)
+        .where('rendezVous.dateHeure',
+            isLessThan: DateTime.now()
+                .add(const Duration(days: 7))
+                .millisecondsSinceEpoch)
+        .orderBy('rendezVous.dateHeure', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Evenement> liste = [];
+        for (var document in snapshot.docs) {
+          Evenement evenement = document.data();
+          liste.add(evenement);
+        }
+        return liste;
+      } else {
+        List<Evenement> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  //liste des évènements en attente dans le mois suivant
+  @override
+  Future<List<Evenement>> listerEnAttenteMedecinMois(String uidMedecin) async {
+    return await evenements
+        .where('rendezVous.medecin.uid', isEqualTo: uidMedecin)
+        .where('rendezVous.dateHeure',
+            isGreaterThan: DateTime.now().millisecondsSinceEpoch)
+        .where('rendezVous.dateHeure',
+            isLessThan: DateTime.now()
+                .add(const Duration(days: 30))
+                .millisecondsSinceEpoch)
         .orderBy('rendezVous.dateHeure', descending: true)
         .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {

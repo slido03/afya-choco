@@ -102,6 +102,66 @@ class ExamenRepositoryImpl extends ExamenRepository {
   }
 
   @override
+  Future<List<Examen>> listerMedecinSpecialite(
+    Specialite type,
+    String uidMedecin,
+  ) async {
+    return await examens
+        .where('medecin.uid', isEqualTo: uidMedecin)
+        .where('type', isEqualTo: type.name)
+        .orderBy('date', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Examen> liste = [];
+        for (var document in snapshot.docs) {
+          Examen examen = document.data();
+          liste.add(examen);
+        }
+        return liste;
+      } else {
+        List<Examen> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<List<Examen>> listerMedecinMois(
+    int mois,
+    String uidMedecin,
+  ) async {
+    //liste de tous les examens du medecin
+    List<Examen> liste = await listerMedecin(uidMedecin);
+    List<Examen> listeMois = [];
+    for (var examen in liste) {
+      //si le mois de l'examen correspond on l'ajoute à listeMois
+      if (examen.date.month == mois) {
+        listeMois.add(examen);
+      }
+    }
+    return listeMois;
+  }
+
+  @override
+  Future<List<Examen>> listerMedecinSpecialiteMois(
+    Specialite type,
+    int mois,
+    String uidMedecin,
+  ) async {
+    //liste de tous les examens du medecin selon la catégorie
+    List<Examen> liste = await listerMedecinSpecialite(type, uidMedecin);
+    List<Examen> listeMois = [];
+    for (var examen in liste) {
+      //si le mois de l'examen correspond on l'ajoute à listeMois
+      if (examen.date.month == mois) {
+        listeMois.add(examen);
+      }
+    }
+    return listeMois;
+  }
+
+  @override
   Future<List<Examen>> listerPatient(String uidPatient) async {
     return await examens
         .where('patient.uid', isEqualTo: uidPatient)
@@ -123,8 +183,10 @@ class ExamenRepositoryImpl extends ExamenRepository {
   }
 
   @override
-  Future<List<Examen>> listerSpecialite(
-      Specialite type, String uidPatient) async {
+  Future<List<Examen>> listerPatientSpecialite(
+    Specialite type,
+    String uidPatient,
+  ) async {
     return await examens
         .where('patient.uid', isEqualTo: uidPatient)
         .where('type', isEqualTo: type.name)
@@ -143,6 +205,41 @@ class ExamenRepositoryImpl extends ExamenRepository {
         return emptyList;
       }
     });
+  }
+
+  @override
+  Future<List<Examen>> listerPatientMois(
+    int mois,
+    String uidPatient,
+  ) async {
+    //liste de tous les examens du patient
+    List<Examen> liste = await listerPatient(uidPatient);
+    List<Examen> listeMois = [];
+    for (var examen in liste) {
+      //si le mois de l'examen correspond on l'ajoute à listeMois
+      if (examen.date.month == mois) {
+        listeMois.add(examen);
+      }
+    }
+    return listeMois;
+  }
+
+  @override
+  Future<List<Examen>> listerPatientSpecialiteMois(
+    Specialite type,
+    int mois,
+    String uidPatient,
+  ) async {
+    //liste de tous les examens du patient selon la catégorie
+    List<Examen> liste = await listerPatientSpecialite(type, uidPatient);
+    List<Examen> listeMois = [];
+    for (var examen in liste) {
+      //si le mois de l'examen correspond on l'ajoute à listeMois
+      if (examen.date.month == mois) {
+        listeMois.add(examen);
+      }
+    }
+    return listeMois;
   }
 
   @override

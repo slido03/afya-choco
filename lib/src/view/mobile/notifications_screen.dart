@@ -7,8 +7,7 @@ import 'package:afya/src/view/mobile/authentication/authentication.dart';
 import 'package:afya/src/viewModel/message_view_model.dart';
 
 class NotificationsScreen extends StatefulWidget {
-  const NotificationsScreen({super.key, this.title = 'Notifications'});
-  final String title;
+  const NotificationsScreen({super.key});
 
   @override
   State<NotificationsScreen> createState() => _NotificationsScreenState();
@@ -40,24 +39,20 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             //si l'utilisateur est connecté
             if (userId != null) {
               return Scaffold(
-                appBar: AppBar(
-                  title: Text(widget.title),
-                ),
-                body: SingleChildScrollView(
-                  child: Center(
-                    child: Column(
-                      // crossAxisAlignment: CrossAxisAlignment.center,
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        titleNotifications(context),
-                        ChangeNotifierProvider(
+                appBar: AppBar(),
+                body: Center(
+                  child: Column(
+                    children: [
+                      titleNotifications(context),
+                      Expanded(
+                        child: ChangeNotifierProvider(
                           create: (context) => MessageViewModel(),
                           builder: ((context, child) => NotificationBuilder(
                                 userId: userId,
                               )),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               );

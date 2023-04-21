@@ -37,7 +37,7 @@ class RendezVous {
     Medecin medecin,
   ) {
     var faker = Faker();
-    var dateHeure = faker.date.dateTime(minYear: 2023, maxYear: 2024);
+    var dateHeure = faker.date.dateTime(minYear: 2021, maxYear: 2024);
     var duree = faker.randomGenerator.integer(50, min: 15);
     var lieu = faker.company.name();
     return RendezVous(

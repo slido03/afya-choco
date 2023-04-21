@@ -1,11 +1,11 @@
 import 'dart:math';
 
-export 'humains/utilisateur.dart';
-export 'humains/personnel_sante.dart';
-export 'humains/patient.dart';
-export 'humains/patient_intermediaire.dart';
-export 'humains/medecin.dart';
-export 'humains/secretaire.dart';
+export 'utilisateurs/utilisateur.dart';
+export 'utilisateurs/personnel_sante.dart';
+export 'utilisateurs/patient.dart';
+export 'utilisateurs/patient_intermediaire.dart';
+export 'utilisateurs/medecin.dart';
+export 'utilisateurs/secretaire.dart';
 export 'agenda/rendez_vous.dart';
 export 'agenda/evenement.dart';
 export 'agenda/rappel.dart';

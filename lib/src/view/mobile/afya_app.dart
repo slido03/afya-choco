@@ -30,7 +30,7 @@ class AfyaApp extends StatelessWidget {
         primarySwatch: Colors.green,
       ),
       initialRoute: '/',
-      //mettre les destinations principales ici : /, /carnet, /agenda
+      //mettre les destinations principales ici : /, /carnet, /agenda, /notifications, /intro
       routes: {
         '/': (context) => const LoginPage(),
         '/carnet': (context) => const CarnetScreen(),

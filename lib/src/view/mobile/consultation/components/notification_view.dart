@@ -81,7 +81,7 @@ class NotificationView extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => NotificationPresentation(
                 message: message,
-              ),
+              ),  
             ),
           );
           if (kDebugMode) {

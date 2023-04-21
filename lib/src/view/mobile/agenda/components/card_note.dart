@@ -1,6 +1,6 @@
 import 'package:afya/src/model/models.dart';
 import 'package:afya/src/repository/repositories.dart';
-import 'package:afya/src/view/mobile/agenda/pages/rappels.dart';
+//import 'package:afya/src/view/mobile/agenda/pages/rappels.dart';
 import 'package:afya/src/viewModel/view_models.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -25,6 +25,7 @@ class CardNote extends StatelessWidget {
               text: '${note.evenement.description}\n',
               style: const TextStyle(
                 color: Colors.black,
+                fontSize: 13,
                 fontWeight: FontWeight.w300,
               ),
               children: <TextSpan>[
@@ -107,16 +108,11 @@ class CardNote extends StatelessWidget {
                 _showDialog(context);
               } else if (value == 2) {
                 NoteViewModel noteViewModel = NoteViewModel();
-                String userId = note.evenement.rendezVous.patient.uid;
                 EasyLoading.show(status: 'suppression en cours');
                 await noteViewModel.supprimer(note); //on supprime le rappel
                 EasyLoading.dismiss();
                 // ignore: use_build_context_synchronously
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => Rappels(userId: userId),
-                  ),
-                );
+                Navigator.pop(context);
               }
             },
           ),
@@ -126,6 +122,7 @@ class CardNote extends StatelessWidget {
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),
+            overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
             note.description.isEmpty ? "Pas de description" : note.description,
@@ -149,7 +146,7 @@ extension DateFormattedNote on DateTime {
     String? number;
     String? jour;
     String? mois;
-    number = DateFormat('EEE').format(this);
+    number = DateFormat('EEE', 'fr_FR').format(this);
     if (day < 10) {
       String j = '0$day';
       jour = ' $j ';

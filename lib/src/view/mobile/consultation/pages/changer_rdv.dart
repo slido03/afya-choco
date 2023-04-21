@@ -8,9 +8,7 @@ import 'package:afya/src/view/mobile/authentication/authentication.dart';
 import 'package:afya/src/view/mobile/consultation/components/components.dart';
 
 class ChangerRdv extends StatefulWidget {
-  const ChangerRdv({super.key, this.title = 'Changer de rendez-vous'});
-
-  final String title;
+  const ChangerRdv({super.key});
 
   @override
   State<ChangerRdv> createState() => _ChangerRdvState();
@@ -42,9 +40,7 @@ class _ChangerRdvState extends State<ChangerRdv> {
             //si l'utilisateur est connecté
             if (userId != null) {
               return Scaffold(
-                appBar: AppBar(
-                  title: Text(widget.title),
-                ),
+                appBar: AppBar(),
                 body: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,

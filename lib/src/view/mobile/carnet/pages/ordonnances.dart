@@ -16,12 +16,6 @@ class Ordonnances extends StatefulWidget {
 }
 
 class _OrdonnancesState extends State<Ordonnances> {
-  final filterState = {
-    'resultat': 1,
-    'categorie': 1,
-    'mois': 1,
-  };
-
   OrdonnanceViewModel ordonnanceViewModel = OrdonnanceViewModel();
 
   @override
@@ -46,7 +40,7 @@ class _OrdonnancesState extends State<Ordonnances> {
           } else if (snapshot.hasData) {
             final List<List<Ordonnance>> data = snapshot.data!;
             final ordonnances = data[0];
-
+            //liste non vide
             if (ordonnances.isNotEmpty) {
               return Container(
                 color: Colors.white12,
@@ -80,17 +74,28 @@ class _OrdonnancesState extends State<Ordonnances> {
                 )),
               );
             } else {
-              return const Center(
-                  child: Padding(
-                padding: EdgeInsets.only(top: 40),
-                child: Text(
-                  'Aucune ordonnance enregistrée',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ));
+              return Container(
+                color: Colors.white12,
+                padding: const EdgeInsets.all(10.0),
+                child: Center(
+                    child: Column(
+                  children: const [
+                    Expanded(
+                        child: Center(
+                            child: Padding(
+                      padding: EdgeInsets.only(top: 40),
+                      child: Text(
+                        'Aucune ordonnance enregistrée',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )))
+                  ],
+                )),
+              );
             }
           }
           //en cas d'erreur quelconque (snapshot.hasError)
@@ -99,15 +104,6 @@ class _OrdonnancesState extends State<Ordonnances> {
           }
           return Center(child: Text('Erreur: ${snapshot.error}'));
         });
-  }
-
-  void onChanged(int? value, String? filter) {
-    setState(() {
-      filterState[filter!] = value!;
-    });
-    if (kDebugMode) {
-      print(filterState);
-    }
   }
 }
 

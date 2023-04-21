@@ -15,7 +15,6 @@ class DropDownMois extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
-      // couleur de fond de la liste déroulante
       value: filterState['mois'],
       decoration: InputDecoration(
         filled: true,
@@ -26,8 +25,8 @@ class DropDownMois extends StatelessWidget {
           borderSide: BorderSide.none,
         ),
         constraints: BoxConstraints(
-            maxWidth: width,
-          ),
+          maxWidth: width,
+        ),
         contentPadding: const EdgeInsets.all(3),
       ),
       menuMaxHeight: 250,

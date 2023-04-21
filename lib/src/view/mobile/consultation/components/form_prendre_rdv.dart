@@ -364,6 +364,9 @@ class _FormPrendreRdvState extends State<FormPrendreRdv> {
           }
         }
       }
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -407,8 +410,7 @@ class _FormPrendreRdvState extends State<FormPrendreRdv> {
   void _navigateToHome(BuildContext context) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-          builder: (context) =>
-              const HomePage(title: 'HomePage')), //à changer par la home page
+          builder: (context) => const HomePage(title: 'HomePage')),
     );
   }
 

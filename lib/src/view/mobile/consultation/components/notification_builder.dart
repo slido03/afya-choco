@@ -43,18 +43,14 @@ class _NotificationBuilderState extends State<NotificationBuilder> {
               if (msgRecus != null) {
                 if (msgRecus.isNotEmpty) {
                   return Center(
-                    child: Column(
-                      children: [
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: msgRecus.length,
-                          itemBuilder: (context, index) {
-                            return NotificationView(
-                              message: msgRecus[index],
-                            );
-                          },
-                        ),
-                      ],
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: msgRecus.length,
+                      itemBuilder: (context, index) {
+                        return NotificationView(
+                          message: msgRecus[index],
+                        );
+                      },
                     ),
                   );
                 } else {
@@ -65,6 +61,7 @@ class _NotificationBuilderState extends State<NotificationBuilder> {
                       'Aucune notification disponible',
                       style: TextStyle(
                         fontSize: 16,
+                        color: Colors.grey,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -78,6 +75,7 @@ class _NotificationBuilderState extends State<NotificationBuilder> {
                     'Aucune notification disponible',
                     style: TextStyle(
                       fontSize: 16,
+                      color: Colors.grey,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
