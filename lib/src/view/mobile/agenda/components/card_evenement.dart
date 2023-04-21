@@ -162,6 +162,8 @@ class CardEvenement extends StatelessWidget {
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
+                maxLines: 2,
+                softWrap: true,
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 5),

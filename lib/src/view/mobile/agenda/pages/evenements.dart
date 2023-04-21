@@ -98,14 +98,11 @@ class _EvenementsState extends State<Evenements> {
                           ),
                           child: GridView.builder(
                             gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount:
-                                  (MediaQuery.of(context).size.width < 390)
-                                      ? 2
-                                      : 3,
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
                               crossAxisSpacing: 5,
                               mainAxisSpacing: 5,
-                              mainAxisExtent: 185,
+                              mainAxisExtent: 200,
                             ),
                             itemCount: evenements.length,
                             itemBuilder: (context, index) {
