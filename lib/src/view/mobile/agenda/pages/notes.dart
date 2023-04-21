@@ -12,7 +12,7 @@ class Notes extends StatefulWidget {
     super.key,
     required this.userId,
     required this.evenement,
-    this.title = 'Notes',
+    this.title = 'Liste des notes',
   });
   final String userId;
   final Evenement evenement;
@@ -27,11 +27,11 @@ class _NotesState extends State<Notes> {
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Note>> not = noteViewModel.lister(widget.evenement);
+    Future<List<Note>> note = noteViewModel.lister(widget.evenement);
 
     return FutureBuilder(
         future: Future.wait([
-          not,
+          note,
         ]),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -44,71 +44,52 @@ class _NotesState extends State<Notes> {
             final List<List<Note>> data = snapshot.data!;
             final notes = data[0];
             if (notes.isNotEmpty) {
-              // ignore: avoid_unnecessary_containers
               return Scaffold(
                   appBar: AppBar(
                     title: Text(widget.title),
                   ),
-                  // ignore: avoid_unnecessary_containers
-                  body: Container(
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                FilterChip(
-                                  label: const Text('3 jours'),
-                                  onSelected: (bool selected) {},
-                                ),
-                                FilterChip(
-                                  label: const Text('Semaine'),
-                                  onSelected: (bool selected) {},
-                                ),
-                                FilterChip(
-                                  selected: true,
-                                  label: const Text('Mois'),
-                                  onSelected: (bool selected) {},
-                                ),
-                              ],
-                            ),
+                  body: Column(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                            left: 10,
+                            right: 10,
+                            top: 20,
                           ),
-                          Expanded(
-                            child: Container(
-                              padding: const EdgeInsets.only(
-                                  left: 10, right: 10, top: 20),
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(30),
-                                ),
-                                color: Color.fromRGBO(37, 211, 102, 0.12),
-                              ),
-                              child: ListView.builder(
-                                itemCount: notes.length,
-                                itemBuilder: (context, index) {
-                                  return CardNote(
-                                    note: notes[index],
-                                  );
-                                },
-                              ),
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(30),
                             ),
+                            color: Color.fromRGBO(37, 211, 102, 0.12),
                           ),
-                        ],
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: notes.length,
+                            itemBuilder: (context, index) {
+                              return CardNote(
+                                note: notes[index],
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ));
+            } else {
+              return Scaffold(
+                  appBar: AppBar(
+                    title: Text(widget.title),
+                  ),
+                  body: const Center(
+                    child: Text(
+                      'Aucune note pour le moment',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
                       ),
                     ),
                   ));
-            } else {
-              return const Center(
-                child: Text(
-                  'Aucune note pour le moment',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                  ),
-                ),
-              );
             }
           }
           //en cas d'erreur quelconque (snapshot.hasError)

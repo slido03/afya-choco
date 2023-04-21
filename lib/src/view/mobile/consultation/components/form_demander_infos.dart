@@ -312,6 +312,9 @@ class _FormDemanderInfoState extends State<FormDemanderInfos> {
           }
         }
       }
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -355,8 +358,7 @@ class _FormDemanderInfoState extends State<FormDemanderInfos> {
   void _navigateToHome(BuildContext context) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-          builder: (context) =>
-              const HomePage(title: 'HomePage')), //à changer par la home page
+          builder: (context) => const HomePage(title: 'HomePage')),
     );
   }
 

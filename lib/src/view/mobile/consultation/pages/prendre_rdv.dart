@@ -6,9 +6,7 @@ import 'package:afya/src/view/mobile/authentication/authentication.dart';
 import 'package:afya/src/view/mobile/consultation/components/components.dart';
 
 class PrendreRdv extends StatefulWidget {
-  const PrendreRdv({super.key, this.title = "Prendre rendez-vous"});
-
-  final String title;
+  const PrendreRdv({super.key});
 
   @override
   State<PrendreRdv> createState() => _PrendreRdvState();
@@ -45,9 +43,7 @@ class _PrendreRdvState extends State<PrendreRdv> {
             //si l'utilisateur est connecté
             if ((userId != null) && (userEmail != null)) {
               return Scaffold(
-                appBar: AppBar(
-                  title: Text(widget.title),
-                ),
+                appBar: AppBar(),
                 body: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,

@@ -5,9 +5,9 @@ import 'dart:async';
 import 'package:afya/src/view/mobile/consultation/components/components.dart';
 import 'package:afya/src/model/models.dart';
 import 'package:afya/src/viewModel/rendez_vous_view_model.dart';
-import 'package:afya/src/viewModel/message_view_model.dart';
-import 'package:afya/src/view/mobile/home_page.dart';
+//import 'package:afya/src/view/mobile/home_page.dart';
 import 'package:afya/src/view/mobile/authentication/login.dart';
+import 'changer_rdv.dart';
 
 /*
  * This is a form that is used to change a rendez-vous. the last one for préférence.
@@ -24,20 +24,18 @@ class FormChangerRdv extends StatefulWidget {
 class _FormChangerRdvState extends State<FormChangerRdv> {
   late bool _isGoodRdv;
   late bool _dialogPushed;
-  final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
-  final TextEditingController _messageController = TextEditingController();
-  final TextEditingController _selectedController = TextEditingController();
   RendezVousViewModel rendezVousViewModel = RendezVousViewModel();
-
-  String get message => _messageController.text;
-  int? get selected => int.parse(_selectedController.text);
 
   @override
   initState() {
     super.initState();
     _isGoodRdv = true;
     _dialogPushed = false;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Future<void> _showRdvDialog(BuildContext context, Patient? patient) async {
@@ -60,7 +58,7 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
               child: const Text("OK"),
               onPressed: () {
                 Navigator.pop(context);
-                _navigateToHome(context);
+                _returnToHome(context);
               },
             ),
           ],
@@ -77,7 +75,7 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
             child: const Text("OK"),
             onPressed: () {
               Navigator.pop(context);
-              _navigateToHome(context);
+              _returnToHome(context);
             },
           ),
         ],
@@ -96,7 +94,7 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
     //et de plus il a appuyé hors de la zone du dialog on le ramène à la HomePage
     if ((rendezVous == null) && (isGoodRdv_ == false)) {
       // ignore: use_build_context_synchronously
-      _navigateToHome(context);
+      _returnToHome(context);
     }
 
     setState(() {
@@ -108,11 +106,8 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
     });
   }
 
-  void _navigateToHome(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-          builder: (context) => const HomePage(title: 'HomePage')),
-    );
+  void _returnToHome(BuildContext context) {
+    Navigator.pop(context);
   }
 
   @override
@@ -142,12 +137,20 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
             final patientIntermediaire = data[1];
             if (patient != null) {
               if (_dialogPushed) {
-                return _changerRdv(context, liste, patient);
+                return ChangerRdv(
+                  rdvs: liste,
+                  patient: patient,
+                  isGoodRdv: _isGoodRdv,
+                );
               }
               return _formChanger(context, liste, patient);
             } else if (patientIntermediaire != null) {
               if (_dialogPushed) {
-                return _changerRdv(context, liste, patientIntermediaire);
+                return ChangerRdv(
+                  rdvs: liste,
+                  patient: patientIntermediaire,
+                  isGoodRdv: _isGoodRdv,
+                );
               }
               return _formChanger(context, liste, patientIntermediaire);
             } else {
@@ -163,6 +166,7 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
               'Aucune donnée disponible',
               style: TextStyle(
                 fontSize: 16,
+                color: Colors.grey,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -178,148 +182,6 @@ class _FormChangerRdvState extends State<FormChangerRdv> {
   Widget _formChanger(
       BuildContext context, Future<List<RendezVous>> rdvs, Patient patient) {
     _showRdvDialog(context, patient);
-    return _changerRdv(context, rdvs, patient);
-  }
-
-  Widget _changerRdv(
-      BuildContext context, Future<List<RendezVous>> rdvs, Patient patient) {
-    var size = MediaQuery.of(context).size;
-    return FutureBuilder(
-        future: Future.wait([rdvs]),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: Container(
-              alignment: Alignment.center,
-              child: const CircularProgressIndicator(),
-            ));
-          } else if (snapshot.hasData) {
-            final data = snapshot.data!;
-            final rdvs = data[0];
-            return Center(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Visibility(
-                      visible: !_isGoodRdv,
-                      child: SelectRdv(
-                        rdvs: rdvs,
-                        selectedController: _selectedController,
-                        maxwidth: size.width * 0.95,
-                      ),
-                    ),
-                    InputTextArea(
-                      labelText: "message",
-                      hintText: "quel est le motif de ce changement ?",
-                      controller: _messageController,
-                      maxwidth: size.width * 0.95,
-                    ),
-                    Container(
-                      width: size.width * 0.95,
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 15.0, horizontal: 3),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          const ButtonCancel(),
-                          const SizedBox(width: 20),
-                          //submit button
-                          _isLoading
-                              ? const CircularProgressIndicator()
-                              : OutlinedButton(
-                                  onPressed: () async {
-                                    await _sendMessage(patient, rdvs);
-                                    // ignore: use_build_context_synchronously
-                                    await _messageSentDialog(context);
-                                  },
-                                  style: OutlinedButton.styleFrom(
-                                    foregroundColor: Colors.green,
-                                  ),
-                                  child: const Text('Envoyer')),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
-          //en cas d'erreur quelconque (snapshot.hasError)
-          return Center(child: Text('Erreur: ${snapshot.error.toString()}'));
-        });
-  }
-
-  Future<void> _sendMessage(
-    Patient patient,
-    List<RendezVous> rdvs,
-  ) async {
-    final form = _formKey.currentState;
-    if (form!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-      form.save();
-      //si les champs sont non vides on procède à l'enregistrement du message
-      if ((message.isNotEmpty) && (selected != null)) {
-        if (kDebugMode) {
-          print('message et sélection de rendez-vous non nuls');
-        }
-        try {
-          MessageViewModel messageViewModel = MessageViewModel();
-          Secretaire? secretaire =
-              await messageViewModel.getSecretariatCentral();
-          RendezVous rdv = rdvs[selected!];
-          //puis on envoie le message de prise de rendez-vous
-          Future.microtask(() => messageViewModel.envoyer(Message(
-                patient,
-                secretaire!,
-                DateTime.now(),
-                ObjetMessage.modifierRendezVous,
-                '${rdv.dateHeure.millisecondsSinceEpoch}||${patient.identifiant}||${rdv.medecin.identifiant}||$message',
-                StatutMessage.nonTraite,
-              )));
-          if (kDebugMode) {
-            print('message sent');
-          }
-        } catch (e) {
-          setState(() {
-            _isLoading = false;
-          });
-          if (kDebugMode) {
-            print(e.toString());
-          }
-        }
-      }
-    }
-  }
-
-  Future<void> _messageSentDialog(BuildContext context) async {
-    //pushed permet de savoir si l'utilisateur a bien cliqué sur le bouton OK
-    final pushed = await showDialog<bool?>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text("Confirmation d'envoie"),
-              content: const Text(
-                  "Votre demande a bien été envoyée. \nLa clinique vous fera un retour dans les bref délais."),
-              actions: [
-                TextButton(
-                  child: const Text("OK"),
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                    _navigateToHome(context);
-                  },
-                ),
-              ],
-            );
-          },
-        ) ??
-        false;
-    //si l'utilisateur n'a pas cliquer sur OK on le redirige quand même à la HomePage
-    if (!pushed) {
-      // ignore: use_build_context_synchronously
-      _navigateToHome(context);
-    }
+    return ChangerRdv(rdvs: rdvs, patient: patient, isGoodRdv: _isGoodRdv);
   }
 }

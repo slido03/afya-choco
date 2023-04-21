@@ -9,9 +9,7 @@ import 'package:afya/src/view/mobile/authentication/authentication.dart';
 import 'package:afya/src/view/mobile/consultation/components/components.dart';
 
 class DemanderInfos extends StatefulWidget {
-  const DemanderInfos({super.key, this.title = "Demande d'informations"});
-
-  final String title;
+  const DemanderInfos({super.key});
 
   @override
   State<DemanderInfos> createState() => _DemanderInfosState();
@@ -48,9 +46,7 @@ class _DemanderInfosState extends State<DemanderInfos> {
             //si l'utilisateur est connecté
             if (userId != null) {
               return Scaffold(
-                appBar: AppBar(
-                  title: Text(widget.title),
-                ),
+                appBar: AppBar(),
                 body: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,

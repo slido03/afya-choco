@@ -1,5 +1,5 @@
 import 'package:afya/src/repository/repositories.dart';
-import 'package:afya/src/view/mobile/agenda/pages/historiques.dart';
+//import 'package:afya/src/view/mobile/agenda/pages/historiques.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../model/models.dart';
@@ -25,6 +25,7 @@ class CardHistorique extends StatelessWidget {
               text: '${evenement.description}\n',
               style: const TextStyle(
                 color: Colors.black,
+                fontSize: 13,
                 fontWeight: FontWeight.w300,
               ),
               children: <TextSpan>[
@@ -114,17 +115,12 @@ class CardHistorique extends StatelessWidget {
                 _showDialog(context);
               } else if (value == 2) {
                 EvenementViewModel evenementViewModel = EvenementViewModel();
-                String userId = evenement.rendezVous.patient.uid;
                 EasyLoading.show(status: 'suppression en cours');
                 await evenementViewModel
                     .supprimer(evenement.rendezVous); //on supprime l'évènement
                 EasyLoading.dismiss();
                 // ignore: use_build_context_synchronously
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => Historiques(userId: userId),
-                  ),
-                );
+                Navigator.pop(context);
               }
             },
           ),
@@ -136,6 +132,7 @@ class CardHistorique extends StatelessWidget {
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),
+            overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
             evenement.description,
@@ -159,7 +156,7 @@ extension DateFormattedHistorique on DateTime {
     String? number;
     String? jour;
     String? mois;
-    number = DateFormat('EEE').format(this);
+    number = DateFormat('EEE', 'fr_FR').format(this);
     if (day < 10) {
       String j = '0$day';
       jour = ' $j ';

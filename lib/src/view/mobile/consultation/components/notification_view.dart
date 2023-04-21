@@ -54,6 +54,9 @@ class NotificationView extends StatelessWidget {
 
           Text(
             message.contenu,
+            softWrap: true,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
             style: const TextStyle(
               fontSize: 14.0,
             ),

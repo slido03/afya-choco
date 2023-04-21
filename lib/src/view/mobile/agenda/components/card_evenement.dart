@@ -27,6 +27,7 @@ class CardEvenement extends StatelessWidget {
               text: '${evenement.description}\n',
               style: const TextStyle(
                 color: Colors.black,
+                fontSize: 13,
                 fontWeight: FontWeight.w300,
               ),
               children: <TextSpan>[
@@ -139,7 +140,8 @@ class CardEvenement extends StatelessWidget {
         ),
         child: Container(
           //width: MediaQuery.of(context).size.width * 0.3,
-          padding: const EdgeInsets.all(10),
+          padding:
+              const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: const Color.fromRGBO(212, 251, 227, 1),
@@ -151,29 +153,25 @@ class CardEvenement extends StatelessWidget {
               Icon(
                 Icons.event_available,
                 color: Theme.of(context).primaryColor,
-                size: 20,
-              ),
-              const SizedBox(height: 5),
-              Text(
-                evenement.rendezVous.dateHeure.numberJourMois,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w300,
-                ),
+                size: 24,
               ),
               const SizedBox(height: 5),
               Text(
                 evenement.titre,
                 style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 5),
               Text(
                 evenement.description,
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 13,
+                ),
                 maxLines: 2,
               ),
               const SizedBox(height: 5),
@@ -184,8 +182,8 @@ class CardEvenement extends StatelessWidget {
                   Text(
                     evenement.rendezVous.dateHeure.numberJourMois,
                     style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   IconButton(
@@ -238,7 +236,7 @@ extension DateFormattedEvenement on DateTime {
     String? number;
     String? jour;
     String? mois;
-    number = DateFormat('EEE').format(this);
+    number = DateFormat('EEE', 'fr_FR').format(this);
     if (day < 10) {
       String j = '0$day';
       jour = ' $j ';

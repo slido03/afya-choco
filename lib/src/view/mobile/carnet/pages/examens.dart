@@ -17,22 +17,34 @@ class Examens extends StatefulWidget {
 }
 
 class _ExamensState extends State<Examens> {
-  final filterState = {
-    'resultat': 1,
+  final filterStateCategorie = {
     'categorie': 1,
+  };
+  final filterStateMois = {
     'mois': 1,
   };
-
+  List<Specialite> categories =
+      Specialite.values; //liste de toutes les spécialités
   ExamenViewModel examenViewModel = ExamenViewModel();
+  late Future<List<Examen>> _exams;
+  late int _categorie;
+  late int _mois;
+
+  @override
+  initState() {
+    super.initState();
+    _categorie = 1; //Tous
+    _mois = 1; //Tous
+    _exams = examenViewModel.listerPatient(widget.userId);
+  }
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    Future<List<Examen>> exams = examenViewModel.listerPatient(widget.userId);
 
     return FutureBuilder(
         future: Future.wait([
-          exams,
+          _exams,
         ]),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -73,14 +85,14 @@ class _ExamensState extends State<Examens> {
                         children: [
                           DropDownCategories(
                             width: width * 0.80,
-                            filterState: filterState,
-                            onChanged: onChanged,
+                            filterState: filterStateCategorie,
+                            onChanged: onChangedCategorie,
                           ),
                           const SizedBox(height: 15),
                           DropDownMois(
-                            filterState: filterState,
+                            filterState: filterStateMois,
                             width: width * 0.80,
-                            onChanged: onChanged,
+                            onChanged: onChangedMois,
                           ),
                         ],
                       ),
@@ -109,17 +121,63 @@ class _ExamensState extends State<Examens> {
                 )),
               );
             } else {
-              return const Center(
-                  child: Padding(
-                padding: EdgeInsets.only(top: 40),
-                child: Text(
-                  'Aucun examen enregistré',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ));
+              //liste vide
+              return Container(
+                color: Colors.white12,
+                padding: const EdgeInsets.all(10.0),
+                child: Center(
+                    child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(20.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          // box-shadow: only on the bottom
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 3,
+                            blurRadius: 7,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          DropDownCategories(
+                            width: width * 0.80,
+                            filterState: filterStateCategorie,
+                            onChanged: onChangedCategorie,
+                          ),
+                          const SizedBox(height: 15),
+                          DropDownMois(
+                            filterState: filterStateMois,
+                            width: width * 0.80,
+                            onChanged: onChangedMois,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Expanded(
+                      child: Center(
+                          child: Padding(
+                        padding: EdgeInsets.only(top: 40),
+                        child: Text(
+                          'Aucun examen enregistré',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      )),
+                    )
+                  ],
+                )),
+              );
             }
           }
           //en cas d'erreur quelconque (snapshot.hasError)
@@ -127,12 +185,53 @@ class _ExamensState extends State<Examens> {
         });
   }
 
-  void onChanged(int? value, String? filter) {
+  void onChangedCategorie(int? value, String? filter) {
     setState(() {
-      filterState[filter!] = value!;
+      filterStateCategorie[filter!] = value!;
+      _categorie = value;
+      if ((_mois == 1) && (_categorie > 1)) {
+        //si tous les mois sont sélectionnés et une catégorie spécifique
+        //est sélectionnée
+        _exams = examenViewModel.listerPatientSpecialite(
+          categories[_categorie - 2],
+          widget.userId,
+        );
+      } else if ((_mois > 1) && (_categorie > 1)) {
+        //au cas contraire si un mois et une catégorie précis sont choisis
+        _exams = examenViewModel.listerPatientSpecialiteMois(
+          categories[_categorie - 2],
+          _mois - 1,
+          widget.userId,
+        );
+      }
     });
     if (kDebugMode) {
-      print(filterState);
+      print(filterStateCategorie);
+    }
+  }
+
+  void onChangedMois(int? value, String? filter) {
+    setState(() {
+      filterStateMois[filter!] = value!;
+      _mois = value;
+      if ((_categorie == 1) && (_mois > 1)) {
+        //si toutes les catégories sont sélectionnées et un mois spécifique
+        //est sélectionné
+        _exams = examenViewModel.listerPatientMois(
+          _mois - 1,
+          widget.userId,
+        );
+      } else if ((_categorie > 1) && (_mois > 1)) {
+        //au cas contaire si une catégorie et un mois précis sont choisis
+        _exams = examenViewModel.listerPatientSpecialiteMois(
+          categories[_categorie - 2],
+          _mois - 1,
+          widget.userId,
+        );
+      }
+    });
+    if (kDebugMode) {
+      print(filterStateMois);
     }
   }
 }
