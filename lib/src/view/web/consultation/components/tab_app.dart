@@ -14,28 +14,28 @@ class _TestState extends State<Test> {
   @override
   Widget build(BuildContext context) => DefaultTabController(
     length: 5,
-    child: Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Scaffold
-      (
-        body: Column(
-          children: [
-            TabBar(
-              tabs: tabs
-              ),
-             Expanded(
-              child: TabBarView(
-                children: [
-                  ListeDemande(),
-                  ListeDemande(),
-                  ListeDemande(),
-                  ListeDemande(),
-                  Text('Rendez-vous')
-                ]
-              ),
-            )
-          ],
-        ),
+    child: Material(
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+            children: [
+              TabBar(
+                tabs: tabs
+                ),
+               Expanded(
+                child: TabBarView(
+                  children: [
+                    ListeDemande(),
+                    ListeDemande(),
+                    ListeDemande(),
+                    ListeDemande(),
+                    Text('Rendez-vous')
+                  ]
+                ),
+              )
+            ],
+          ),
+        
       ),
     ),
     );

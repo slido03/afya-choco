@@ -9,15 +9,15 @@ class AfyaLogo extends StatelessWidget {
       height: 50,
       width: 105,
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.white),
-        borderRadius: BorderRadius.circular(5)
+        color: Colors.grey[200],
+        //border: Border.all(color: Colors.white),
+        borderRadius: BorderRadius.circular(10)
       ),
         child: const Center(
           child: Text(
           'AFYA',
           style: TextStyle(
-            fontSize: 40,
+            fontSize: 35,
             color: Color.fromRGBO(30, 82, 42, 1),
             fontStyle: FontStyle.italic,
             fontWeight: FontWeight.bold,

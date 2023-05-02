@@ -1,14 +1,37 @@
-// import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
-// class DropDownRdv extends StatelessWidget {
-//   const DropDownRdv({Key? key}) : super(key: key);
+class DropdownCard extends StatefulWidget {
+  const DropdownCard({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
+  @override
+  // ignore: library_private_types_in_public_api
+  _DropdownCardState createState() => _DropdownCardState();
+}
 
-//     List <dynamic> listeItem = [];
-//     return DropdownButtonFormField(
-//       items : list
-//     );
-//   }
-// }
+class _DropdownCardState extends State<DropdownCard> {
+  List <String> listItem = [   
+     "Option 1",    "Option 2",    "Option 3",    "Option 4", 
+  ];
+  late String valueChoose = listItem[0];
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField<String>(
+      icon: const Icon(Icons.arrow_drop_down),
+      iconSize: 30,
+      value: valueChoose,
+      onChanged: (newValue) {
+        setState(() {
+          valueChoose = newValue!;
+        });
+       // print(newValue);
+      },
+      items: listItem.map((valueItem) {
+        return DropdownMenuItem<String>(
+          value: valueItem,
+          child: Text(valueItem),
+        );
+      }).toList(),
+    );
+  }
+}

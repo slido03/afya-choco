@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'date_rdv.dart';
+import 'drop_down_button.dart';
 import 'duree_rdv.dart';
 import 'heure_rdv.dart';
 
@@ -23,21 +24,21 @@ class _CreationRdvState extends State<CreationRdv> {
     final TextEditingController objetController = TextEditingController();
     final TextEditingController lieuController = TextEditingController();
     final formKey = GlobalKey<FormState>();
-    List <dynamic> listePatient = ['KOKOU', 'KOFI','KOSSIGAN'];
-    List <dynamic> listeMedecin = ['KOKOUO', 'KOFIGO','KOSSIGANTOR'];
-    List <dynamic> listeObjet = ['Consultation', 'Examens','Analyses'];
-    List <dynamic> listItem = [
+    List <String> listePatient = ['KOKOU', 'KOFI','KOSSIGAN'];
+    List <String> listeMedecin = ['KOKOUO', 'KOFIGO','KOSSIGANTOR'];
+    List <String> listeObjet = ['Consultation', 'Examens','Analyses'];
+    List <String> listItem = [
       'Alala',
       'Adjo',
       'Akakpo',
     ];
+
     String? valueChoose = listItem[0];
 
+    @override
     void initState() {
       super.initState();
-      valueChoose = listItem[0];
     }
-
 
     return Material(
       child: Column(
@@ -166,28 +167,12 @@ class _CreationRdvState extends State<CreationRdv> {
                             ),
                           ),
                         ),
-                        Expanded(
+                        const Expanded(
                           child: Card(
-                            shape: const RoundedRectangleBorder(
+                            shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
                             ),
-                            child: DropdownButton(
-                              icon: const Icon(Icons.arrow_drop_down),
-                              iconSize: 22,
-                              underline: Container(),
-                              value: valueChoose,
-                              onChanged: (newValue){
-                                setState(() {
-                                  valueChoose = newValue as String?;
-                                });
-                              },
-                              items: listItem.map((valueItem) {
-                                return DropdownMenuItem(
-                                  value: valueItem,
-                                  child: Text(valueItem),
-                                );
-                              }).toList(),
-                            ),
+                            child: DropdownCard(),
                           )
                         )
                       ],
