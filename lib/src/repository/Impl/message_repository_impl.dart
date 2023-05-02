@@ -83,9 +83,31 @@ class MessageRepositoryImpl extends MessageRepository {
     });
   }
 
+  //lister les messages envoyés
+  @override
+  Future<List<Message>> listerEnvoye(String uidExpediteur) async {
+    return await messages
+        .where('expediteur.uid', isEqualTo: uidExpediteur)
+        .orderBy('dateHeure', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Message> liste = [];
+        for (var document in snapshot.docs) {
+          Message message = document.data();
+          liste.add(message);
+        }
+        return liste;
+      } else {
+        List<Message> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
   //lister les messages envoyés en fonction de l'objet
   @override
-  Future<List<Message>> listerEnvoye(
+  Future<List<Message>> listerEnvoyeObjet(
       String uidExpediteur, ObjetMessage objet) async {
     return await messages
         .where('expediteur.uid', isEqualTo: uidExpediteur)

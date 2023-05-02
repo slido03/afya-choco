@@ -93,6 +93,7 @@ class _FormRappelState extends State<FormRappel> {
                           child: Column(
                             children: <Widget>[
                               InputDate(
+                                maxwidth: maxwidth,
                                 labelText: 'Date',
                                 hintText: 'Date du rappel',
                                 controller: _dateController,
@@ -100,6 +101,7 @@ class _FormRappelState extends State<FormRappel> {
                                     widget.evenement.rendezVous.dateHeure,
                               ),
                               InputTime(
+                                maxwidth: maxwidth,
                                 labelText: 'Heure',
                                 hintText: 'Heure du rappel',
                                 controller: _timeController,

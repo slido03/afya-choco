@@ -10,11 +10,14 @@ abstract class MessageRepository {
   );
   //modifie uniquement le statut d'un message
   Future<void> modifierStatut(Message message);
+  Future<List<Message>> listerEnvoye(String uidExpediteur);
   //lister les messages envoyés en fonction de l'objet
-  Future<List<Message>> listerEnvoye(String uidExpediteur, ObjetMessage objet);
+  Future<List<Message>> listerEnvoyeObjet(
+      String uidExpediteur, ObjetMessage objet);
   //lister les messages reçus en fonction de l'objet
-  Future<List<Message>> listerRecuObjet(String uidDestinataire, ObjetMessage objet);
-  //lister tous les messages reçus 
+  Future<List<Message>> listerRecuObjet(
+      String uidDestinataire, ObjetMessage objet);
+  //lister tous les messages reçus
   Future<List<Message>> listerRecu(String uidDestinataire);
   //lister les messages reçus traités ou non traités
   Future<List<Message>> listerRecuStatut(

@@ -57,11 +57,11 @@ class _NotesState extends State<Notes> {
                             right: 10,
                             top: 20,
                           ),
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.vertical(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(30),
                             ),
-                            color: Color.fromRGBO(37, 211, 102, 0.12),
+                            color: Colors.grey[100],
                           ),
                           child: ListView.builder(
                             shrinkWrap: true,

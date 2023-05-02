@@ -203,6 +203,8 @@ class _ExamensState extends State<Examens> {
           _mois - 1,
           widget.userId,
         );
+      } else if ((_categorie == 1) && (_mois == 1)) {
+        _exams = examenViewModel.listerPatient(widget.userId);
       }
     });
     if (kDebugMode) {
@@ -228,6 +230,8 @@ class _ExamensState extends State<Examens> {
           _mois - 1,
           widget.userId,
         );
+      } else if ((_categorie == 1) && (_mois == 1)) {
+        _exams = examenViewModel.listerPatient(widget.userId);
       }
     });
     if (kDebugMode) {

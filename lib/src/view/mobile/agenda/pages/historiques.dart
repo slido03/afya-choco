@@ -25,7 +25,7 @@ class _HistoriquesState extends State<Historiques> {
   @override
   Widget build(BuildContext context) {
     Future<List<Evenement>> events =
-        evenementViewModel.listerPassePatient(widget.userId); //test
+        evenementViewModel.listerPassePatient(widget.userId);
 
     return FutureBuilder(
         future: Future.wait([

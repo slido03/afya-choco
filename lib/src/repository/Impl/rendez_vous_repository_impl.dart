@@ -174,7 +174,7 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
 
   @override
   Future<RendezVous?> getLastForPatient(String uidPatient) async {
-    //liste des rendez-vous du patient en attente du plus récent au plus ancien
+    //liste des rendez-vous en attente du patient en attente du plus récent au plus ancien
     List<RendezVous> liste = await listerEnAttentePatient(uidPatient);
     if (liste.isNotEmpty) {
       return liste.first;
@@ -185,8 +185,8 @@ class RendezVousRepositoryImpl extends RendezVousRepository {
 
   @override
   Future<RendezVous?> getLastForMedecin(String uidMedecin) async {
-    //liste des rendez-vous du patient du plus récent au plus ancien
-    List<RendezVous> liste = await listerMedecin(uidMedecin);
+    //liste des rendez-vous en attente du médecin du plus récent au plus ancien
+    List<RendezVous> liste = await listerEnAttenteMedecin(uidMedecin);
     if (liste.isNotEmpty) {
       return liste.first;
     } else {

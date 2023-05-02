@@ -58,19 +58,13 @@ class AuthService {
   // Vérifie si l'utilisateur est déjà connecté et renvoie son ID utilisateur
   Future<String?> getCurrentUserUid() async {
     String? uid = await storage.read(key: 'uid');
-    if (uid != null) {
-      return uid;
-    }
-    return null;
+    return uid;
   }
 
   // Vérifie si l'utilisateur est déjà connecté et renvoie son email
   Future<String?> getCurrentUserEmail() async {
     String? email = await storage.read(key: 'email');
-    if (email != null) {
-      return email;
-    }
-    return null;
+    return email;
   }
 
   // Déconnexion

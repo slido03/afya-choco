@@ -136,12 +136,11 @@ class CardEvenement extends StatelessWidget {
       child: Card(
         elevation: 5,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Container(
           //width: MediaQuery.of(context).size.width * 0.3,
-          padding:
-              const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 5),
+          padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: const Color.fromRGBO(212, 251, 227, 1),

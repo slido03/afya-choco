@@ -14,7 +14,7 @@ export './notification_view.dart';
 export './popupmenu_more.dart';
 export './popupmenu_user.dart';
 export './rdv_dialog.dart';
-export './section_first_presentation.dart';
+export 'notification_sent_builder.dart';
 export './select_rdv.dart';
 export './separator.dart';
 export './title_changer_rdv.dart';

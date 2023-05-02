@@ -35,9 +35,14 @@ class MessageViewModel extends ChangeNotifier {
   }
 
   //liste des messages envoyés par l'utilisateur courant du plus récent au plus ancien
-  Future<List<Message>> listerEnvoye(
+  Future<List<Message>> listerEnvoye(String uidExpediteur) async {
+    return await messageRep.listerEnvoye(uidExpediteur);
+  }
+
+  //liste des messages envoyés par l'utilisateur en fonction de l'objet courant du plus récent au plus ancien
+  Future<List<Message>> listerEnvoyeObjet(
       String uidExpediteur, ObjetMessage objet) async {
-    return await messageRep.listerEnvoye(uidExpediteur, objet);
+    return await messageRep.listerEnvoyeObjet(uidExpediteur, objet);
   }
 
   //liste des messages reçus par l'utilisateur courant en fonction de l'objet du plus récent au plus ancien

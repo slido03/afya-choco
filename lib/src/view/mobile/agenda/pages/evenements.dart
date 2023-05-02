@@ -90,11 +90,11 @@ class _EvenementsState extends State<Evenements> {
                         child: Container(
                           padding: const EdgeInsets.only(
                               left: 10, right: 10, top: 20),
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.vertical(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(30),
                             ),
-                            color: Color.fromRGBO(37, 211, 102, 0.12),
+                            color: Colors.grey[100],
                           ),
                           child: GridView.builder(
                             gridDelegate:
@@ -157,11 +157,11 @@ class _EvenementsState extends State<Evenements> {
                         child: Container(
                           padding: const EdgeInsets.only(
                               left: 10, right: 10, top: 20),
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.vertical(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(30),
                             ),
-                            color: Color.fromRGBO(37, 211, 102, 0.12),
+                            color: Colors.grey[100],
                           ),
                           child: const Center(
                             child: Text(
