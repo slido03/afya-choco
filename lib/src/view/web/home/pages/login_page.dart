@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../authentication/login_form.dart';
 import '../../constant/afya_logo.dart';
-import '../../constant/navigation_rail.dart';
 import '../components/home_container.dart';
 
 class LoginPage extends StatefulWidget {
@@ -40,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: AfyaLogo(),
                 ),
                 const SizedBox(
-                  height: 60,
+                  height: 40,
                 ),
                 Center(
                   child: Padding(

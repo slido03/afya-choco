@@ -9,22 +9,14 @@ class ConsultationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children:  [
-        const NavigationRailPage(),
-        // const SizedBox(
-        //   width: 5,
-        // ),
-        Expanded(
-          child: Column(
-            children: const [
-              TopBar(),
-              SizedBox(height: 3,),
-              Expanded(child: Test()),
-            ],
-          ),
-        )
-      ],
+    return Expanded(
+      child: Column(
+        children: const [
+          TopBar(),
+          SizedBox(height: 3,),
+          Expanded(child: Test()),
+        ],
+      ),
     );
   }
 }
