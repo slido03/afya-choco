@@ -1,4 +1,5 @@
 import '../models.dart';
+import 'package:faker/faker.dart';
 
 class Evenement {
   String _titre;
@@ -13,9 +14,20 @@ class Evenement {
 
   factory Evenement.fromJson(Map<String, dynamic> json) {
     return Evenement(
-      json['titre'] as String,
-      json['description'] as String,
-      RendezVous.fromJson(json['rendez-vous']),
+      json['titre'],
+      json['description'],
+      RendezVous.fromJson(json['rendezVous']),
+    );
+  }
+
+  factory Evenement.faker(RendezVous rendezVous) {
+    var faker = Faker();
+    var titre = faker.lorem.sentence();
+    var description = faker.lorem.sentence();
+    return Evenement(
+      titre,
+      description,
+      rendezVous,
     );
   }
 
@@ -29,6 +41,6 @@ class Evenement {
   Map<String, dynamic> toJson() => {
         'titre': titre,
         'description': description,
-        'rendez-vous': rendezVous.toJson(),
+        'rendezVous': rendezVous.toJson(),
       };
 }

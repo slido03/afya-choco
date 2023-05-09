@@ -10,7 +10,6 @@ class RdvDialog extends StatelessWidget {
   const RdvDialog({super.key, this.rdv});
   //const RdvDialog({super.key, required this.rdv});
 
-  //final Object? rdv;
   final RendezVous? rdv;
 
   @override
@@ -35,7 +34,7 @@ class RdvDialog extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(3.0),
             child: Text(
-              "Objet: ${rdv?.objet.value ?? 'Indéfini'}",
+              "Objet: ${rdv?.objet.value ?? ''}",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 14.0,
@@ -47,7 +46,7 @@ class RdvDialog extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(3.0),
             child: Text(
-              "Médecin: ${rdv?.medecin.nom ?? 'Iconnu(e)'}",
+              "Médecin: ${rdv?.medecin.nom ?? ''}",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 14.0,
@@ -59,7 +58,7 @@ class RdvDialog extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(3.0),
             child: Text(
-              "Date: ${rdv?.dateHeure.formatDate() ?? '01/12/1970'}",
+              "Date: ${rdv?.dateHeure.formatDate() ?? ''}",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 14.0,

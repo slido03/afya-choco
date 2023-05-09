@@ -5,8 +5,8 @@ class OrdonnanceViewModel extends ChangeNotifier {
   OrdonnanceRepository ordonnanceRep = OrdonnanceRepositoryImpl.instance;
 
   //ajout d'un ordonnance dans la base de données
-  void ajouter(Ordonnance ordonnance) {
-    ordonnanceRep.ajouter(ordonnance);
+  Future<void> ajouter(Ordonnance ordonnance) async {
+    await ordonnanceRep.ajouter(ordonnance);
     notifyListeners();
   }
 
@@ -14,23 +14,23 @@ class OrdonnanceViewModel extends ChangeNotifier {
     return await ordonnanceRep.trouver(diagnostic);
   }
 
-  void modifier(Ordonnance ordonnance) {
-    ordonnanceRep.modifier(ordonnance);
+  Future<void> modifier(Ordonnance ordonnance) async {
+    await ordonnanceRep.modifier(ordonnance);
     notifyListeners();
   }
 
   //liste des ordonnance du patient courant du plus récent au plus ancien
-  Future<List<Ordonnance>> listerPatient(Patient patient) async {
-    return await ordonnanceRep.listerPatient(patient);
+  Future<List<Ordonnance>> listerPatient(String uidPatient) async {
+    return await ordonnanceRep.listerPatient(uidPatient);
   }
 
   //liste des ordonnance du medecin courant du plus récent au plus ancien
-  Future<List<Ordonnance>> listerMedecin(Medecin medecin) async {
-    return await ordonnanceRep.listerMedecin(medecin);
+  Future<List<Ordonnance>> listerMedecin(String uidMedecin) async {
+    return await ordonnanceRep.listerMedecin(uidMedecin);
   }
 
-  void supprimer(Ordonnance ordonnance) {
-    ordonnanceRep.supprimer(ordonnance);
+  Future<void> supprimer(Ordonnance ordonnance) async {
+    await ordonnanceRep.supprimer(ordonnance);
     notifyListeners();
   }
 }

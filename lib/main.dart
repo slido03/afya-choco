@@ -21,3 +21,4 @@ Future<void> main() async {
     builder: ((context, child) => const AfyaApp()),
   ));
 }
+

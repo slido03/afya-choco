@@ -19,6 +19,20 @@ class Carnet {
     );
   }
 
+  factory Carnet.faker(
+    Patient proprietaire,
+    Examen examen,
+    Ordonnance ordonnance,
+  ) {
+    List<Examen> examens = [examen];
+    List<Ordonnance> ordonnances = [ordonnance];
+    return Carnet(
+      proprietaire,
+      examens,
+      ordonnances,
+    );
+  }
+
   Patient get proprietaire => _proprietaire;
   List<Examen> get examens => _examens;
   List<Ordonnance> get ordonnances => _ordonnances;
@@ -36,19 +50,18 @@ class Carnet {
       _ordonnances.remove(ordonnance);
 
   Map<String, dynamic> toJson() => {
-        'propietaire': proprietaire.toJson(),
+        'proprietaire': proprietaire.toJson(),
         'examens': examensJson,
         'ordonnances': ordonnancesJson,
       };
 
-  static List<Examen> examensFromJson(List<Map<String, dynamic>> examensJson) {
+  static List<Examen> examensFromJson(List<dynamic> examensJson) {
     List<Examen> examens =
         examensJson.map((examen) => Examen.fromJson(examen)).toList();
     return examens;
   }
 
-  static List<Ordonnance> ordonnancesFromJson(
-      List<Map<String, dynamic>> ordonnancesJson) {
+  static List<Ordonnance> ordonnancesFromJson(List<dynamic> ordonnancesJson) {
     List<Ordonnance> ordonnances = ordonnancesJson
         .map((ordonnance) => Ordonnance.fromJson(ordonnance))
         .toList();

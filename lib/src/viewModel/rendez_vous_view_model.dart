@@ -9,8 +9,8 @@ class RendezVousViewModel extends ChangeNotifier {
   PatientRepository patientRep = PatientRepositoryImpl.instance;
 
   //ajout d'un rendezvous dans la base de données
-  void ajouter(RendezVous rendezvous) {
-    rendezvousRep.ajouter(rendezvous);
+  Future<void> ajouter(RendezVous rendezvous) async {
+    await rendezvousRep.ajouter(rendezvous);
     notifyListeners();
   }
 
@@ -19,8 +19,8 @@ class RendezVousViewModel extends ChangeNotifier {
     return await rendezvousRep.trouver(dateHeure, patient, medecin);
   }
 
-  void modifier(RendezVous rendezvous) {
-    rendezvousRep.modifier(rendezvous);
+  Future<void> modifier(RendezVous rendezvous) async {
+    await rendezvousRep.modifier(rendezvous);
     notifyListeners();
   }
 
@@ -44,34 +44,24 @@ class RendezVousViewModel extends ChangeNotifier {
     return await rendezvousRep.getLastForPatient(uidMedecin);
   }
 
-  void supprimer(RendezVous rendezvous) {
-    rendezvousRep.supprimer(rendezvous);
+  Future<void> supprimer(RendezVous rendezvous) async {
+    await rendezvousRep.supprimer(rendezvous);
     notifyListeners();
   }
 
   //permet de s'assurer si l'utilisateur courant est un patient intermediaire
   Future<PatientIntermediaire?> trouverPatientIntermediaireUid(
       String uid) async {
-    PatientIntermediaire? patient =
-        await patientIntermediaireRep.trouverUid(uid);
-    return patient;
+    return await patientIntermediaireRep.trouverUid(uid);
   }
 
 //permet de s'assurer si l'utilisateur courant est un patient
   Future<Patient?> trouverPatientUid(String uid) async {
-    Patient? patient = await patientRep.trouverUid(uid);
-    return patient;
+    return await patientRep.trouverUid(uid);
   }
 
   Future<Secretaire?> getSecretariatCentral() async {
     //faire en sorte que l'objet secretaire central existe en permanence
-    Secretaire? secretaire = await secretaireRep.getSecretariatCentral();
-    if (secretaire == null) {
-      if (kDebugMode) {
-        print(
-            "erreur lors de la recherche du secretariat central : l'objet est nul");
-      }
-    }
-    return secretaire;
+    return await secretaireRep.getSecretariatCentral();
   }
 }

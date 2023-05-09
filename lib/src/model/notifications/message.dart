@@ -1,4 +1,5 @@
 import '../models.dart';
+import 'package:faker/faker.dart';
 
 class Message {
   final Utilisateur _expediteur;
@@ -23,8 +24,25 @@ class Message {
       Utilisateur.fromJson(json['destinataire']),
       DateTime.fromMillisecondsSinceEpoch(json['dateHeure']),
       parseObjet(json['objet']),
-      json['contenu'] as String,
+      json['contenu'],
       parseStatut(json['statut']),
+    );
+  }
+
+  factory Message.faker(
+    Utilisateur expediteur,
+    Utilisateur destinataire,
+  ) {
+    var faker = Faker();
+    var dateHeure = faker.date.dateTime(minYear: 2022, maxYear: 2024);
+    var contenu = faker.lorem.sentence();
+    return Message(
+      expediteur,
+      destinataire,
+      dateHeure,
+      ObjetMessageExtension.faker(),
+      contenu,
+      StatutMessageExtension.faker(),
     );
   }
 
@@ -39,7 +57,7 @@ class Message {
 
   Map<String, dynamic> toJson() => {
         'expediteur': expediteur.toJson(),
-        'destinaire': destinataire.toJson(),
+        'destinataire': destinataire.toJson(),
         'dateHeure': dateHeure.millisecondsSinceEpoch,
         'objet': objet.name,
         'contenu': contenu,

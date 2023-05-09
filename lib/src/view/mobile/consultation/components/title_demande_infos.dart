@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 Widget titleDemandeInfo() {
   return Container(
-    margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+    margin: const EdgeInsets.only(top: 20.0, bottom: 10.0),
     child: const Text(
       "Demande d'informations",
       style: TextStyle(

@@ -1,15 +1,23 @@
+import 'package:flutter/foundation.dart';
+
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ExamenRepositoryImpl extends ExamenRepository {
   static ExamenRepository? _instance;
-  final examens =
-      FirebaseFirestore.instance.collection('examens').withConverter<Examen>(
-            fromFirestore: (snapshot, _) => Examen.fromJson(snapshot.data()!),
-            toFirestore: (examen, _) => examen.toJson(),
-          ); //collection examens
+  static final _firestore = FirebaseFirestore.instance;
+  final examens = _firestore.collection('examens').withConverter<Examen>(
+        fromFirestore: (snapshot, _) => Examen.fromJson(snapshot.data()!),
+        toFirestore: (examen, _) => examen.toJson(),
+      ); //collection examens
 
-  ExamenRepositoryImpl._(); //constructeur privé
+  ExamenRepositoryImpl._() {
+    //on initialise le cache local de firestore
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: 15 * 1024 * 1024,
+    );
+  } //constructeur privé
 
   static ExamenRepository get instance {
     _instance ??= ExamenRepositoryImpl._();
@@ -31,7 +39,7 @@ class ExamenRepositoryImpl extends ExamenRepository {
         .where('patient.identifiant', isEqualTo: patient.identifiant)
         .where('type', isEqualTo: type.name)
         .where('date', isEqualTo: date.millisecondsSinceEpoch)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         if (snapshot.docs.first.exists) {
@@ -40,7 +48,13 @@ class ExamenRepositoryImpl extends ExamenRepository {
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -50,7 +64,7 @@ class ExamenRepositoryImpl extends ExamenRepository {
         .where('patient.identifiant', isEqualTo: examen.patient.identifiant)
         .where('type', isEqualTo: examen.type.name)
         .where('date', isEqualTo: examen.date.millisecondsSinceEpoch)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs.first.reference.set(
@@ -59,15 +73,21 @@ class ExamenRepositoryImpl extends ExamenRepository {
               'resultats',
             ]));
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
-  Future<List<Examen>> listerMedecin(Medecin medecin) async {
+  Future<List<Examen>> listerMedecin(String uidMedecin) async {
     return await examens
-        .where('medecin.identifiant', isEqualTo: medecin.identifiant)
+        .where('medecin.uid', isEqualTo: uidMedecin)
         .orderBy('date', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Examen> liste = [];
@@ -84,34 +104,15 @@ class ExamenRepositoryImpl extends ExamenRepository {
   }
 
   @override
-  Future<List<Examen>> listerPatient(Patient patient) async {
+  Future<List<Examen>> listerMedecinSpecialite(
+    Specialite type,
+    String uidMedecin,
+  ) async {
     return await examens
-        .where('patient.identifiant', isEqualTo: patient.identifiant)
-        .orderBy('date', descending: true)
-        .get()
-        .then((snapshot) {
-      if (snapshot.docs.isNotEmpty) {
-        List<Examen> liste = [];
-        for (var document in snapshot.docs) {
-          Examen examen = document.data();
-          liste.add(examen);
-        }
-        return liste;
-      } else {
-        List<Examen> emptyList = [];
-        return emptyList;
-      }
-    });
-  }
-
-  @override
-  Future<List<Examen>> listerSpecialite(
-      Specialite type, Patient patient) async {
-    return await examens
-        .where('patient.identifiant', isEqualTo: patient.identifiant)
+        .where('medecin.uid', isEqualTo: uidMedecin)
         .where('type', isEqualTo: type.name)
         .orderBy('date', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Examen> liste = [];
@@ -125,6 +126,122 @@ class ExamenRepositoryImpl extends ExamenRepository {
         return emptyList;
       }
     });
+  }
+
+  @override
+  Future<List<Examen>> listerMedecinMois(
+    int mois,
+    String uidMedecin,
+  ) async {
+    //liste de tous les examens du medecin
+    List<Examen> liste = await listerMedecin(uidMedecin);
+    List<Examen> listeMois = [];
+    for (var examen in liste) {
+      //si le mois de l'examen correspond on l'ajoute à listeMois
+      if (examen.date.month == mois) {
+        listeMois.add(examen);
+      }
+    }
+    return listeMois;
+  }
+
+  @override
+  Future<List<Examen>> listerMedecinSpecialiteMois(
+    Specialite type,
+    int mois,
+    String uidMedecin,
+  ) async {
+    //liste de tous les examens du medecin selon la catégorie
+    List<Examen> liste = await listerMedecinSpecialite(type, uidMedecin);
+    List<Examen> listeMois = [];
+    for (var examen in liste) {
+      //si le mois de l'examen correspond on l'ajoute à listeMois
+      if (examen.date.month == mois) {
+        listeMois.add(examen);
+      }
+    }
+    return listeMois;
+  }
+
+  @override
+  Future<List<Examen>> listerPatient(String uidPatient) async {
+    return await examens
+        .where('patient.uid', isEqualTo: uidPatient)
+        .orderBy('date', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Examen> liste = [];
+        for (var document in snapshot.docs) {
+          Examen examen = document.data();
+          liste.add(examen);
+        }
+        return liste;
+      } else {
+        List<Examen> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<List<Examen>> listerPatientSpecialite(
+    Specialite type,
+    String uidPatient,
+  ) async {
+    return await examens
+        .where('patient.uid', isEqualTo: uidPatient)
+        .where('type', isEqualTo: type.name)
+        .orderBy('date', descending: true)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        List<Examen> liste = [];
+        for (var document in snapshot.docs) {
+          Examen examen = document.data();
+          liste.add(examen);
+        }
+        return liste;
+      } else {
+        List<Examen> emptyList = [];
+        return emptyList;
+      }
+    });
+  }
+
+  @override
+  Future<List<Examen>> listerPatientMois(
+    int mois,
+    String uidPatient,
+  ) async {
+    //liste de tous les examens du patient
+    List<Examen> liste = await listerPatient(uidPatient);
+    List<Examen> listeMois = [];
+    for (var examen in liste) {
+      //si le mois de l'examen correspond on l'ajoute à listeMois
+      if (examen.date.month == mois) {
+        listeMois.add(examen);
+      }
+    }
+    return listeMois;
+  }
+
+  @override
+  Future<List<Examen>> listerPatientSpecialiteMois(
+    Specialite type,
+    int mois,
+    String uidPatient,
+  ) async {
+    //liste de tous les examens du patient selon la catégorie
+    List<Examen> liste = await listerPatientSpecialite(type, uidPatient);
+    List<Examen> listeMois = [];
+    for (var examen in liste) {
+      //si le mois de l'examen correspond on l'ajoute à listeMois
+      if (examen.date.month == mois) {
+        listeMois.add(examen);
+      }
+    }
+    return listeMois;
   }
 
   @override
@@ -134,13 +251,19 @@ class ExamenRepositoryImpl extends ExamenRepository {
         .where('patient.identifiant', isEqualTo: examen.patient.identifiant)
         .where('type', isEqualTo: examen.type.name)
         .where('date', isEqualTo: examen.date.millisecondsSinceEpoch)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var document in snapshot.docs) {
           document.reference.delete();
         }
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 }

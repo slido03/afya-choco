@@ -1,4 +1,6 @@
+import 'package:faker/faker.dart';
 import 'package:uuid/uuid.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Utilisateur {
   String _uid; //id unique généré par firebase auth
@@ -21,13 +23,33 @@ class Utilisateur {
 
   factory Utilisateur.fromJson(Map<String, dynamic> json) {
     return Utilisateur(
-      json['uid'] as String,
-      json['identifiant'] as String?,
-      json['nom'] as String,
-      json['prenoms'] as String,
-      json['telephone'] as String,
-      json['email'] as String,
-      json['adresse'] as String?,
+      json['uid'],
+      json['identifiant'],
+      json['nom'],
+      json['prenoms'],
+      json['telephone'],
+      json['email'],
+      json['adresse'],
+    );
+  }
+
+  //créer faker user à partir d'un compte utilisateur créé
+  factory Utilisateur.faker(User user) {
+    var faker = Faker();
+    var uid = user.uid;
+    var nom = faker.person.name();
+    var prenoms = faker.person.firstName();
+    var telephone = faker.phoneNumber.us();
+    var email = user.email!;
+    var adresse = faker.address.streetAddress();
+    return Utilisateur(
+      uid,
+      null,
+      nom,
+      prenoms,
+      telephone,
+      email,
+      adresse,
     );
   }
 

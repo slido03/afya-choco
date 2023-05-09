@@ -1,16 +1,25 @@
+import 'package:flutter/foundation.dart';
+
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DiagnosticRepositoryImpl extends DiagnosticRepository {
   static DiagnosticRepository? _instance;
-  final diagnostics = FirebaseFirestore.instance
+  static final _firestore = FirebaseFirestore.instance;
+  final diagnostics = _firestore
       .collection('diagnostics')
       .withConverter<Diagnostic>(
         fromFirestore: (snapshot, _) => Diagnostic.fromJson(snapshot.data()!),
         toFirestore: (diagnostic, _) => diagnostic.toJson(),
       ); //collection diagnostics
 
-  DiagnosticRepositoryImpl._(); //constructeur privé
+  DiagnosticRepositoryImpl._() {
+    //on initialise le cache local de firestore
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: 15 * 1024 * 1024,
+    );
+  } //constructeur privé
 
   static DiagnosticRepository get instance {
     _instance ??= DiagnosticRepositoryImpl._();
@@ -31,7 +40,7 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
         .where('date', isEqualTo: date.millisecondsSinceEpoch)
         .where('medecin.identifiant', isEqualTo: medecin.identifiant)
         .where('patient.identifiant', isEqualTo: patient.identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         if (snapshot.docs.first.exists) {
@@ -40,7 +49,13 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -50,7 +65,7 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
         .where('medecin.identifiant', isEqualTo: diagnostic.medecin.identifiant)
         .where('patient.identifiant',
             isEqualTo: diagnostic.patient!.identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs.first.reference.set(
@@ -62,7 +77,13 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
               'statut',
             ]));
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -70,7 +91,7 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
     return await diagnostics
         .where('patient.identifiant', isEqualTo: patient.identifiant)
         .orderBy('date', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Diagnostic> liste = [];
@@ -91,7 +112,7 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
     return await diagnostics
         .where('medecin.identifiant', isEqualTo: medecin.identifiant)
         .orderBy('date', descending: true)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Diagnostic> liste = [];
@@ -114,13 +135,19 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
         .where('medecin.identifiant', isEqualTo: diagnostic.medecin.identifiant)
         .where('patient.identifiant',
             isEqualTo: diagnostic.patient!.identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var document in snapshot.docs) {
           document.reference.delete();
         }
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 }

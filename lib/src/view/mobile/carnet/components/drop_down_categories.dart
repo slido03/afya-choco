@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:afya/src/model/models.dart';
 
 class DropDownCategories extends StatelessWidget {
   const DropDownCategories({
@@ -33,51 +34,34 @@ class DropDownCategories extends StatelessWidget {
       borderRadius: BorderRadius.circular(10.0),
       value: filterState['categorie'],
       focusColor: Colors.white38,
-      items: const [
-        DropdownMenuItem(
-          value: 1,
-          child: Text(
-            'Tous',
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        DropdownMenuItem(
-          value: 2,
-          child: Text(
-            'Radiologie',
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        DropdownMenuItem(
-          value: 3,
-          child: Text(
-            'Biologie',
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        DropdownMenuItem(
-          value: 4,
-          child: Text(
-            'Echographie',
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        DropdownMenuItem(
-          value: 5,
-          child: Text(
-            'Autres',
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ],
-      onChanged: (int? value) {
+      items: specialiteItems(),
+      onChanged: (value) {
         onChanged(value, 'categorie');
       },
     );
+  }
+
+  List<DropdownMenuItem<int>> specialiteItems() {
+    List<DropdownMenuItem<int>> items = [];
+    items.add(const DropdownMenuItem<int>(
+      value: 1,
+      child: Text(
+        'Tous',
+        softWrap: true,
+        overflow: TextOverflow.ellipsis,
+      ),
+    ));
+    for (int index = 0; index < Specialite.values.length; index++) {
+      DropdownMenuItem<int> item = DropdownMenuItem<int>(
+        value: index + 2,
+        child: Text(
+          Specialite.values[index].value,
+          softWrap: true,
+          overflow: TextOverflow.ellipsis,
+        ),
+      );
+      items.add(item);
+    }
+    return items;
   }
 }

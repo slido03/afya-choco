@@ -1,4 +1,7 @@
+import 'package:flutter/foundation.dart';
+
 import '../models.dart';
+import 'package:faker/faker.dart';
 
 class Diagnostic {
   final DateTime _date;
@@ -18,10 +21,27 @@ class Diagnostic {
   factory Diagnostic.fromJson(Map<String, dynamic> json) {
     return Diagnostic(
       DateTime.fromMillisecondsSinceEpoch(json['date']),
-      json['description'] as String,
+      json['description'],
       Medecin.fromJson(json['medecin']),
       examensFromJson(json['examens']),
       parseStatut(json['statut']),
+    );
+  }
+
+  factory Diagnostic.faker(
+    Medecin medecin,
+    Examen examen,
+  ) {
+    var faker = Faker();
+    var date = faker.date.dateTime(minYear: 2022, maxYear: 2024);
+    var description = faker.lorem.sentence();
+    List<Examen> examens = [examen];
+    return Diagnostic(
+      date,
+      description,
+      medecin,
+      examens,
+      StatutDiagnosticExtension.faker(),
     );
   }
 
@@ -62,9 +82,15 @@ class Diagnostic {
     return statut;
   }
 
-  static List<Examen> examensFromJson(List<Map<String, dynamic>> examensJson) {
+  static List<Examen> examensFromJson(List<dynamic> examensJson) {
+    if (kDebugMode) {
+      print('examens rendering');
+    }
     List<Examen> examens =
         examensJson.map((examen) => Examen.fromJson(examen)).toList();
+    if (kDebugMode) {
+      print('examens rendered');
+    }
     return examens;
   }
 }

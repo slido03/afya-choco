@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'top_app_bar.dart';
 import 'bottom_nav_bar.dart';
 import 'consultation/components/menu_dialog_consultation.dart';
-
+//import 'authentication/auth_service.dart';
 import 'consultation/consultation_screen.dart';
 import 'carnet/carnet_screen.dart';
 import 'agenda/agenda_screen.dart';
@@ -25,7 +25,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
     _pages.addAll([
       const ConsultationScreen(),
       const CarnetScreen(),

@@ -5,8 +5,8 @@ class RappelViewModel extends ChangeNotifier {
   RappelRepository rappelRep = RappelRepositoryImpl.instance;
 
   //ajout d'un rappel dans la base de données
-  void ajouter(Rappel rappel) {
-    rappelRep.ajouter(rappel);
+  Future<void> ajouter(Rappel rappel) async {
+    await rappelRep.ajouter(rappel);
     notifyListeners();
   }
 
@@ -14,18 +14,54 @@ class RappelViewModel extends ChangeNotifier {
     return await rappelRep.trouver(dateHeure, evenement);
   }
 
-  void modifier(Rappel rappel) {
-    rappelRep.modifier(rappel);
+  Future<void> modifier(Rappel rappel) async {
+    await rappelRep.modifier(rappel);
     notifyListeners();
   }
 
-  //liste des rappels de l'évènement spécifié du plus récent au plus ancien
-  Future<List<Rappel>> lister(Evenement evenement) async {
-    return await rappelRep.lister(evenement);
+  Future<List<Rappel>> lister() async {
+    return await rappelRep.lister();
   }
 
-  void supprimer(Rappel rappel) {
-    rappelRep.supprimer(rappel);
+  Future<List<Rappel>> listerEnAttentePatient3Jours(String uidPatient) async {
+    return await rappelRep.listerEnAttentePatient3Jours(uidPatient);
+  }
+
+  Future<List<Rappel>> listerEnAttentePatientSemaine(String uidPatient) async {
+    return await rappelRep.listerEnAttentePatientSemaine(uidPatient);
+  }
+
+  Future<List<Rappel>> listerEnAttentePatientMois(String uidPatient) async {
+    return await rappelRep.listerEnAttentePatientMois(uidPatient);
+  }
+
+  Future<List<Rappel>> listerEnAttenteMedecin3Jours(String uidMedecin) async {
+    return await rappelRep.listerEnAttenteMedecin3Jours(uidMedecin);
+  }
+
+  Future<List<Rappel>> listerEnAttenteMedecinSemaine(String uidMedecin) async {
+    return await rappelRep.listerEnAttenteMedecinSemaine(uidMedecin);
+  }
+
+  Future<List<Rappel>> listerEnAttenteMedecinMois(String uidMedecin) async {
+    return await rappelRep.listerEnAttenteMedecinMois(uidMedecin);
+  }
+
+  Future<List<Rappel>> listerPassePatient(String uidPatient) async {
+    return await rappelRep.listerPassePatient(uidPatient);
+  }
+
+  Future<List<Rappel>> listerPasseMedecin(String uidMedecin) async {
+    return await rappelRep.listerPasseMedecin(uidMedecin);
+  }
+
+  //liste des rappels de l'évènement spécifié du plus récent au plus ancien
+  Future<List<Rappel>> listerEvenement(Evenement evenement) async {
+    return await rappelRep.listerEvenement(evenement);
+  }
+
+  Future<void> supprimer(Rappel rappel) async {
+    await rappelRep.supprimer(rappel);
     notifyListeners();
   }
 }

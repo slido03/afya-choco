@@ -5,7 +5,7 @@ class PersonnelSanteViewModel extends ChangeNotifier {
   PersonnelSanteRepository personnelsanteRep =
       PersonnelSanteRepositoryImpl.instance;
 
-  void ajouter(PersonnelSante personnelsante) async {
+  Future<void> ajouter(PersonnelSante personnelsante) async {
     PersonnelSante? p;
     //on attribut un identifiant unique au personnelsante
     personnelsante.setIdentifiant();
@@ -24,21 +24,21 @@ class PersonnelSanteViewModel extends ChangeNotifier {
 
   //permet la recherche d'un personnelSante depuis l'UI à partir de son identifiant système
   Future<PersonnelSante?> trouver(String identifiant) async {
-    return personnelsanteRep.trouver(identifiant);
+    return await personnelsanteRep.trouver(identifiant);
   }
 
   //permet de s'assurer si l'utilisateur courant est de ce type
   Future<PersonnelSante?> trouverUid(String uid) async {
-    return personnelsanteRep.trouverUid(uid);
+    return await personnelsanteRep.trouverUid(uid);
   }
 
-  void modifier(PersonnelSante personnelsante) {
-    personnelsanteRep.modifier(personnelsante);
+  Future<void> modifier(PersonnelSante personnelsante) async {
+    await personnelsanteRep.modifier(personnelsante);
     notifyListeners();
   }
 
-  void supprimer(String identifiant) {
-    personnelsanteRep.supprimer(identifiant);
+  Future<void> supprimer(String identifiant) async {
+    await personnelsanteRep.supprimer(identifiant);
     notifyListeners();
   }
 
