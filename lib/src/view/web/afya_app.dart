@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'agenda/pages/evenements.dart';
 import 'authentication/login_form.dart';
 import 'constant/navigation_rail.dart';
 import 'consultation/components/creation_rdv.dart';
@@ -33,7 +34,7 @@ class AfyaApp extends StatelessWidget {
       // routes: {
       //   '/': (context) => const LoginPage(),
       // },
-      home: const NavigationRailPage(),
+      home: EvenementAgenda(),
       debugShowCheckedModeBanner: false,  
       );
   }
