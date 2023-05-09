@@ -35,21 +35,26 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
           //si l'utilisateur est connecté
           if (userId != null) {
             return Center(
-                child: Column(
-              children: <Widget>[
-                const SizedBox(height: 5.0),
-                const BannerCarousel(),
-                const SizedBox(height: 5.0),
-                titleNotificationsSent(context),
-                Expanded(
-                  child: ChangeNotifierProvider(
-                    create: (context) => MessageViewModel(),
-                    builder: ((context, child) => NotificationSent(
-                          userId: userId,
-                        )),
+                child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                children: <Widget>[
+                  const SizedBox(height: 5.0),
+                  const BannerCarousel(),
+                  const SizedBox(height: 5.0),
+                  titleNotificationsSent(context),
+                  Expanded(
+                    child: ChangeNotifierProvider(
+                      create: (context) => MessageViewModel(),
+                      builder: ((context, child) => NotificationSent(
+                            userId: userId,
+                          )),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ));
           } else {
             Navigator.of(context).pushReplacement(

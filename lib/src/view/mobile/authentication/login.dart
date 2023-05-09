@@ -284,7 +284,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             children: <TextSpan>[
                               TextSpan(
-                                text: 'Votre parcours de soins simplifié',
+                                text: 'Votre parcours de soins digitalisé',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 18.0,
@@ -339,6 +339,13 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                                 onPressed: () async {
+                                  // String? fcmToken =
+                                  //     await AuthService.fcmToken; //test
+                                  // if (kDebugMode || kProfileMode) {
+                                  //   // ignore: avoid_print
+                                  //   print(
+                                  //       '\n\n\n\nthe current app fcmToken is : $fcmToken\n\n\n\n');
+                                  // }
                                   bool signedIn =
                                       await signInWithEmailAndPassword(
                                           _emailController.text,

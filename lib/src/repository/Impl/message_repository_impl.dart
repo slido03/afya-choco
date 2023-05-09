@@ -53,6 +53,7 @@ class MessageRepositoryImpl extends MessageRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -77,6 +78,7 @@ class MessageRepositoryImpl extends MessageRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -214,6 +216,7 @@ class MessageRepositoryImpl extends MessageRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;

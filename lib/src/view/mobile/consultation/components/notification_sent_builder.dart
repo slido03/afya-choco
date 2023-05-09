@@ -4,7 +4,7 @@ import 'package:afya/src/view/mobile/consultation/components/notification_view.d
 import 'package:flutter/material.dart';
 import 'package:afya/src/viewModel/message_view_model.dart';
 import 'package:provider/provider.dart';
-import '../../../../model/notifications/message.dart';
+//import '../../../../model/notifications/message.dart';
 
 /*
  * This class is used to display the first presentation of the app

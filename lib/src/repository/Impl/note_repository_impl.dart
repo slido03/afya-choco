@@ -53,6 +53,7 @@ class NoteRepositoryImpl extends NoteRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -104,6 +105,7 @@ class NoteRepositoryImpl extends NoteRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -128,6 +130,7 @@ class NoteRepositoryImpl extends NoteRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;

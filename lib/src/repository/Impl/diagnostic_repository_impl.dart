@@ -51,6 +51,7 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -78,6 +79,7 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -142,6 +144,7 @@ class DiagnosticRepositoryImpl extends DiagnosticRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;

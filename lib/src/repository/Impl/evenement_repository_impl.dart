@@ -51,6 +51,7 @@ class EvenementRepositoryImpl extends EvenementRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -77,7 +78,8 @@ class EvenementRepositoryImpl extends EvenementRepository {
             ]));
       }
     }).catchError((onError) {
-      if (kDebugMode) {
+      if (kDebugMode || kProfileMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -338,6 +340,7 @@ class EvenementRepositoryImpl extends EvenementRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;

@@ -53,6 +53,7 @@ class MedecinRepositoryImpl extends MedecinRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -69,6 +70,7 @@ class MedecinRepositoryImpl extends MedecinRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -98,6 +100,7 @@ class MedecinRepositoryImpl extends MedecinRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -136,6 +139,7 @@ class MedecinRepositoryImpl extends MedecinRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -156,6 +160,7 @@ class MedecinRepositoryImpl extends MedecinRepository {
       }
     }).catchError((error) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(error.toString());
       }
       return false;

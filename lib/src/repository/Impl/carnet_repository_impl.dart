@@ -45,6 +45,7 @@ class CarnetRepositoryImpl extends CarnetRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -83,6 +84,7 @@ class CarnetRepositoryImpl extends CarnetRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;

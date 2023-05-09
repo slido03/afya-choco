@@ -53,6 +53,7 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -79,6 +80,7 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -145,6 +147,7 @@ class OrdonnanceRepositoryImpl extends OrdonnanceRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;

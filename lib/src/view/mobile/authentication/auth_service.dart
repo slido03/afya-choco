@@ -2,11 +2,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:async';
+import 'package:afya/src/messagingSystem/messages_service.dart';
 
 //service d'authentification avec mise en cache
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final storage = const FlutterSecureStorage();
+  static final fcmToken = MessageService.getMobileAppToken();
   static AuthService? _instance;
 
   AuthService._(); //constructeur privé

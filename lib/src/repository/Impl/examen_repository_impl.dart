@@ -50,6 +50,7 @@ class ExamenRepositoryImpl extends ExamenRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -74,6 +75,7 @@ class ExamenRepositoryImpl extends ExamenRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -258,6 +260,7 @@ class ExamenRepositoryImpl extends ExamenRepository {
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;

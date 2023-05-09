@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -60,6 +59,7 @@ class PatientIntermediaireRepositoryImpl
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -79,6 +79,7 @@ class PatientIntermediaireRepositoryImpl
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
@@ -104,6 +105,7 @@ class PatientIntermediaireRepositoryImpl
       }
     }).catchError((onError) {
       if (kDebugMode) {
+        // ignore: avoid_print
         print(onError.toString());
       }
       return null;
