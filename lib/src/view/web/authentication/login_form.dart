@@ -88,7 +88,7 @@ class _LoginState extends State<Login> {
                 style: OutlinedButton.styleFrom(
                   backgroundColor: const Color.fromRGBO(37, 107, 211, 0.27),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),), 
-                  minimumSize: const Size(448, 60),
+                  minimumSize: const Size(515, 60),
                 ),
                 onPressed: null, 
                 child: const Text('Se connecter', style: TextStyle(fontSize: 18, color: Colors.white),),

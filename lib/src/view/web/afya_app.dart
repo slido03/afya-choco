@@ -34,7 +34,7 @@ class AfyaApp extends StatelessWidget {
       // routes: {
       //   '/': (context) => const LoginPage(),
       // },
-      home: EvenementAgenda(),
+      home: NavigationRailPage(),
       debugShowCheckedModeBanner: false,  
       );
   }
