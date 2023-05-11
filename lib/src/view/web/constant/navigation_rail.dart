@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../consultation/pages/consultation.dart';
 import '../home/pages/login_page.dart';
 
-
 class NavigationRailPage extends StatefulWidget {
   const NavigationRailPage({super.key});
 
@@ -14,18 +13,18 @@ class NavigationRailPage extends StatefulWidget {
 
 class _NavigationRailPageState extends State<NavigationRailPage> {
   int _selectedIndex = 0;
-  final List<Widget> pages =  [
-     LoginPage(),
-     ConsultationPage(),
-    
-        Container(color: Colors.red),
+  final List<Widget> pages = [
+    const LoginPage(),
+    const ConsultationPage(),
+
+    Container(color: Colors.red),
     Container(color: Colors.blue),
     Container(color: Colors.green),
     Container(color: Colors.yellow),
 
 //     LoginPage(),
 //     ConsultationPage(),
-];
+  ];
 
   @override
   Widget build(BuildContext context) {

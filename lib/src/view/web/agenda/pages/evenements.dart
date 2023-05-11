@@ -9,11 +9,13 @@ class EvenementAgenda extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: const [
         AfyaLogo(),
-        const SizedBox(height: 3,),
+        SizedBox(
+          height: 3,
+        ),
         TabBarAgenda(),
-    ],
+      ],
     );
   }
 }
