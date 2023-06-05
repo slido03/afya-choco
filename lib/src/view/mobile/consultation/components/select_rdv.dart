@@ -50,7 +50,7 @@ class _SelectRdvState extends State<SelectRdv> {
                   RichText(
                     text: TextSpan(
                       text:
-                          '${widget.rdvs[int.parse(option)].dateHeure.jourMois}, Dr', // la vrai date est dans la base de donnée et doit être formaté : 01 Jan
+                          '${widget.rdvs[int.parse(option)].dateHeure.jourMois}, Dr. ',
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 14,
@@ -94,10 +94,11 @@ extension DateFormat on DateTime {
   String get jourMois {
     String? jour;
     String? mois;
-    if ((day >= 1) && (day <= 9)) {
+    if (day < 10) {
       String j = '0$day';
       jour = '$j ';
     }
+    jour = '$day ';
     switch (month) {
       case 1:
         mois = 'Jan';
@@ -106,10 +107,10 @@ extension DateFormat on DateTime {
         mois = 'Fev';
         break;
       case 3:
-        mois = 'Mars';
+        mois = 'Mar';
         break;
       case 4:
-        mois = 'Avril';
+        mois = 'Avr';
         break;
       case 5:
         mois = 'Mai';

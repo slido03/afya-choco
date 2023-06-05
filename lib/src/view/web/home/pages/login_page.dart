@@ -29,26 +29,26 @@ class _LoginPageState extends State<LoginPage> {
               fit: BoxFit.cover,
             ),
           ),
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.only(left: 20, right: 20),
+          child: const SingleChildScrollView(
+            padding: EdgeInsets.only(left: 20, right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 28.0,),
                   child: AfyaLogo(),
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 30,
                 ),
                 Center(
                   child: Padding(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 70, vertical: 70),
+                        EdgeInsets.symmetric(horizontal: 70, vertical: 70),
                     child: Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
+                        children: [
                           Expanded(
                             child: HomeContainer1(),
                           ),

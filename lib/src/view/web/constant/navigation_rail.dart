@@ -15,8 +15,8 @@ class NavigationRailPage extends StatefulWidget {
 class _NavigationRailPageState extends State<NavigationRailPage> {
   int _selectedIndex = 0;
   final List<Widget> pages =  [
-     LoginPage(),
-     ConsultationPage(),
+     const LoginPage(),
+     const ConsultationPage(),
     
         Container(color: Colors.red),
     Container(color: Colors.blue),

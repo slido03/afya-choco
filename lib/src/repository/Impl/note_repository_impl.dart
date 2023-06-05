@@ -1,15 +1,23 @@
+import 'package:flutter/foundation.dart';
+
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NoteRepositoryImpl extends NoteRepository {
   static NoteRepository? _instance;
-  final notes =
-      FirebaseFirestore.instance.collection('notes').withConverter<Note>(
-            fromFirestore: (snapshot, _) => Note.fromJson(snapshot.data()!),
-            toFirestore: (note, _) => note.toJson(),
-          ); //collection notes
+  static final _firestore = FirebaseFirestore.instance;
+  final notes = _firestore.collection('notes').withConverter<Note>(
+        fromFirestore: (snapshot, _) => Note.fromJson(snapshot.data()!),
+        toFirestore: (note, _) => note.toJson(),
+      ); //collection notes
 
-  NoteRepositoryImpl._(); //constructeur privé
+  NoteRepositoryImpl._() {
+    //on initialise le cache local de firestore
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: 15 * 1024 * 1024,
+    );
+  } //constructeur privé
 
   static NoteRepository get instance {
     _instance ??= NoteRepositoryImpl._();
@@ -26,14 +34,14 @@ class NoteRepositoryImpl extends NoteRepository {
   @override
   Future<void> modifier(Note note) {
     return notes
-        .where('evenement.rendez-vous.dateHeure',
+        .where('evenement.rendezVous.medecin.uid',
+            isEqualTo: note.evenement.rendezVous.medecin.uid)
+        .where('evenement.rendezVous.patient.uid',
+            isEqualTo: note.evenement.rendezVous.patient.uid)
+        .where('evenement.rendezVous.dateHeure',
             isEqualTo:
                 note.evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
-        .where('evenement.rendez-vous.medecin.uid',
-            isEqualTo: note.evenement.rendezVous.medecin.uid)
-        .where('evenement.rendez-vous.patient.uid',
-            isEqualTo: note.evenement.rendezVous.patient.uid)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs.first.reference.set(
@@ -43,20 +51,25 @@ class NoteRepositoryImpl extends NoteRepository {
               'description',
             ]));
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
   Future<List<Note>> lister(Evenement evenement) async {
     return await notes
-        .where('evenement.rendez-vous.dateHeure',
-            isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
-        .where('evenement.rendez-vous.medecin.uid',
+        .where('evenement.rendezVous.medecin.uid',
             isEqualTo: evenement.rendezVous.medecin.uid)
-        .where('evenement.rendez-vous.patient.uid',
+        .where('evenement.rendezVous.patient.uid',
             isEqualTo: evenement.rendezVous.patient.uid)
-        .orderBy('evenement.rendez-vous.dateHeure', descending: true)
-        .get()
+        .where('evenement.rendezVous.dateHeure',
+            isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Note> liste = [];
@@ -73,21 +86,54 @@ class NoteRepositoryImpl extends NoteRepository {
   }
 
   @override
-  Future<void> supprimer(Evenement evenement) {
+  Future<void> supprimer(Note note) {
     return notes
-        .where('evenement.rendez-vous.dateHeure',
-            isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
-        .where('evenement.rendez-vous.medecin.uid',
-            isEqualTo: evenement.rendezVous.medecin.uid)
-        .where('evenement.rendez-vous.patient.uid',
-            isEqualTo: evenement.rendezVous.patient.uid)
-        .get()
+        .where('titre', isEqualTo: note.titre)
+        .where('evenement.rendezVous.medecin.uid',
+            isEqualTo: note.evenement.rendezVous.medecin.uid)
+        .where('evenement.rendezVous.patient.uid',
+            isEqualTo: note.evenement.rendezVous.patient.uid)
+        .where('evenement.rendezVous.dateHeure',
+            isEqualTo:
+                note.evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var document in snapshot.docs) {
           document.reference.delete();
         }
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print(onError.toString());
+      }
+      return null;
+    });
+  }
+
+  @override
+  Future<void> supprimerEvenement(Evenement evenement) {
+    return notes
+        .where('evenement.rendezVous.medecin.uid',
+            isEqualTo: evenement.rendezVous.medecin.uid)
+        .where('evenement.rendezVous.patient.uid',
+            isEqualTo: evenement.rendezVous.patient.uid)
+        .where('evenement.rendezVous.dateHeure',
+            isEqualTo: evenement.rendezVous.dateHeure.millisecondsSinceEpoch)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        for (var document in snapshot.docs) {
+          document.reference.delete();
+        }
+      }
+    }).catchError((onError) {
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 }

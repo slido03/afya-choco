@@ -1,9 +1,12 @@
+import 'package:afya/src/view/mobile/carnet/profile_storage.dart';
+import 'package:flutter/foundation.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './authentication.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+//import 'package:afya/src/view/mobile/authentication/login.dart';
 import '../home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,8 +20,11 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? get email => _emailController.text;
-  int _counter =
-      0; // initialisation du compteur, ce sera le nombre de fois où l'on ouvre l'application
+  // initialisation du compteur, ce sera le nombre de fois où l'on ouvre l'application
+  int _counter = 0;
+
+  final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -87,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
           PageViewModel(
             titleWidget: const Center(
               child: Text(
-                "Consultaion",
+                "Consultation",
                 style: TextStyle(
                   fontSize: 28.0,
                   fontWeight: FontWeight.w700,
@@ -99,7 +105,6 @@ class _LoginPageState extends State<LoginPage> {
                 "Vous pouvez prendre rendez-vous avec votre médecin, demander des informations à votre Clinique ou à votre pharmacie, et bien plus encore.",
             image: const Center(
               child: Icon(
-                //FlutterMaterialSymbols.calendar,
                 Icons.medical_services_rounded,
                 size: 100,
                 color: Colors.green,
@@ -172,31 +177,54 @@ class _LoginPageState extends State<LoginPage> {
         ],
         onDone: () => {
           _incrementCounter(),
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const LoginPage()),
           ),
         },
         onSkip: () => {
           _incrementCounter(),
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const LoginPage()),
           ),
         },
         showSkipButton: true,
-        skip: const Text("Passer"),
-        next: const Icon(Icons.arrow_forward),
-        back: const Icon(Icons.arrow_back),
+        skip: MediaQuery.of(context).size.width < 335
+            ? const Text("Passer",
+                style: TextStyle(
+                  fontSize: 10,
+                ))
+            : const Text(
+                "Passer",
+              ),
         done: const Text("Fait", style: TextStyle(fontWeight: FontWeight.w600)),
-        dotsDecorator: const DotsDecorator(
-          size: Size(10.0, 10.0),
-          color: Color(0xFFBDBDBD),
-          activeSize: Size(22.0, 10.0),
+        next: MediaQuery.of(context).size.width < 335
+            ? const Icon(
+                Icons.arrow_forward,
+                size: 14,
+              )
+            : const Icon(Icons.arrow_forward),
+        back: const Icon(Icons.arrow_back),
+        dotsFlex: 2,
+        controlsPadding: MediaQuery.of(context).size.width < 335
+            ? const EdgeInsets.all(10)
+            : const EdgeInsets.all(16),
+        dotsDecorator: DotsDecorator(
+          size: MediaQuery.of(context).size.width < 335
+              ? const Size(7.0, 7.0)
+              : const Size(10.0, 10.0),
+          color: const Color(0xFFBDBDBD),
+          activeSize: MediaQuery.of(context).size.width < 335
+              ? const Size(14.0, 7.0)
+              : const Size(20.0, 10.0),
           activeColor: Colors.green,
-          activeShape: RoundedRectangleBorder(
+          activeShape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(25.0)),
           ),
+          spacing: MediaQuery.of(context).size.width < 335
+              ? const EdgeInsets.symmetric(horizontal: 2.5)
+              : const EdgeInsets.symmetric(horizontal: 5.0),
         ),
       );
     }
@@ -222,6 +250,7 @@ class _LoginPageState extends State<LoginPage> {
               vertical: 25.0,
             ),
             child: Form(
+              key: _formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [
@@ -244,11 +273,26 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: Column(
                       children: <Widget>[
-                        const Text(
-                          'Bienvenu(e) dans Afya, votre santé en poche.',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
+                        RichText(
+                          textAlign: TextAlign.center,
+                          text: const TextSpan(
+                            text: 'Bienvenue sur AFYA Mobile \n\n',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'Votre parcours de soins digitalisé',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(
@@ -284,31 +328,46 @@ class _LoginPageState extends State<LoginPage> {
                           height: 20,
                         ),
                         // login button
-                        ElevatedButton(
-                          child: const Text(
-                            'Se connecter',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                            ),
-                          ),
-                          onPressed: () async {
-                            if (await signInWithEmailAndPassword(
-                                _emailController.text,
-                                _passwordController.text)) {
-                              // ignore: use_build_context_synchronously
-                              _navigateToHome(context);
-                            } else {
-                              const snackBar = SnackBar(
-                                  padding: EdgeInsets.only(bottom: 50, top: 30),
-                                  content: Text(
-                                      'Désolé votre email ou mot de passe sont invalides ou non vérifiés ou votre compte a été désactivé'));
-                              // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-                            }
-                          },
-                        ),
+                        _isLoading
+                            ? const CircularProgressIndicator()
+                            : ElevatedButton(
+                                child: const Text(
+                                  'Se connecter',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  // String? fcmToken =
+                                  //     await AuthService.fcmToken; //test
+                                  // if (kDebugMode || kProfileMode) {
+                                  //   // ignore: avoid_print
+                                  //   print(
+                                  //       '\n\n\n\nthe current app fcmToken is : $fcmToken\n\n\n\n');
+                                  // }
+                                  bool signedIn =
+                                      await signInWithEmailAndPassword(
+                                          _emailController.text,
+                                          _passwordController.text);
+                                  if (signedIn) {
+                                    if (kDebugMode) {
+                                      print('user signed in');
+                                    }
+                                    // ignore: use_build_context_synchronously
+                                    _navigateToHome(context);
+                                  } else {
+                                    const snackBar = SnackBar(
+                                        padding: EdgeInsets.only(
+                                            bottom: 50, top: 30),
+                                        content: Text(
+                                            'Email ou mot de passe invalides ou non vérifiés ou compte désactivé'));
+                                    // ignore: use_build_context_synchronously
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  }
+                                },
+                              ),
                       ],
                     ),
                   ),
@@ -322,30 +381,52 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<bool> signInWithEmailAndPassword(String email, String password) async {
-    try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      if ((userCredential.user != null)) {
-        if ((userCredential.user!.emailVerified)) {
-          // L'utilisateur a été connecté avec succès et a son email vérifié
-          // On redirige l'utilisateur vers la page d'accueil
-          return true;
-        }
+    AuthService authService = AuthService.instance;
+    final form = _formKey.currentState;
+    if (form!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      form.save();
+      if (kDebugMode) {
+        print('sign in starts');
       }
-    } catch (e) {
-      return false;
+      try {
+        User? user =
+            await authService.signInWithEmailAndPassword(email, password);
+        if ((user != null)) {
+          if (kDebugMode) {
+            print('user signed-in non null');
+          }
+          if ((user.emailVerified)) {
+            if (kDebugMode) {
+              print('user email verified');
+            }
+            // L'utilisateur a été connecté avec succès et a son email est vérifié
+            // On redirige l'utilisateur vers la page d'accueil
+            return true;
+          }
+        }
+      } catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+        return false;
+      }
     }
+    if (kDebugMode) {
+      print('sign in not achieved');
+    }
+    setState(() {
+      _isLoading = false;
+    });
     return false;
   }
 
   void _navigateToHome(BuildContext context) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-          builder: (context) =>
-              const HomePage(title: 'HomePage')), //à changer par la home page
+          builder: (context) => const HomePage(title: 'HomePage')),
     );
   }
 
@@ -370,8 +451,9 @@ class _LoginPageState extends State<LoginPage> {
             TextButton(
               child: const Text("Envoyer"),
               onPressed: () async {
-                await FirebaseAuth.instance
-                    .sendPasswordResetEmail(email: email!);
+                if (kDebugMode) {
+                  print('password sending starts');
+                }
                 // ignore: use_build_context_synchronously
                 Navigator.pop(context);
                 // ignore: use_build_context_synchronously
@@ -393,6 +475,20 @@ class _LoginPageState extends State<LoginPage> {
                     );
                   },
                 );
+                try {
+                  await FirebaseAuth.instance
+                      .sendPasswordResetEmail(email: email!);
+                  if (kDebugMode) {
+                    print('password sent');
+                  }
+                } catch (e) {
+                  if (kDebugMode) {
+                    print('error while sending password : ');
+                  }
+                  if (kDebugMode) {
+                    print(e.toString());
+                  }
+                }
               },
             ),
           ],
@@ -403,13 +499,12 @@ class _LoginPageState extends State<LoginPage> {
 }
 
 Future<void> logout(BuildContext context) async {
-  User? user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    await FirebaseAuth.instance.signOut();
-    // ignore: use_build_context_synchronously
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-          builder: (context) => const LoginPage()), //à changer par la home page
-    );
-  }
+  AuthService authService = AuthService.instance;
+  ProfileStorage.clear();
+  //l'utilisateur est déconnecté
+  await authService.signOut();
+  // ignore: use_build_context_synchronously
+  Navigator.of(context).pushReplacement(
+    MaterialPageRoute(builder: (context) => const LoginPage()),
+  );
 }

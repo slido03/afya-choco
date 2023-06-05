@@ -24,11 +24,11 @@ class _RdvTopBarState extends State<RdvTopBar> {
             ),
           ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
+        child: const Padding(
+          padding: EdgeInsets.all(10.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               AfyaLogo(),
         
             ],

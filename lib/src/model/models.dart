@@ -1,9 +1,11 @@
-export 'humains/utilisateur.dart';
-export 'humains/personnel_sante.dart';
-export 'humains/patient.dart';
-export 'humains/patient_intermediaire.dart';
-export 'humains/medecin.dart';
-export 'humains/secretaire.dart';
+import 'dart:math';
+
+export 'utilisateurs/utilisateur.dart';
+export 'utilisateurs/personnel_sante.dart';
+export 'utilisateurs/patient.dart';
+export 'utilisateurs/patient_intermediaire.dart';
+export 'utilisateurs/medecin.dart';
+export 'utilisateurs/secretaire.dart';
 export 'agenda/rendez_vous.dart';
 export 'agenda/evenement.dart';
 export 'agenda/rappel.dart';
@@ -24,12 +26,19 @@ extension SexeExtension on Sexe {
   String get value {
     switch (this) {
       case Sexe.homme:
-        return 'homme';
+        return 'Masculin';
       case Sexe.femme:
-        return 'femme';
+        return 'Féminin';
       default:
         throw ArgumentError('Sexe inconnu');
     }
+  }
+
+  //génère un Sexe aléatoire de l'enum
+  static Sexe faker() {
+    var values = Sexe.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
   }
 }
 
@@ -64,56 +73,63 @@ extension SpecialiteExtension on Specialite {
   String get value {
     switch (this) {
       case Specialite.cardiologie:
-        return 'cardiologie';
+        return 'Cardiologie';
       case Specialite.anesthesiologie:
-        return 'anesthesiologie';
+        return 'Anesthesiologie';
       case Specialite.chirurgieCardiothoracique:
-        return 'chirurgie cardiothoracique';
+        return 'Chirurgie cardiothoracique';
       case Specialite.chirurgieGenerale:
-        return 'chirurgie générale';
+        return 'Chirurgie générale';
       case Specialite.chirurgieOrthopedique:
-        return 'chirurgie orthopédique';
+        return 'Chirurgie orthopédique';
       case Specialite.dermatologie:
-        return 'dermatologie';
+        return 'Dermatologie';
       case Specialite.endocrinologie:
-        return 'endocrinologie';
+        return 'Endocrinologie';
       case Specialite.gastroEnterologie:
-        return 'gastro-enterologie';
+        return 'Gastro-enterologie';
       case Specialite.geriatrie:
-        return 'geriatrie';
+        return 'Geriatrie';
       case Specialite.gynecologieObstetrique:
-        return 'gynécologie obstétrique';
+        return 'Gynécologie obstétrique';
       case Specialite.hematologie:
-        return 'hématologie';
+        return 'Hématologie';
       case Specialite.infectiologie:
-        return 'infectiologie';
+        return 'Infectiologie';
       case Specialite.medecineInterne:
-        return 'médecine interne';
+        return 'Médecine interne';
       case Specialite.nephrologie:
-        return 'néphrologie';
+        return 'Néphrologie';
       case Specialite.neurologie:
-        return 'neurologie';
+        return 'Neurologie';
       case Specialite.oncologie:
-        return 'oncologie';
+        return 'Oncologie';
       case Specialite.ophtalmologie:
-        return 'ophtalmologie';
+        return 'Ophtalmologie';
       case Specialite.orl:
         return 'Otho-rhyno-laryngologie';
       case Specialite.pediatrie:
-        return 'pédiatrie';
+        return 'Pédiatrie';
       case Specialite.pneumologie:
-        return 'pneumologie';
+        return 'Pneumologie';
       case Specialite.psychiatrie:
-        return 'psychiatrie';
+        return 'Psychiatrie';
       case Specialite.radiologie:
-        return 'radiologie';
+        return 'Radiologie';
       case Specialite.rhumatologie:
-        return 'rhumatologie';
+        return 'Rhumatologie';
       case Specialite.toxicologie:
-        return 'toxicologie';
+        return 'Toxicologie';
       default:
         throw ArgumentError('Spécialité inconnue');
     }
+  }
+
+  //génère une Spécialité aléatoire de l'enum
+  static Specialite faker() {
+    var values = Specialite.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
   }
 }
 
@@ -131,28 +147,35 @@ extension ObjetMessageExtension on ObjetMessage {
   String get value {
     switch (this) {
       case ObjetMessage.prendreRendezVous:
-        return 'Prendre un rendez-vous';
+        return 'Prise de rendez-vous';
       case ObjetMessage.modifierRendezVous:
-        return 'Modifier un rendez-vous';
+        return 'Changement de rendez-vous';
       case ObjetMessage.annulerRendezVous:
-        return 'Annuler un rendez-vous';
+        return 'Annulation de rendez-vous';
       case ObjetMessage.demanderInformations:
-        return 'Demander des informations';
+        return "Demande d'informations";
       case ObjetMessage.confirmerRendezVous:
-        return 'Confirmer un rendez-vous';
+        return 'Confirmation de rendez-vous';
       case ObjetMessage.donnerInformations:
-        return 'Donner des informations';
+        return 'Renseignements';
       case ObjetMessage.signalerMiseAJour:
-        return 'Signaler une mise à jour de documents personnels';
+        return 'Mise à jour de vos informations médicales';
       default:
         throw ArgumentError('Objet de message inconnu');
     }
   }
+
+  //génère un ObjetMessage aléatoire de l'enum
+  static ObjetMessage faker() {
+    var values = ObjetMessage.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
+  }
 }
 
 enum StatutMessage {
-  traite,
   nonTraite,
+  traite,
 }
 
 extension StatutMessageExtension on StatutMessage {
@@ -161,10 +184,17 @@ extension StatutMessageExtension on StatutMessage {
       case StatutMessage.nonTraite:
         return 'Non traité';
       case StatutMessage.traite:
-        return 'traité';
+        return 'Traité';
       default:
         throw ArgumentError('Statut de message inconnu');
     }
+  }
+
+  //génère un StatutMessage aléatoire de l'enum
+  static StatutMessage faker() {
+    var values = StatutMessage.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
   }
 }
 
@@ -187,6 +217,13 @@ extension ObjetRendezVousExtension on ObjetRendezVous {
         throw ArgumentError('Objet de rendez-vous inconnu');
     }
   }
+
+  //génère un ObjetRendezVous aléatoire de l'enum
+  static ObjetRendezVous faker() {
+    var values = ObjetRendezVous.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
+  }
 }
 
 enum StatutRendezVous {
@@ -207,6 +244,13 @@ extension StatutRendezVousExtension on StatutRendezVous {
       default:
         throw ArgumentError('Statut de rendez-vous inconnu');
     }
+  }
+
+  //génère un StatutRendezVous aléatoire de l'enum
+  static StatutRendezVous faker() {
+    var values = StatutRendezVous.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
   }
 }
 
@@ -244,6 +288,13 @@ extension GroupeSanguinExtension on GroupeSanguin {
         throw ArgumentError('Groupe sanguin inconnu');
     }
   }
+
+  //génère un GroupeSanguin aléatoire de l'enum
+  static GroupeSanguin faker() {
+    var values = GroupeSanguin.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
+  }
 }
 
 enum StatutDiagnostic {
@@ -251,7 +302,7 @@ enum StatutDiagnostic {
   confirme,
 }
 
-extension StatutDagnosticExtension on StatutDiagnostic {
+extension StatutDiagnosticExtension on StatutDiagnostic {
   String get value {
     switch (this) {
       case StatutDiagnostic.enCours:
@@ -261,5 +312,12 @@ extension StatutDagnosticExtension on StatutDiagnostic {
       default:
         throw ArgumentError('Statut de diagnostic inconnu');
     }
+  }
+
+  //génère un StatutDagnostic aléatoire de l'enum
+  static StatutDiagnostic faker() {
+    var values = StatutDiagnostic.values;
+    var randomIndex = Random().nextInt(values.length);
+    return values[randomIndex];
   }
 }

@@ -19,7 +19,7 @@ class EnregistrementPatient extends StatefulWidget {
 
 class _EnregistrementPatientState extends State<EnregistrementPatient> {
   final TextEditingController sexeController = TextEditingController();
-  String _selectedGender = 'Féminin';
+  final String _selectedGender = 'Féminin';
 
   @override
   Widget build(BuildContext context) {
@@ -47,24 +47,24 @@ class _EnregistrementPatientState extends State<EnregistrementPatient> {
             child: Center(
               child: Form(
                 key: formKey,
-                child: Column(children: [
+                child: const Column(children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       SaisieNom(),
                       SaisiePrenom(),
                     ],
                   ),
                   Row(
-                    children: const [
+                    children: [
                       SaisieEmail(),
                       SaisieAdresse(),
                     ],
                   ),
                   Row(
                     children: [
-                      const SaisieNumero(),
-                      const SaisieDate(),
+                      SaisieNumero(),
+                      SaisieDate(),
                       // Padding(
                       //   padding: const EdgeInsets.all(10.0),
                       //   child: SelectionItem(
@@ -78,14 +78,14 @@ class _EnregistrementPatientState extends State<EnregistrementPatient> {
                       // ),
                     ],
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 10,
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: EdgeInsets.all(15.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
+                      children: [
                         ButtonAnnuler(),
                         SizedBox(
                           width: 50,

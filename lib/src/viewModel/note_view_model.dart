@@ -5,13 +5,13 @@ class NoteViewModel extends ChangeNotifier {
   NoteRepository noteRep = NoteRepositoryImpl.instance;
 
   //ajout d'un note dans la base de données
-  void ajouter(Note note) {
-    noteRep.ajouter(note);
+  Future<void> ajouter(Note note) async {
+    await noteRep.ajouter(note);
     notifyListeners();
   }
 
-  void modifier(Note note) {
-    noteRep.modifier(note);
+  Future<void> modifier(Note note) async {
+    await noteRep.modifier(note);
     notifyListeners();
   }
 
@@ -20,8 +20,13 @@ class NoteViewModel extends ChangeNotifier {
     return await noteRep.lister(evenement);
   }
 
-  void supprimer(Evenement evenement) {
-    noteRep.supprimer(evenement);
+  Future<void> supprimer(Note note) async {
+    await noteRep.supprimer(note);
+    notifyListeners();
+  }
+
+  Future<void> supprimerEvenement(Evenement evenement) async {
+    await noteRep.supprimerEvenement(evenement);
     notifyListeners();
   }
 }

@@ -5,7 +5,7 @@ class PatientIntermedaireViewModel extends ChangeNotifier {
   PatientIntermediaireRepository patientIntermediaireRep =
       PatientIntermediaireRepositoryImpl.instance;
 
-  void ajouter(PatientIntermediaire patientIntermediaire) async {
+  Future<void> ajouter(PatientIntermediaire patientIntermediaire) async {
     PatientIntermediaire? p;
     //on attribut un identifiant unique au patientintermedaire
     patientIntermediaire.setIdentifiant();
@@ -24,21 +24,21 @@ class PatientIntermedaireViewModel extends ChangeNotifier {
 
   //permet la recherche d'un patientIntermediaire depuis l'UI à partir de son identifiant système
   Future<PatientIntermediaire?> trouver(String identifiant) async {
-    return patientIntermediaireRep.trouver(identifiant);
+    return await patientIntermediaireRep.trouver(identifiant);
   }
 
   //permet de s'assurer si l'utilisateur courant est de ce type
   Future<PatientIntermediaire?> trouverUid(String uid) async {
-    return patientIntermediaireRep.trouverUid(uid);
+    return await patientIntermediaireRep.trouverUid(uid);
   }
 
-  void modifier(PatientIntermediaire patientIntermediaire) {
-    patientIntermediaireRep.modifier(patientIntermediaire);
+  Future<void> modifier(PatientIntermediaire patientIntermediaire) async {
+    await patientIntermediaireRep.modifier(patientIntermediaire);
     notifyListeners();
   }
 
-  void supprimer(String identifiant) {
-    patientIntermediaireRep.supprimer(identifiant);
+  Future<void> supprimer(String identifiant) async {
+    await patientIntermediaireRep.supprimer(identifiant);
     notifyListeners();
   }
 

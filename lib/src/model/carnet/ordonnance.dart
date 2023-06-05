@@ -1,4 +1,5 @@
 import '../models.dart';
+import 'package:faker/faker.dart';
 
 class Ordonnance {
   final DateTime _date;
@@ -16,12 +17,37 @@ class Ordonnance {
   );
 
   factory Ordonnance.fromJson(Map<String, dynamic> json) {
+    Map<String, String> instructions = json['instructions'].map((key, value) {
+      return MapEntry(key, value.toString());
+    }).cast<String, String>();
     return Ordonnance(
       DateTime.fromMillisecondsSinceEpoch(json['date']),
       Medecin.fromJson(json['medecin']),
       Patient.fromJson(json['patient']),
       Diagnostic.fromJson(json['diagnostic']),
-      json['instructions'] as Map<String, String>,
+      instructions,
+    );
+  }
+
+  factory Ordonnance.faker(
+    Medecin medecin,
+    Patient patient,
+    Diagnostic diagnostic,
+  ) {
+    var faker = Faker();
+    var date = faker.date.dateTime(minYear: 2022, maxYear: 2024);
+    var instructions = {
+      'Repos médical': faker.lorem.word(),
+      'Vitamine C': faker.lorem.word(),
+      "Doliprane": faker.lorem.word(),
+      'Artemisia': faker.lorem.sentence(),
+    };
+    return Ordonnance(
+      date,
+      medecin,
+      patient,
+      diagnostic,
+      instructions,
     );
   }
 
@@ -36,7 +62,7 @@ class Ordonnance {
 
   Map<String, dynamic> toJson() => {
         'date': date.millisecondsSinceEpoch,
-        'médecin': medecin.toJson(),
+        'medecin': medecin.toJson(),
         'patient': patient.toJson(),
         'diagnostic': diagnostic.toJson(),
         'instructions': instructions,

@@ -1,61 +1,16 @@
 import 'package:afya/src/model/models.dart';
 import 'package:afya/src/repository/repositories.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:afya/src/view/mobile/agenda/components/form_note.dart';
+import 'package:afya/src/view/mobile/agenda/components/form_rappel.dart';
+import '../pages/notes.dart';
 
 class CardEvenement extends StatelessWidget {
-  //final Evenement evenement;
-
-  //const CardEvenement({super.key, required this.evenement});
-
-  CardEvenement({super.key});
-
-  final evenement = Evenement(
-    "consultation du Dr. Jean",
-    "consultation pour un mal de tête, je suis malade depuis 3 jours"
-        "Rendez-vous du 12/12/2020 à 12h, pour des examens approfondis"
-        "être à l'heure, et ne pas oublier votre carte vitale",
-    RendezVous(
-      DateTime.now(),
-      30,
-      Patient(
-          "ES7284D", //uid
-          "6382BY3", //id
-          "Jean",
-          "Dupont",
-          "93750300",
-          "felindelaplace@hotmail.com", //email
-          "12 rue de la paix, 75000 Paris", //adresse
-          DateTime.now(), //date de naissance
-          Sexe.homme),
-      Medecin(
-        "ES7284D", //uid
-        "6382BY3",
-        "Jean",
-        "Dupont",
-        "93750300",
-        "edmond234@hotmail.com", //email
-        "12 rue de la paix, 75000 Paris", //adresse
-        "La sante meilleure",
-        true,
-        Specialite.anesthesiologie,
-        "34827DE",
-        Secretaire(
-          "ES7284D", //uid
-          "6382BY3",
-          "Jean",
-          "Dupont",
-          "93750300",
-          "edmond234@hotmail.com", //email
-          "12 rue de la paix, 75000 Paris", //adresse
-          "La sante meilleure",
-          "34827DE",
-        ),
-      ), //clinique
-      "12 rue de la paix, 75000 Paris",
-      ObjetRendezVous.consultation,
-      StatutRendezVous.enAttente,
-    ),
-  );
+  const CardEvenement(
+      {super.key, required this.userId, required this.evenement});
+  final String userId;
+  final Evenement evenement;
 
   void _showDialog(BuildContext context) {
     showDialog(
@@ -72,12 +27,13 @@ class CardEvenement extends StatelessWidget {
               text: '${evenement.description}\n',
               style: const TextStyle(
                 color: Colors.black,
+                fontSize: 13,
                 fontWeight: FontWeight.w300,
               ),
               children: <TextSpan>[
                 TextSpan(
                   text:
-                      "\nDate: ${evenement.rendezVous.dateHeure.toString().split(" ")[0]}\n",
+                      "\nDate: ${evenement.rendezVous.dateHeure.dateFormatted}\n",
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     color: Colors.black,
@@ -85,7 +41,7 @@ class CardEvenement extends StatelessWidget {
                 ),
                 TextSpan(
                   text:
-                      "Heure: ${evenement.rendezVous.dateHeure.toString().split(" ")[1].split(":").sublist(0, 2).join(":")}\n",
+                      "Heure: ${evenement.rendezVous.dateHeure.timeFormatted}\n",
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     color: Colors.black,
@@ -128,32 +84,44 @@ class CardEvenement extends StatelessWidget {
       builder: (BuildContext context) {
         // ignore: sized_box_for_whitespace
         return Container(
-          height: MediaQuery.of(context).size.height * 0.3,
+          height: MediaQuery.of(context).size.height * 0.42,
           child: Column(
             children: [
               ListTile(
                 leading: const Icon(Icons.event_available),
                 title: const Text("Rendez-vous"),
-                subtitle: Text(evenement.rendezVous.dateHeure.toString()),
+                subtitle: Text(evenement.rendezVous.dateHeure.numberJourMois),
               ),
               const SizedBox(
                 height: 10,
               ),
-              const ListTile(
-                title: Text("Créer un rappel"),
-                subtitle: Text(
-                    "Un rappel sera créé pour vous 30 minutes avant le rendez-vous"),
-                onTap:
-                    null, // a modifier lors de la connexion avec la base de données
+              ListTile(
+                title: const Text("Créer un rappel"),
+                subtitle: const Text(
+                    "Un rappel sera créé pour vous avant votre rendez-vous"),
+                onTap: () {
+                  //on le redirige vers la page de création de rappel
+                  _navigateToFormRappel(context);
+                },
               ),
               const SizedBox(
                 height: 5,
               ),
-              const ListTile(
-                title: Text("Ajouter une note"),
-                subtitle: Text("Ajouter une note pour ce rendez-vous"),
-                onTap:
-                    null, // a modifier lors de la connexion avec la base de données
+              ListTile(
+                title: const Text("Ajouter une note"),
+                subtitle: const Text("Ajouter une note pour ce rendez-vous"),
+                onTap: () {
+                  //on le redirige vers la page de création de note
+                  _navigateToFormNote(context);
+                },
+              ),
+              ListTile(
+                title: const Text("Voir vos notes"),
+                subtitle: const Text("Voir vos notes sur cet évènement"),
+                onTap: () {
+                  //on le redirige vers la page des notes de l'évènement
+                  _navigateToNotes(context);
+                },
               ),
             ],
           ),
@@ -168,11 +136,11 @@ class CardEvenement extends StatelessWidget {
       child: Card(
         elevation: 5,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Container(
           //width: MediaQuery.of(context).size.width * 0.3,
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: const Color.fromRGBO(212, 251, 227, 1),
@@ -184,30 +152,27 @@ class CardEvenement extends StatelessWidget {
               Icon(
                 Icons.event_available,
                 color: Theme.of(context).primaryColor,
-                size: 20,
-              ),
-              const SizedBox(height: 5),
-              Text(
-                evenement.rendezVous.dateHeure.toString().split(" ")[
-                    0], // a modifier lors de la connexion avec la base de données; format de date : lun 12 oct
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w300,
-                ),
+                size: 24,
               ),
               const SizedBox(height: 5),
               Text(
                 evenement.titre,
                 style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
+                maxLines: 2,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 5),
               Text(
                 evenement.description,
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 13,
+                ),
                 maxLines: 2,
               ),
               const SizedBox(height: 5),
@@ -216,16 +181,10 @@ class CardEvenement extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    evenement.rendezVous.dateHeure
-                        .toString()
-                        .split(" ")[1]
-                        .split(":")
-                        .sublist(0, 2)
-                        .join(":"),
-                    // a modifier lors de la connexion avec la base de données; format de date : lun 12 oct
+                    evenement.rendezVous.dateHeure.numberJourMois,
                     style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   IconButton(
@@ -252,4 +211,79 @@ class CardEvenement extends StatelessWidget {
       },
     );
   }
+
+  void _navigateToFormRappel(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => FormRappel(evenement: evenement)),
+    );
+  }
+
+  void _navigateToFormNote(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => FormNote(evenement: evenement)),
+    );
+  }
+
+  void _navigateToNotes(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) => Notes(userId: userId, evenement: evenement)),
+    );
+  }
+}
+
+extension DateFormattedEvenement on DateTime {
+  String get numberJourMois {
+    String? number;
+    String? jour;
+    String? mois;
+    number = DateFormat('EEE', 'fr_FR').format(this);
+    if (day < 10) {
+      String j = '0$day';
+      jour = ' $j ';
+    }
+    jour = ' $day ';
+    switch (month) {
+      case 1:
+        mois = 'Jan';
+        break;
+      case 2:
+        mois = 'Fev';
+        break;
+      case 3:
+        mois = 'Mar';
+        break;
+      case 4:
+        mois = 'Avr';
+        break;
+      case 5:
+        mois = 'Mai';
+        break;
+      case 6:
+        mois = 'Juin';
+        break;
+      case 7:
+        mois = 'Jul';
+        break;
+      case 8:
+        mois = 'Aôut';
+        break;
+      case 9:
+        mois = 'Sep';
+        break;
+      case 10:
+        mois = 'Oct';
+        break;
+      case 11:
+        mois = 'Nov';
+        break;
+      case 12:
+        mois = 'Dec';
+        break;
+    }
+    return '$number$jour$mois';
+  }
+
+  String get dateFormatted => DateFormat('dd/MM/yyyy').format(this);
+  String get timeFormatted => DateFormat('HH:mm').format(this);
 }

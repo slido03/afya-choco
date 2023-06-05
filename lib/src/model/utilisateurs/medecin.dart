@@ -1,9 +1,10 @@
 import '../models.dart';
+import 'package:faker/faker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Medecin extends PersonnelSante {
   bool _admin;
   Specialite _specialite;
-  String _numeroLicence;
   Secretaire _secretaire;
 
   Medecin(
@@ -17,35 +18,58 @@ class Medecin extends PersonnelSante {
     super._clinique,
     this._admin,
     this._specialite,
-    this._numeroLicence,
     this._secretaire,
   );
 
   factory Medecin.fromJson(Map<String, dynamic> json) {
     return Medecin(
-      json['uid'] as String,
-      json['identifiant'] as String,
-      json['nom'] as String,
-      json['prenoms'] as String,
-      json['telephone'] as String,
-      json['email'] as String,
-      json['adresse'] as String,
-      json['clinique'] as String,
-      json['admin'] as bool,
+      json['uid'],
+      json['identifiant'],
+      json['nom'],
+      json['prenoms'],
+      json['telephone'],
+      json['email'],
+      json['adresse'],
+      json['clinique'],
+      json['admin'],
       parseSpecialite(json['specialite']),
-      json['numeroLicence'] as String,
       Secretaire.fromJson(json['secretaire']),
+    );
+  }
+
+  factory Medecin.faker(
+    User user,
+    Secretaire secretaire,
+  ) {
+    var faker = Faker();
+    var uid = user.uid;
+    var nom = faker.person.name();
+    var prenoms = faker.person.firstName();
+    var telephone = faker.phoneNumber.us();
+    var email = user.email!;
+    var adresse = faker.address.streetAddress();
+    var clinique = faker.company.name();
+    return Medecin(
+      uid,
+      null,
+      nom,
+      prenoms,
+      telephone,
+      email,
+      adresse,
+      clinique,
+      false,
+      SpecialiteExtension.faker(),
+      secretaire,
     );
   }
 
   bool get admin => _admin;
   Specialite get specialite => _specialite;
-  String get numeroLicence => _numeroLicence;
   Secretaire get secretaire => _secretaire;
 
   void setAdmin(bool admin) => _admin = admin;
   void setSpecialite(Specialite specialite) => _specialite = specialite;
-  void setNumeroLicence(String numeroLicence) => _numeroLicence = numeroLicence;
   void setSecretaire(Secretaire secretaire) => _secretaire = secretaire;
 
   @override
@@ -58,9 +82,8 @@ class Medecin extends PersonnelSante {
         'email': email,
         'adresse': adresse,
         'clinique': clinique,
-        'admin': admin.toString(),
+        'admin': admin,
         'specialite': specialite.name,
-        'numeroLicence': numeroLicence,
         'secretaire': secretaire.toJson(),
       };
 

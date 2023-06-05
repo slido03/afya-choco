@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 Widget titleNotifications(BuildContext context) {
   return Container(
-    padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+    padding: const EdgeInsets.only(top: 20.0, bottom: 10.0),
     margin: const EdgeInsets.only(bottom: 5.0),
     //color: Colors.white,
     decoration: const BoxDecoration(

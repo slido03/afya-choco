@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../constant/tabs.dart';
+import '../pages/rendez_vous.dart';
 import 'liste_demande.dart';
 
 class Test extends StatefulWidget {
@@ -29,7 +30,7 @@ class _TestState extends State<Test> {
                     ListeDemande(),
                     ListeDemande(),
                     ListeDemande(),
-                    Text('Rendez-vous')
+                    const RendezVousPage(),
                   ]
                 ),
               )

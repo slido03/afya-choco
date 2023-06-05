@@ -1,15 +1,23 @@
+import 'package:flutter/foundation.dart';
+
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PatientRepositoryImpl extends PatientRepository {
   static PatientRepository? _instance;
-  final patients =
-      FirebaseFirestore.instance.collection('patients').withConverter<Patient>(
-            fromFirestore: (snapshot, _) => Patient.fromJson(snapshot.data()!),
-            toFirestore: (patient, _) => patient.toJson(),
-          ); //collection patients
+  static final _firestore = FirebaseFirestore.instance;
+  final patients = _firestore.collection('patients').withConverter<Patient>(
+        fromFirestore: (snapshot, _) => Patient.fromJson(snapshot.data()!),
+        toFirestore: (patient, _) => patient.toJson(),
+      ); //collection patients
 
-  PatientRepositoryImpl._(); //constructeur privé
+  PatientRepositoryImpl._() {
+    //on initialise le cache local de firestore
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: 25 * 1024 * 1024,
+    );
+  } //constructeur privé
 
   static PatientRepository get instance {
     _instance ??= PatientRepositoryImpl._();
@@ -34,7 +42,7 @@ class PatientRepositoryImpl extends PatientRepository {
   Future<Patient?> trouver(String identifiant) async {
     return await patients
         .where('identifiant', isEqualTo: identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         if (snapshot.docs.first.exists) {
@@ -43,25 +51,38 @@ class PatientRepositoryImpl extends PatientRepository {
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
   Future<Patient?> trouverUid(String uid) async {
-    return await patients.doc(uid).get().then((snapshot) {
+    return await patients
+        .doc(uid)
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
       if (snapshot.exists) {
         return snapshot.data();
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
   Future<void> modifier(Patient patient) {
     return patients
         .where('identifiant', isEqualTo: patient.identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs.first.reference.set(
@@ -76,12 +97,19 @@ class PatientRepositoryImpl extends PatientRepository {
               'sexe',
             ]));
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
   Future<List<Patient>> lister() async {
-    return await patients.get().then((snapshot) {
+    return await patients
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Patient> liste = [];
         for (var document in snapshot.docs) {
@@ -100,18 +128,23 @@ class PatientRepositoryImpl extends PatientRepository {
   Future<void> supprimer(String identifiant) {
     return patients
         .where('identifiant', isEqualTo: identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var document in snapshot.docs) {
           document.reference.delete();
         }
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   bool _checkID(Patient patient) {
-    patients.get().then((snapshot) {
+    patients.get(const GetOptions(source: Source.server)).then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var doc in snapshot.docs) {
           if (doc['identifiant'] == patient.identifiant) {
@@ -122,7 +155,12 @@ class PatientRepositoryImpl extends PatientRepository {
       } else {
         return true;
       }
-    }).catchError((error) => error);
+    }).catchError((error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+      return false;
+    });
     return true;
   }
 }

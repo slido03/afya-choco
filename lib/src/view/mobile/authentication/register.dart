@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './authentication.dart';
-import './login.dart';
+import 'dart:async';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -17,6 +17,9 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _secondPasswordController =
       TextEditingController();
   String? get email => _emailController.text;
+
+  final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -56,6 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
               vertical: 25.0,
             ),
             child: Form(
+              key: _formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [
@@ -79,10 +83,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Column(
                       children: <Widget>[
                         const Text(
-                          'Nous sommes heureux de vous accueillir dans Afya.\nVeuillez entrer vos information de connexion.',
+                          'Veuillez vous inscrire',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            fontSize: 18,
+                            fontSize: 22,
                           ),
                         ),
                         const SizedBox(
@@ -104,35 +108,40 @@ class _RegisterPageState extends State<RegisterPage> {
                           controller: _secondPasswordController,
                           firstPasswordController: _firstPasswordController,
                         ),
-                        // register button
                         const SizedBox(
                           height: 25,
                         ),
-                        ElevatedButton(
-                          child: const Text(
-                            'Créer un compte',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                            ),
-                          ),
-                          onPressed: () async {
-                            //Si l'user a été créé
-                            // ignore: use_build_context_synchronously
-                            if (!await registerWithEmailAndPassword(
-                                _emailController.text,
-                                _secondPasswordController.text,
-                                context)) {
-                              const snackBar = SnackBar(
-                                  padding: EdgeInsets.only(bottom: 30, top: 30),
-                                  content: Text(
-                                      "Désolé vous êtes déconnecté soit l'email saisi est déjà utilisé, invalide ou désactivé."));
-                              // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-                            }
-                          },
-                        ),
+                        // register button
+                        _isLoading
+                            ? const CircularProgressIndicator()
+                            : ElevatedButton(
+                                child: const Text(
+                                  'S\'inscrire',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  //Si l'user a été créé
+                                  bool registered =
+                                      await registerWithEmailAndPassword(
+                                          _emailController.text,
+                                          _secondPasswordController.text,
+                                          context);
+                                  // ignore: use_build_context_synchronously
+                                  if (!registered) {
+                                    const snackBar = SnackBar(
+                                        padding: EdgeInsets.only(
+                                            bottom: 30, top: 30),
+                                        content: Text(
+                                            "Désolé vous êtes déconnecté soit l'email saisi est déjà utilisé, invalide ou désactivé."));
+                                    // ignore: use_build_context_synchronously
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  }
+                                },
+                              ),
                       ],
                     ),
                   ),
@@ -147,42 +156,55 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<bool> registerWithEmailAndPassword(
       String email, String password, BuildContext context) async {
-    try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      // Si l'utilisateur a été créé avec succès
-      if (userCredential.user != null) {
-        //envoie de l'email de vérification au nouvel utilisateur
-        await userCredential.user!.sendEmailVerification();
-        // ignore: use_build_context_synchronously
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text("Vérification de votre email"),
-              content:
-                  Text("Un e-mail de vérification vous a été envoyé à $email"),
-              actions: [
-                TextButton(
-                  child: const Text("OK"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _navigateToLogin(context);
-                  },
-                ),
-              ],
-            );
-          },
+    final form = _formKey.currentState;
+    if (form!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      form.save();
+      try {
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
         );
-        return true;
+        // Si l'utilisateur a été créé avec succès
+        if (userCredential.user != null) {
+          //envoie de l'email de vérification au nouvel utilisateur
+          await userCredential.user!.sendEmailVerification();
+          // ignore: use_build_context_synchronously
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("Vérification de votre email"),
+                content: Text(
+                    "Un e-mail de vérification vous a été envoyé à $email"),
+                actions: [
+                  TextButton(
+                    child: const Text("OK"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _navigateToLogin(context);
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+          return true;
+        }
+        // L'utilisateur est créé avec succès.
+      } catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+        return false;
       }
-      // L'utilisateur est créé avec succès.
-    } catch (e) {
-      return false;
     }
+    setState(() {
+      _isLoading = false;
+    });
     return false;
   }
 

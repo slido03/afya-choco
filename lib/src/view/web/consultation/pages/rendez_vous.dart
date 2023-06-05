@@ -10,15 +10,14 @@ class RendezVousPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       children:  [
-        const NavigationRailPage(),
        
         Expanded(
           child: Column(
-            children: const [
-              RdvTopBar(),
-              SizedBox(height: 4,),
+            children: [
+              // RdvTopBar(),
+              // SizedBox(height: 4,),
               Padding(
                 padding: EdgeInsets.only(left: 120.0, right: 120.0,),
                 child: CreationRdv(),

@@ -1,15 +1,23 @@
+import 'package:flutter/foundation.dart';
+
 import '../repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MedecinRepositoryImpl extends MedecinRepository {
   static MedecinRepository? _instance;
-  final medecins =
-      FirebaseFirestore.instance.collection('medecins').withConverter<Medecin>(
-            fromFirestore: (snapshot, _) => Medecin.fromJson(snapshot.data()!),
-            toFirestore: (medecin, _) => medecin.toJson(),
-          ); //collection medecins
+  static final _firestore = FirebaseFirestore.instance;
+  final medecins = _firestore.collection('medecins').withConverter<Medecin>(
+        fromFirestore: (snapshot, _) => Medecin.fromJson(snapshot.data()!),
+        toFirestore: (medecin, _) => medecin.toJson(),
+      ); //collection medecins
 
-  MedecinRepositoryImpl._(); //constructeur privé
+  MedecinRepositoryImpl._() {
+    //on initialise le cache local de firestore
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: 20 * 1024 * 1024,
+    );
+  } //constructeur privé
 
   static MedecinRepository get instance {
     _instance ??= MedecinRepositoryImpl._();
@@ -34,7 +42,7 @@ class MedecinRepositoryImpl extends MedecinRepository {
   Future<Medecin?> trouver(String identifiant) async {
     return await medecins
         .where('identifiant', isEqualTo: identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         if (snapshot.docs.first.exists) {
@@ -43,7 +51,13 @@ class MedecinRepositoryImpl extends MedecinRepository {
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
@@ -54,14 +68,20 @@ class MedecinRepositoryImpl extends MedecinRepository {
       } else {
         return null;
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
   Future<void> modifier(Medecin medecin) {
     return medecins
         .where('identifiant', isEqualTo: medecin.identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         snapshot.docs.first.reference.set(
@@ -75,16 +95,23 @@ class MedecinRepositoryImpl extends MedecinRepository {
               'clinique',
               'admin',
               'specialite',
-              'numeroLicence',
               'secretaire',
             ]));
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   @override
   Future<List<Medecin>> lister() async {
-    return await medecins.get().then((snapshot) {
+    return await medecins
+        .get(const GetOptions(source: Source.serverAndCache))
+        .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         List<Medecin> liste = [];
         for (var document in snapshot.docs) {
@@ -103,18 +130,24 @@ class MedecinRepositoryImpl extends MedecinRepository {
   Future<void> supprimer(String identifiant) {
     return medecins
         .where('identifiant', isEqualTo: identifiant)
-        .get()
+        .get(const GetOptions(source: Source.serverAndCache))
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var document in snapshot.docs) {
           document.reference.delete();
         }
       }
-    }).catchError((onError) => null);
+    }).catchError((onError) {
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print(onError.toString());
+      }
+      return null;
+    });
   }
 
   bool _checkID(Medecin medecin) {
-    medecins.get().then((snapshot) {
+    medecins.get(const GetOptions(source: Source.server)).then((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         for (var doc in snapshot.docs) {
           if (doc['identifiant'] == medecin.identifiant) {
@@ -125,7 +158,13 @@ class MedecinRepositoryImpl extends MedecinRepository {
       } else {
         return true;
       }
-    }).catchError((error) => error);
+    }).catchError((error) {
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print(error.toString());
+      }
+      return false;
+    });
     return true;
   }
 }

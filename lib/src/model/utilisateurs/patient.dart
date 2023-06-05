@@ -1,4 +1,6 @@
 import '../models.dart';
+import 'package:faker/faker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Patient extends Utilisateur {
   DateTime? _dateNaissance;
@@ -18,15 +20,37 @@ class Patient extends Utilisateur {
 
   factory Patient.fromJson(Map<String, dynamic> json) {
     return Patient(
-      json['uid'] as String,
-      json['identifiant'] as String,
-      json['nom'] as String,
-      json['prenoms'] as String,
-      json['telephone'] as String,
-      json['email'] as String,
-      json['adresse'] as String,
+      json['uid'],
+      json['identifiant'],
+      json['nom'],
+      json['prenoms'],
+      json['telephone'],
+      json['email'],
+      json['adresse'],
       DateTime.parse(json['dateNaissance']),
       parseSexe(json['sexe']),
+    );
+  }
+
+  factory Patient.faker(User user) {
+    var faker = Faker();
+    var uid = user.uid;
+    var nom = faker.person.name();
+    var prenoms = faker.person.firstName();
+    var telephone = faker.phoneNumber.us();
+    var email = user.email!;
+    var adresse = faker.address.streetAddress();
+    var dateNaissance = faker.date.dateTime(minYear: 1960, maxYear: 2022);
+    return Patient(
+      uid,
+      null,
+      nom,
+      prenoms,
+      telephone,
+      email,
+      adresse,
+      dateNaissance,
+      SexeExtension.faker(),
     );
   }
 

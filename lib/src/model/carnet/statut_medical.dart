@@ -1,4 +1,5 @@
 import '../models.dart';
+import 'package:faker/faker.dart';
 
 class StatutMedical {
   final Patient _patient;
@@ -14,11 +15,26 @@ class StatutMedical {
   );
 
   factory StatutMedical.fromJson(Map<String, dynamic> json) {
+    List<String> allergies = json['allergies'].cast<String>().toList();
+    List<String> maladiesHereditaires =
+        json['maladiesHereditaires'].cast<String>().toList();
     return StatutMedical(
       Patient.fromJson(json['patient']),
       parseGroupeSanguin(json['groupeSanguin']),
-      json['allergies'] as List<String>,
-      json['maladies-hereditaires'] as List<String>,
+      allergies,
+      maladiesHereditaires,
+    );
+  }
+
+  factory StatutMedical.faker(Patient patient) {
+    var faker = Faker();
+    var allergies = faker.lorem.words(3);
+    var maladiesHereditaires = faker.lorem.words(4);
+    return StatutMedical(
+      patient,
+      GroupeSanguinExtension.faker(),
+      allergies,
+      maladiesHereditaires,
     );
   }
 
@@ -40,7 +56,7 @@ class StatutMedical {
         'patient': patient.toJson(),
         'groupeSanguin': groupeSanguin.name,
         'allergies': allergies,
-        'maladies-hereditaires': maladiesHereditaires,
+        'maladiesHereditaires': maladiesHereditaires,
       };
 
   static GroupeSanguin parseGroupeSanguin(String name) {

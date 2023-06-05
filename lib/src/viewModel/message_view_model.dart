@@ -25,35 +25,41 @@ class MessageViewModel extends ChangeNotifier {
   }
 
   //change le statut d'un message de non traité à traité
-  void modifierStatut(Message message) {
+  Future<void> modifierStatut(Message message) async {
     //on vérifie le statut initial avant de faire la modification
     if (message.statut == StatutMessage.nonTraite) {
       message.changerStatut(StatutMessage.traite);
-      messageRep.modifierStatut(message);
+      await messageRep.modifierStatut(message);
       notifyListeners();
     }
   }
 
   //liste des messages envoyés par l'utilisateur courant du plus récent au plus ancien
-  Future<List<Message>> listerEnvoye(
-      String uidExpediteur, ObjetMessage objet) async {
-    List<Message> liste = await messageRep.listerEnvoye(uidExpediteur, objet);
-    return liste;
+  Future<List<Message>> listerEnvoye(String uidExpediteur) async {
+    return await messageRep.listerEnvoye(uidExpediteur);
   }
 
-  //liste des messages reçus par l'utilisateur courant du plus récent au plus ancien
-  Future<List<Message>> listerRecu(
+  //liste des messages envoyés par l'utilisateur en fonction de l'objet courant du plus récent au plus ancien
+  Future<List<Message>> listerEnvoyeObjet(
+      String uidExpediteur, ObjetMessage objet) async {
+    return await messageRep.listerEnvoyeObjet(uidExpediteur, objet);
+  }
+
+  //liste des messages reçus par l'utilisateur courant en fonction de l'objet du plus récent au plus ancien
+  Future<List<Message>> listerRecuObjet(
       String uidDestinataire, ObjetMessage objet) async {
-    List<Message> liste = await messageRep.listerRecu(uidDestinataire, objet);
-    return liste;
+    return await messageRep.listerRecuObjet(uidDestinataire, objet);
+  }
+
+  //liste de tous les messages reçus par l'utilisateur
+  Future<List<Message>> listerRecu(String uidDestinataire) async {
+    return await messageRep.listerRecu(uidDestinataire);
   }
 
   //lister les messages reçus traités ou non traités par l'utilisateur courant
-  Future<List<Message>> listerStatut(
+  Future<List<Message>> listerRecuStatut(
       String uidDestinataire, StatutMessage statut) async {
-    List<Message> liste =
-        await messageRep.listerStatut(uidDestinataire, statut);
-    return liste;
+    return await messageRep.listerRecuStatut(uidDestinataire, statut);
   }
 
   Future<Secretaire?> getSecretariatCentral() async {
@@ -61,22 +67,11 @@ class MessageViewModel extends ChangeNotifier {
     if (kDebugMode) {
       print('recherche du secretariat central');
     }
-    Secretaire? secretaire = await secretaireRep.getSecretariatCentral();
-    if (kDebugMode) {
-      print('fin de recherche du secretariat central');
-      //print(secretaire.toString());
-    }
-    if (secretaire == null) {
-      if (kDebugMode) {
-        print(
-            "erreur lors de la recherche du secretariat central : l'objet est nul");
-      }
-    }
-    return secretaire;
+    return await secretaireRep.getSecretariatCentral();
   }
 
-  void supprimer(Message message) {
-    messageRep.supprimer(message);
+  Future<void> supprimer(Message message) async {
+    await messageRep.supprimer(message);
     notifyListeners();
   }
 
@@ -105,14 +100,11 @@ class MessageViewModel extends ChangeNotifier {
   //permet de s'assurer si l'utilisateur courant est un patient intermediaire
   Future<PatientIntermediaire?> trouverPatientIntermediaireUid(
       String uid) async {
-    PatientIntermediaire? patient =
-        await patientIntermediaireRep.trouverUid(uid);
-    return patient;
+    return await patientIntermediaireRep.trouverUid(uid);
   }
 
 //permet de s'assurer si l'utilisateur courant est un patient
   Future<Patient?> trouverPatientUid(String uid) async {
-    Patient? patient = await patientRep.trouverUid(uid);
-    return patient;
+    return await patientRep.trouverUid(uid);
   }
 }
