@@ -13,32 +13,30 @@ class CreationRdv extends StatefulWidget {
   _CreationRdvState createState() => _CreationRdvState();
 }
 
-
 class _CreationRdvState extends State<CreationRdv> {
   @override
   Widget build(BuildContext context) {
-
-    final TextEditingController dateController = TextEditingController();
+    //final TextEditingController dateController = TextEditingController();
     final TextEditingController medecinController = TextEditingController();
     final TextEditingController patientController = TextEditingController();
     final TextEditingController objetController = TextEditingController();
     final TextEditingController lieuController = TextEditingController();
     final formKey = GlobalKey<FormState>();
-    List <String> listePatient = ['KOKOU', 'KOFI','KOSSIGAN'];
-    List <String> listeMedecin = ['KOKOUO', 'KOFIGO','KOSSIGANTOR'];
-    List <String> listeObjet = ['Consultation', 'Examens','Analyses'];
-    List <String> listItem = [
-      'Alala',
-      'Adjo',
-      'Akakpo',
-    ];
+    //List <String> listePatient = ['KOKOU', 'KOFI','KOSSIGAN'];
+    //List <String> listeMedecin = ['KOKOUO', 'KOFIGO','KOSSIGANTOR'];
+    //List <String> listeObjet = ['Consultation', 'Examens','Analyses'];
+    // List <String> listItem = [
+    //   'Alala',
+    //   'Adjo',
+    //   'Akakpo',
+    // ];
 
-    String? valueChoose = listItem[0];
+    //String? valueChoose = listItem[0];
 
-    @override
-    void initState() {
-      super.initState();
-    }
+    // @override
+    // void initState() {
+    //   super.initState();
+    // }
 
     return Material(
       child: Column(
@@ -65,17 +63,17 @@ class _CreationRdvState extends State<CreationRdv> {
                 key: formKey,
                 child: Column(
                   children: [
-                    Row(
-                      children: const [
-                       DateRdv(),
+                    const Row(
+                      children: [
+                        DateRdv(),
                         SizedBox(
                           width: 20,
                         ),
-                       HeureRdv(),
+                        HeureRdv(),
                         SizedBox(
                           width: 20,
                         ),
-                       DureeRdv(),
+                        DureeRdv(),
                       ],
                     ),
                     const SizedBox(
@@ -93,7 +91,9 @@ class _CreationRdvState extends State<CreationRdv> {
                         Expanded(
                           child: Card(
                             shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8)),
                             ),
                             child: TextFormField(
                               controller: medecinController,
@@ -112,7 +112,9 @@ class _CreationRdvState extends State<CreationRdv> {
                         Expanded(
                           child: Card(
                             shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8)),
                             ),
                             child: TextFormField(
                               controller: patientController,
@@ -135,7 +137,9 @@ class _CreationRdvState extends State<CreationRdv> {
                         Expanded(
                           child: Card(
                             shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8)),
                             ),
                             child: TextFormField(
                               controller: objetController,
@@ -154,7 +158,9 @@ class _CreationRdvState extends State<CreationRdv> {
                         Expanded(
                           child: Card(
                             shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8)),
                             ),
                             child: TextFormField(
                               controller: lieuController,
@@ -168,13 +174,14 @@ class _CreationRdvState extends State<CreationRdv> {
                           ),
                         ),
                         const Expanded(
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-                            ),
-                            child: DropdownCard(),
-                          )
-                        )
+                            child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                topRight: Radius.circular(8)),
+                          ),
+                          child: DropdownCard(),
+                        ))
                       ],
                     ),
                     const SizedBox(

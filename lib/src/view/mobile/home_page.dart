@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             showSimpleDialog(context);
           },
-          tooltip: 'new consultation',
+          tooltip: 'nouvelle consultation',
           child: const Icon(Icons.add),
         ),
       ),

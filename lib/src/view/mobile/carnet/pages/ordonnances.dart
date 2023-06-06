@@ -77,9 +77,9 @@ class _OrdonnancesState extends State<Ordonnances> {
               return Container(
                 color: Colors.white12,
                 padding: const EdgeInsets.all(10.0),
-                child: Center(
+                child: const Center(
                     child: Column(
-                  children: const [
+                  children: [
                     Expanded(
                         child: Center(
                             child: Padding(

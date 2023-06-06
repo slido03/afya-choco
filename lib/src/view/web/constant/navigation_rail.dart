@@ -1,31 +1,27 @@
+import 'package:afya/src/view/web/authentication/auth_service.dart';
 import 'package:flutter/material.dart';
 
 import '../consultation/pages/consultation.dart';
 import '../home/pages/login_page.dart';
 
-
 class NavigationRailPage extends StatefulWidget {
   const NavigationRailPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _NavigationRailPageState createState() => _NavigationRailPageState();
+  NavigationRailPageState createState() => NavigationRailPageState();
 }
 
-class _NavigationRailPageState extends State<NavigationRailPage> {
+class NavigationRailPageState extends State<NavigationRailPage> {
   int _selectedIndex = 0;
-  final List<Widget> pages =  [
-     LoginPage(),
-     ConsultationPage(),
-    
-        Container(color: Colors.red),
+  final List<Widget> pages = [
+    Container(color: Colors.white30),
+    const ConsultationPage(),
+    Container(color: Colors.red),
     Container(color: Colors.blue),
     Container(color: Colors.green),
-    Container(color: Colors.yellow),
-
-//     LoginPage(),
-//     ConsultationPage(),
-];
+    logout(),
+    Container(color: Colors.black),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +31,7 @@ class _NavigationRailPageState extends State<NavigationRailPage> {
           backgroundColor: const Color.fromRGBO(37, 211, 102, 0.6),
           selectedIndex: _selectedIndex,
           onDestinationSelected: (int index) {
-            setState(() {
-              _selectedIndex = index;
-            });
+            _selectIndex(index);
           },
           labelType: NavigationRailLabelType.all,
           destinations: const [
@@ -88,4 +82,16 @@ class _NavigationRailPageState extends State<NavigationRailPage> {
       ],
     );
   }
+
+  void _selectIndex(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+}
+
+Widget logout() {
+  final AuthService auth = AuthService.instance;
+  auth.signOut();
+  return const LoginPage();
 }

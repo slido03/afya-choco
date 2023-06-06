@@ -100,6 +100,7 @@ class _AgendaScreenState extends State<AgendaScreen>
                 ],
               );
             } else {
+              authService.signOut();
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => const LoginPage()),
               );

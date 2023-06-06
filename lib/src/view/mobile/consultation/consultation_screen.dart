@@ -57,6 +57,7 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
               ),
             ));
           } else {
+            authService.signOut();
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => const LoginPage()),
             );

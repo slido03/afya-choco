@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:afya/src/model/models.dart';
 
 class SelectionItem extends StatefulWidget {
-  
-  final List<String> choix = ['Féminin', 'Masculin'];
+  final List<String> choix = _sexeValues();
   final String valueChoose;
   final Function(String?) onChanged;
 
-  SelectionItem({Key? key, required this.onChanged, required this.valueChoose,})
-      : super(key: key);
+  SelectionItem({
+    Key? key,
+    required this.onChanged,
+    required this.valueChoose,
+  }) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -22,7 +25,7 @@ class _SelectionItemState extends State<SelectionItem> {
     super.initState();
     valueChoose = widget.valueChoose;
   }
- 
+
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
@@ -52,4 +55,12 @@ class _SelectionItemState extends State<SelectionItem> {
       }).toList(),
     );
   }
+}
+
+List<String> _sexeValues() {
+  List<String> values = [];
+  for (var sexe in Sexe.values) {
+    values.add(sexe.value);
+  }
+  return values;
 }

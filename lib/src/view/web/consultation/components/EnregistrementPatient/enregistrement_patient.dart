@@ -4,7 +4,9 @@ import 'package:afya/src/view/web/consultation/components/EnregistrementPatient/
 import 'package:afya/src/view/web/consultation/components/EnregistrementPatient/saisie_nom.dart';
 import 'package:afya/src/view/web/consultation/components/EnregistrementPatient/saisie_numero.dart';
 import 'package:afya/src/view/web/consultation/components/EnregistrementPatient/saisie_prenoms.dart';
+import 'package:afya/src/view/web/consultation/components/EnregistrementPatient/saisie_sexe.dart';
 import 'package:flutter/material.dart';
+import 'package:afya/src/model/models.dart';
 
 import 'button_annuler.dart';
 import 'button_enregistrer.dart';
@@ -19,7 +21,7 @@ class EnregistrementPatient extends StatefulWidget {
 
 class _EnregistrementPatientState extends State<EnregistrementPatient> {
   final TextEditingController sexeController = TextEditingController();
-  String _selectedGender = 'Féminin';
+  String _selectedGender = Sexe.femme.value;
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +50,15 @@ class _EnregistrementPatientState extends State<EnregistrementPatient> {
               child: Form(
                 key: formKey,
                 child: Column(children: [
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       SaisieNom(),
                       SaisiePrenom(),
                     ],
                   ),
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       SaisieEmail(),
                       SaisieAdresse(),
                     ],
@@ -65,27 +67,27 @@ class _EnregistrementPatientState extends State<EnregistrementPatient> {
                     children: [
                       const SaisieNumero(),
                       const SaisieDate(),
-                      // Padding(
-                      //   padding: const EdgeInsets.all(10.0),
-                      //   child: SelectionItem(
-                      //     valueChoose: _selectedGender,
-                      //     onChanged: (newValue) {
-                      //       setState(() {
-                      //         _selectedGender = newValue!;
-                      //       });
-                      //     },
-                      //   ),
-                      // ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: SelectionItem(
+                          valueChoose: _selectedGender,
+                          onChanged: (newValue) {
+                            setState(() {
+                              _selectedGender = newValue!;
+                            });
+                          },
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
+                  const Padding(
+                    padding: EdgeInsets.all(15.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
+                      children: [
                         ButtonAnnuler(),
                         SizedBox(
                           width: 50,

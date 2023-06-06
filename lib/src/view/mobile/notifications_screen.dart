@@ -57,6 +57,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 ),
               );
             } else {
+              authService.signOut();
               //si l'userId est nul c'est que l'utilisateur est déconnecté et donc on le ramène à la page de login
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => const LoginPage()),

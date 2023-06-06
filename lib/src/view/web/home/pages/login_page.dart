@@ -9,10 +9,11 @@ class LoginPage extends StatefulWidget {
 
   @override
   // ignore: library_private_types_in_public_api
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
+  // ignore: unused_field
   late double _screenWidth;
 
   @override
@@ -21,54 +22,50 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
         body: SizedBox.expand(
-      child: Expanded(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/banner-img-3.jpg'),
-              fit: BoxFit.cover,
-            ),
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/banner-img-3.jpg'),
+            fit: BoxFit.cover,
           ),
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.only(left: 90, right: 90),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 28.0),
-                  child: AfyaLogo(),
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                Center(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 70, vertical: 70),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          Expanded(
-                            child: HomeContainer1(),
-                          ),
-                          SizedBox(
+        ),
+        child: const SingleChildScrollView(
+          padding: EdgeInsets.only(left: 90, right: 90),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 28.0),
+                child: AfyaLogo(),
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 70, vertical: 70),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: HomeContainer1(),
+                        ),
+                        SizedBox(
                             width: 70,
-                             child : VerticalDivider(
+                            child: VerticalDivider(
                               thickness: 2,
                               color: Colors.red,
-                            )
-                          ),
-                          Expanded(
-                            child: Login(),
-                          ),
-                        ],
-                      ),
+                            )),
+                        Expanded(
+                          child: Login(),
+                        ),
+                      ],
                     ),
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         ),
       ),

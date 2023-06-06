@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../constant/navigation_rail.dart';
-import '../components/tab_app.dart';
+//import '../../constant/navigation_rail.dart';
+import '../components/consultation_tab.dart';
 import '../components/top_bar.dart';
 
 class ConsultationPage extends StatelessWidget {
@@ -9,12 +9,14 @@ class ConsultationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return const Expanded(
       child: Column(
-        children: const [
+        children: [
           TopBar(),
-          SizedBox(height: 3,),
-          Expanded(child: Test()),
+          SizedBox(
+            height: 3,
+          ),
+          Expanded(child: ConsultationTab()),
         ],
       ),
     );
