@@ -78,6 +78,7 @@ dependencies:
   flutter_easyloading: ^3.0.5
   flutter_localizations:
     sdk: flutter
+  go_router: ^7.1.1
 
 dev_dependencies:
   flutter_test:
