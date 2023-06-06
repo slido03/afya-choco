@@ -1,5 +1,7 @@
+//import 'package:afya/src/view/web/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
-import 'agenda/pages/evenements.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+//import 'agenda/pages/evenements.dart';
 // import 'authentication/login_form.dart';
 // import 'constant/navigation_rail.dart';
 // import 'consultation/components/creation_rdv.dart';
@@ -14,26 +16,45 @@ import 'agenda/pages/evenements.dart';
 // import 'consultation/pages/demande.dart';
 // import 'consultation/pages/enregistrement.dart';
 // import 'consultation/pages/rendez_vous.dart';
-// import 'home/pages/login_page.dart';
+import 'constant/navigation_rail.dart';
+import 'home/pages/login_page.dart';
+import 'package:go_router/go_router.dart';
 
 class AfyaApp extends StatelessWidget {
   const AfyaApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final router = GoRouter(
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (context, state) => const LoginPage(),
+        ),
+        GoRoute(
+          path: '/home',
+          builder: (context, state) => const Scaffold(
+            body: NavigationRailPage(),
+          ),
+        )
+      ],
+    );
+    return MaterialApp.router(
       title: 'Afya Demo',
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''), //English
+        Locale('fr', ''), // Français
+      ],
+      locale: const Locale('fr', ''), //locale de l'app en français
       theme: ThemeData(
-        //const Color.fromARGB(255, 33, 243, 156)
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
       ),
-      //  initialRoute: '/',
-      // //mettre les destinations principales ici : /, /carnet, /agenda
-      // routes: {
-      //   '/': (context) => const LoginPage(),
-      // },
-      home: const EvenementAgenda(),
+      routerConfig: router,
       debugShowCheckedModeBanner: false,
     );
   }

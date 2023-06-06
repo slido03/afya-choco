@@ -9,20 +9,19 @@ class Enregistrement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       children: [
-        const NavigationRailPage(),
+        NavigationRailPage(),
         Expanded(
           child: Column(
-            children: const[
-               TopBar(),
-               SizedBox(
+            children: [
+              TopBar(),
+              SizedBox(
                 height: 10,
               ),
               Padding(
-                padding: EdgeInsets.only(right: 90, left: 90),
-                child: EnregistrementPatient()
-                ),
+                  padding: EdgeInsets.only(right: 90, left: 90),
+                  child: EnregistrementPatient()),
             ],
           ),
         ),

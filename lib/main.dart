@@ -3,7 +3,8 @@ import 'firebase_options.dart';
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'src/view/mobile/afya_app.dart'; //importing the main mobile app
+//import 'src/view/mobile/afya_app.dart'; //importing the main mobile app
+import 'src/view/web/afya_app.dart'; //importing the main web app
 //import 'package:provider/provider.dart';
 //import './src/repository/repositories.dart';
 //import 'package:afya/src/seeder/seeders.dart';

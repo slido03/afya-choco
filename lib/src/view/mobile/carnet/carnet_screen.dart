@@ -115,6 +115,7 @@ class _CarnetScreenState extends State<CarnetScreen>
                 ],
               );
             } else {
+              authService.signOut();
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => const LoginPage()),
               );

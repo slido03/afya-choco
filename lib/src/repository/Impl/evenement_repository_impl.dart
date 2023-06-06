@@ -138,7 +138,8 @@ class EvenementRepositoryImpl extends EvenementRepository {
   //liste des évènements en attente dans la semaine suivante
   @override
   Future<List<Evenement>> listerEnAttentePatientSemaine(
-      String uidPatient) async {
+    String uidPatient,
+  ) async {
     return await evenements
         .where('rendezVous.patient.uid', isEqualTo: uidPatient)
         .where('rendezVous.dateHeure',
@@ -195,7 +196,8 @@ class EvenementRepositoryImpl extends EvenementRepository {
   //liste des évènements en attente dans les 3 jours suivants
   @override
   Future<List<Evenement>> listerEnAttenteMedecin3Jours(
-      String uidMedecin) async {
+    String uidMedecin,
+  ) async {
     return await evenements
         .where('rendezVous.medecin.uid', isEqualTo: uidMedecin)
         .where('rendezVous.dateHeure',

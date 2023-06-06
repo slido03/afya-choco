@@ -50,15 +50,15 @@ class _EnregistrementPatientState extends State<EnregistrementPatient> {
               child: Form(
                 key: formKey,
                 child: Column(children: [
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       SaisieNom(),
                       SaisiePrenom(),
                     ],
                   ),
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       SaisieEmail(),
                       SaisieAdresse(),
                     ],
@@ -83,11 +83,11 @@ class _EnregistrementPatientState extends State<EnregistrementPatient> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
+                  const Padding(
+                    padding: EdgeInsets.all(15.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
+                      children: [
                         ButtonAnnuler(),
                         SizedBox(
                           width: 50,

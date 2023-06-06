@@ -63,8 +63,8 @@ class _CreationRdvState extends State<CreationRdv> {
                 key: formKey,
                 child: Column(
                   children: [
-                    Row(
-                      children: const [
+                    const Row(
+                      children: [
                         DateRdv(),
                         SizedBox(
                           width: 20,

@@ -38,12 +38,12 @@ class _PopupMenuUserState extends State<PopupMenuUser> {
             if (userId != null) {
               return PopupMenuButton(
                 icon: const Icon(Icons.person_2_outlined),
-                itemBuilder: (context) => [
+                itemBuilder: (context) => const [
                   // user profile
                   PopupMenuItem(
                     value: 1,
                     child: Row(
-                      children: const [
+                      children: [
                         Icon(Icons.person_2_outlined, color: Colors.black),
                         SizedBox(width: 10.0),
                         Text('Profile'),
@@ -54,7 +54,7 @@ class _PopupMenuUserState extends State<PopupMenuUser> {
                   PopupMenuItem(
                     value: 2,
                     child: Row(
-                      children: const [
+                      children: [
                         Icon(Icons.logout, color: Colors.black),
                         SizedBox(width: 10.0),
                         Text('Déconnexion'),
@@ -88,6 +88,7 @@ class _PopupMenuUserState extends State<PopupMenuUser> {
                 },
               );
             } else {
+              authService.signOut();
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => const LoginPage()),
               );
