@@ -88,7 +88,6 @@ class _PopupMenuUserState extends State<PopupMenuUser> {
                 },
               );
             } else {
-              authService.signOut();
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => const LoginPage()),
               );

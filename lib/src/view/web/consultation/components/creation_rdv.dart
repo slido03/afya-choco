@@ -22,9 +22,9 @@ class _CreationRdvState extends State<CreationRdv> {
     final TextEditingController objetController = TextEditingController();
     final TextEditingController lieuController = TextEditingController();
     final formKey = GlobalKey<FormState>();
-    //List <String> listePatient = ['KOKOU', 'KOFI','KOSSIGAN'];
-    //List <String> listeMedecin = ['KOKOUO', 'KOFIGO','KOSSIGANTOR'];
-    //List <String> listeObjet = ['Consultation', 'Examens','Analyses'];
+    // List <String> listePatient = ['KOKOU', 'KOFI','KOSSIGAN'];
+    // List <String> listeMedecin = ['KOKOUO', 'KOFIGO','KOSSIGANTOR'];
+    // List <String> listeObjet = ['Consultation', 'Examens','Analyses'];
     // List <String> listItem = [
     //   'Alala',
     //   'Adjo',
@@ -32,11 +32,6 @@ class _CreationRdvState extends State<CreationRdv> {
     // ];
 
     //String? valueChoose = listItem[0];
-
-    // @override
-    // void initState() {
-    //   super.initState();
-    // }
 
     return Material(
       child: Column(
@@ -95,14 +90,10 @@ class _CreationRdvState extends State<CreationRdv> {
                                   topLeft: Radius.circular(8),
                                   topRight: Radius.circular(8)),
                             ),
-                            child: TextFormField(
-                              controller: medecinController,
-                              decoration: const InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 10.0),
-                                hintText: 'NAYO Philippa',
-                                labelText: 'Medecin',
-                              ),
+                            child: DropdownCard(
+                              options: listeMedecin,
+                              defaultValue: listeMedecin[0],
+                              labelText: labelTextMedecin,
                             ),
                           ),
                         ),
@@ -141,14 +132,10 @@ class _CreationRdvState extends State<CreationRdv> {
                                   topLeft: Radius.circular(8),
                                   topRight: Radius.circular(8)),
                             ),
-                            child: TextFormField(
-                              controller: objetController,
-                              decoration: const InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 10.0),
-                                hintText: 'Consultation',
-                                labelText: 'Objet',
-                              ),
+                            child: DropdownCard(
+                              options: listeObjet,
+                              defaultValue: listeObjet[0],
+                              labelText: labelTextObjet,
                             ),
                           ),
                         ),

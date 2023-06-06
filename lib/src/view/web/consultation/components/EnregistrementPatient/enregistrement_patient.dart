@@ -4,9 +4,7 @@ import 'package:afya/src/view/web/consultation/components/EnregistrementPatient/
 import 'package:afya/src/view/web/consultation/components/EnregistrementPatient/saisie_nom.dart';
 import 'package:afya/src/view/web/consultation/components/EnregistrementPatient/saisie_numero.dart';
 import 'package:afya/src/view/web/consultation/components/EnregistrementPatient/saisie_prenoms.dart';
-import 'package:afya/src/view/web/consultation/components/EnregistrementPatient/saisie_sexe.dart';
 import 'package:flutter/material.dart';
-import 'package:afya/src/model/models.dart';
 
 import 'button_annuler.dart';
 import 'button_enregistrer.dart';
@@ -21,7 +19,7 @@ class EnregistrementPatient extends StatefulWidget {
 
 class _EnregistrementPatientState extends State<EnregistrementPatient> {
   final TextEditingController sexeController = TextEditingController();
-  String _selectedGender = Sexe.femme.value;
+  //final String _selectedGender = 'Féminin';
 
   @override
   Widget build(BuildContext context) {
@@ -49,15 +47,15 @@ class _EnregistrementPatientState extends State<EnregistrementPatient> {
             child: Center(
               child: Form(
                 key: formKey,
-                child: Column(children: [
-                  const Row(
+                child: const Column(children: [
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SaisieNom(),
                       SaisiePrenom(),
                     ],
                   ),
-                  const Row(
+                  Row(
                     children: [
                       SaisieEmail(),
                       SaisieAdresse(),
@@ -65,25 +63,25 @@ class _EnregistrementPatientState extends State<EnregistrementPatient> {
                   ),
                   Row(
                     children: [
-                      const SaisieNumero(),
-                      const SaisieDate(),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: SelectionItem(
-                          valueChoose: _selectedGender,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedGender = newValue!;
-                            });
-                          },
-                        ),
-                      ),
+                      SaisieNumero(),
+                      SaisieDate(),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(10.0),
+                      //   child: SelectionItem(
+                      //     valueChoose: _selectedGender,
+                      //     onChanged: (newValue) {
+                      //       setState(() {
+                      //         _selectedGender = newValue!;
+                      //       });
+                      //     },
+                      //   ),
+                      // ),
                     ],
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 10,
                   ),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.all(15.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
