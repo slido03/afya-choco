@@ -19,12 +19,8 @@ class NavigationRailPageState extends State<NavigationRailPage> {
     Container(color: Colors.red),
     Container(color: Colors.blue),
     Container(color: Colors.green),
-<<<<<<< HEAD
     logout(),
     Container(color: Colors.black),
-=======
-    Container(color: Colors.yellow),
->>>>>>> 1772f7950f67f1d4cfc9496f5144b0fd04aa5d31
   ];
 
   @override

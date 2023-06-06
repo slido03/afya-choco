@@ -22,9 +22,9 @@ class _CreationRdvState extends State<CreationRdv> {
     final TextEditingController objetController = TextEditingController();
     final TextEditingController lieuController = TextEditingController();
     final formKey = GlobalKey<FormState>();
-    //List <String> listePatient = ['KOKOU', 'KOFI','KOSSIGAN'];
-    //List <String> listeMedecin = ['KOKOUO', 'KOFIGO','KOSSIGANTOR'];
-    //List <String> listeObjet = ['Consultation', 'Examens','Analyses'];
+    // List <String> listePatient = ['KOKOU', 'KOFI','KOSSIGAN'];
+    // List <String> listeMedecin = ['KOKOUO', 'KOFIGO','KOSSIGANTOR'];
+    // List <String> listeObjet = ['Consultation', 'Examens','Analyses'];
     // List <String> listItem = [
     //   'Alala',
     //   'Adjo',
@@ -32,11 +32,6 @@ class _CreationRdvState extends State<CreationRdv> {
     // ];
 
     //String? valueChoose = listItem[0];
-
-    // @override
-    // void initState() {
-    //   super.initState();
-    // }
 
     return Material(
       child: Column(
@@ -51,7 +46,7 @@ class _CreationRdvState extends State<CreationRdv> {
             ),
           ),
           const SizedBox(
-            height: 15,
+            height: 20,
           ),
           Container(
             padding: const EdgeInsets.all(40),
@@ -65,11 +60,7 @@ class _CreationRdvState extends State<CreationRdv> {
                   children: [
                     const Row(
                       children: [
-<<<<<<< HEAD
                         DateRdv(),
-=======
-                       DateRdv(),
->>>>>>> 1772f7950f67f1d4cfc9496f5144b0fd04aa5d31
                         SizedBox(
                           width: 20,
                         ),
@@ -99,22 +90,32 @@ class _CreationRdvState extends State<CreationRdv> {
                                   topLeft: Radius.circular(8),
                                   topRight: Radius.circular(8)),
                             ),
-                            child: DropdownCard(options : listeMedecin, defaultValue: listeMedecin[0], labelText: labelTextMedecin,),
-                           
+                            child: DropdownCard(
+                              options: listeMedecin,
+                              defaultValue: listeMedecin[0],
+                              labelText: labelTextMedecin,
+                            ),
                           ),
                         ),
                         const SizedBox(
                           width: 40,
                         ),
-                         Expanded(
+                        Expanded(
                           child: Card(
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(8),
                                   topRight: Radius.circular(8)),
                             ),
-                            child: DropdownCard(options : listePatient, defaultValue: listePatient[0], labelText: labelTextPatient,),
-                           
+                            child: TextFormField(
+                              controller: patientController,
+                              decoration: const InputDecoration(
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10.0),
+                                hintText: 'ADJO Afi',
+                                labelText: 'Patient',
+                              ),
+                            ),
                           ),
                         )
                       ],
@@ -124,15 +125,18 @@ class _CreationRdvState extends State<CreationRdv> {
                     ),
                     Row(
                       children: [
-                         Expanded(
+                        Expanded(
                           child: Card(
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(8),
                                   topRight: Radius.circular(8)),
                             ),
-                            child: DropdownCard(options : listeObjet, defaultValue: listeObjet[0], labelText: labelTextObjet,),
-                            
+                            child: DropdownCard(
+                              options: listeObjet,
+                              defaultValue: listeObjet[0],
+                              labelText: labelTextObjet,
+                            ),
                           ),
                         ),
                         const SizedBox(
@@ -156,7 +160,6 @@ class _CreationRdvState extends State<CreationRdv> {
                             ),
                           ),
                         ),
-
                         const Expanded(
                             child: Card(
                           shape: RoundedRectangleBorder(

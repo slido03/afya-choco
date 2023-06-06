@@ -28,10 +28,10 @@ class _TestState extends State<Test> {
                     ListeDemande(),
                     ListeDemande(),
                     const RendezVousPage(),
-                  ]
-                ),
-              )
-            ],
+                  ]),
+                )
+              ],
+            ),
           ),
         ),
       );

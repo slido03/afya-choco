@@ -4,9 +4,7 @@ import 'package:afya/src/view/web/consultation/components/EnregistrementPatient/
 import 'package:afya/src/view/web/consultation/components/EnregistrementPatient/saisie_nom.dart';
 import 'package:afya/src/view/web/consultation/components/EnregistrementPatient/saisie_numero.dart';
 import 'package:afya/src/view/web/consultation/components/EnregistrementPatient/saisie_prenoms.dart';
-import 'package:afya/src/view/web/consultation/components/EnregistrementPatient/saisie_sexe.dart';
 import 'package:flutter/material.dart';
-import 'package:afya/src/model/models.dart';
 
 import 'button_annuler.dart';
 import 'button_enregistrer.dart';
@@ -21,7 +19,7 @@ class EnregistrementPatient extends StatefulWidget {
 
 class _EnregistrementPatientState extends State<EnregistrementPatient> {
   final TextEditingController sexeController = TextEditingController();
-  String _selectedGender = Sexe.femme.value;
+  //final String _selectedGender = 'Féminin';
 
   @override
   Widget build(BuildContext context) {
@@ -49,24 +47,15 @@ class _EnregistrementPatientState extends State<EnregistrementPatient> {
             child: Center(
               child: Form(
                 key: formKey,
-<<<<<<< HEAD
-                child: Column(children: [
-                  const Row(
-=======
                 child: const Column(children: [
                   Row(
->>>>>>> 1772f7950f67f1d4cfc9496f5144b0fd04aa5d31
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SaisieNom(),
                       SaisiePrenom(),
                     ],
                   ),
-<<<<<<< HEAD
-                  const Row(
-=======
                   Row(
->>>>>>> 1772f7950f67f1d4cfc9496f5144b0fd04aa5d31
                     children: [
                       SaisieEmail(),
                       SaisieAdresse(),
@@ -74,29 +63,25 @@ class _EnregistrementPatientState extends State<EnregistrementPatient> {
                   ),
                   Row(
                     children: [
-                      const SaisieNumero(),
-                      const SaisieDate(),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: SelectionItem(
-                          valueChoose: _selectedGender,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedGender = newValue!;
-                            });
-                          },
-                        ),
-                      ),
+                      SaisieNumero(),
+                      SaisieDate(),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(10.0),
+                      //   child: SelectionItem(
+                      //     valueChoose: _selectedGender,
+                      //     onChanged: (newValue) {
+                      //       setState(() {
+                      //         _selectedGender = newValue!;
+                      //       });
+                      //     },
+                      //   ),
+                      // ),
                     ],
                   ),
                   SizedBox(
                     height: 10,
                   ),
-<<<<<<< HEAD
-                  const Padding(
-=======
                   Padding(
->>>>>>> 1772f7950f67f1d4cfc9496f5144b0fd04aa5d31
                     padding: EdgeInsets.all(15.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,

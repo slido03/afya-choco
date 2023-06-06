@@ -40,7 +40,7 @@ class _PopupMenuUserState extends State<PopupMenuUser> {
                 icon: const Icon(Icons.person_2_outlined),
                 itemBuilder: (context) => const [
                   // user profile
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 1,
                     child: Row(
                       children: [
@@ -51,7 +51,7 @@ class _PopupMenuUserState extends State<PopupMenuUser> {
                     ),
                   ),
                   // logout
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 2,
                     child: Row(
                       children: [
@@ -88,7 +88,6 @@ class _PopupMenuUserState extends State<PopupMenuUser> {
                 },
               );
             } else {
-              authService.signOut();
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => const LoginPage()),
               );
