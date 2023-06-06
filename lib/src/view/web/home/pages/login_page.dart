@@ -28,6 +28,7 @@ class LoginPageState extends State<LoginPage> {
             image: AssetImage('assets/images/banner-img-3.jpg'),
             fit: BoxFit.cover,
           ),
+<<<<<<< HEAD
         ),
         child: const SingleChildScrollView(
           padding: EdgeInsets.only(left: 90, right: 90),
@@ -61,6 +62,42 @@ class LoginPageState extends State<LoginPage> {
                           child: Login(),
                         ),
                       ],
+=======
+          child: const SingleChildScrollView(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 28.0,),
+                  child: AfyaLogo(),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 70, vertical: 70),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: HomeContainer1(),
+                          ),
+                          SizedBox(
+                              width: 70,
+                              child: VerticalDivider(
+                                thickness: 2,
+                                color: Colors.red,
+                              )),
+                          Expanded(
+                            child: Login(),
+                          ),
+                        ],
+                      ),
+>>>>>>> 1772f7950f67f1d4cfc9496f5144b0fd04aa5d31
                     ),
                   ),
                 ),

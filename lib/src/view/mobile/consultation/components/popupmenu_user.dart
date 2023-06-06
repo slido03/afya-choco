@@ -40,7 +40,7 @@ class _PopupMenuUserState extends State<PopupMenuUser> {
                 icon: const Icon(Icons.person_2_outlined),
                 itemBuilder: (context) => const [
                   // user profile
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 1,
                     child: Row(
                       children: [
@@ -51,7 +51,7 @@ class _PopupMenuUserState extends State<PopupMenuUser> {
                     ),
                   ),
                   // logout
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 2,
                     child: Row(
                       children: [

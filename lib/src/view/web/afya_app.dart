@@ -1,7 +1,11 @@
 //import 'package:afya/src/view/web/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:flutter_localizations/flutter_localizations.dart';
 //import 'agenda/pages/evenements.dart';
+=======
+import 'constant/navigation_rail.dart';
+>>>>>>> 1772f7950f67f1d4cfc9496f5144b0fd04aa5d31
 // import 'authentication/login_form.dart';
 // import 'constant/navigation_rail.dart';
 // import 'consultation/components/creation_rdv.dart';
@@ -54,8 +58,19 @@ class AfyaApp extends StatelessWidget {
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
       ),
+<<<<<<< HEAD
       routerConfig: router,
       debugShowCheckedModeBanner: false,
     );
+=======
+      //  initialRoute: '/',
+      // //mettre les destinations principales ici : /, /carnet, /agenda
+      // routes: {
+      //   '/': (context) => const LoginPage(),
+      // },
+      home: const NavigationRailPage(),
+      debugShowCheckedModeBanner: false,  
+      );
+>>>>>>> 1772f7950f67f1d4cfc9496f5144b0fd04aa5d31
   }
 }

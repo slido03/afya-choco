@@ -11,9 +11,7 @@ class EvenementAgenda extends StatelessWidget {
     return const Column(
       children: [
         AfyaLogo(),
-        SizedBox(
-          height: 3,
-        ),
+        SizedBox(height: 3,),
         TabBarAgenda(),
       ],
     );

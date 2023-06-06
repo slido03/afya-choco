@@ -40,7 +40,23 @@ class _TopBarState extends State<TopBar> {
             NouveauMessage(),
           ],
         ),
+<<<<<<< HEAD
       ),
+=======
+        child: const Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AfyaLogo(),
+              SizedBox(width : 600),
+              ListeMessage(),
+              SizedBox(width : 40),
+              NouveauMessage(),
+            ],
+          ),
+        ),
+>>>>>>> 1772f7950f67f1d4cfc9496f5144b0fd04aa5d31
     );
   }
 }

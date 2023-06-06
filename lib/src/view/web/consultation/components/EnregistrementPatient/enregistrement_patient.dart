@@ -49,15 +49,24 @@ class _EnregistrementPatientState extends State<EnregistrementPatient> {
             child: Center(
               child: Form(
                 key: formKey,
+<<<<<<< HEAD
                 child: Column(children: [
                   const Row(
+=======
+                child: const Column(children: [
+                  Row(
+>>>>>>> 1772f7950f67f1d4cfc9496f5144b0fd04aa5d31
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SaisieNom(),
                       SaisiePrenom(),
                     ],
                   ),
+<<<<<<< HEAD
                   const Row(
+=======
+                  Row(
+>>>>>>> 1772f7950f67f1d4cfc9496f5144b0fd04aa5d31
                     children: [
                       SaisieEmail(),
                       SaisieAdresse(),
@@ -80,10 +89,14 @@ class _EnregistrementPatientState extends State<EnregistrementPatient> {
                       ),
                     ],
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 10,
                   ),
+<<<<<<< HEAD
                   const Padding(
+=======
+                  Padding(
+>>>>>>> 1772f7950f67f1d4cfc9496f5144b0fd04aa5d31
                     padding: EdgeInsets.all(15.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
