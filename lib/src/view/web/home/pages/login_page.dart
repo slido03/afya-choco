@@ -13,6 +13,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // ignore: unused_field
   late double _screenWidth;
 
   @override
@@ -43,8 +44,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Center(
                   child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 70, vertical: 70),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 70, vertical: 70),
                     child: Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -53,12 +54,11 @@ class _LoginPageState extends State<LoginPage> {
                             child: HomeContainer1(),
                           ),
                           SizedBox(
-                            width: 70,
-                             child : VerticalDivider(
-                              thickness: 2,
-                              color: Colors.red,
-                            )
-                          ),
+                              width: 70,
+                              child: VerticalDivider(
+                                thickness: 2,
+                                color: Colors.red,
+                              )),
                           Expanded(
                             child: Login(),
                           ),

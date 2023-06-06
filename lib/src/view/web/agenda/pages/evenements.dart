@@ -13,7 +13,7 @@ class EvenementAgenda extends StatelessWidget {
         AfyaLogo(),
         SizedBox(height: 3,),
         TabBarAgenda(),
-    ],
+      ],
     );
   }
 }
