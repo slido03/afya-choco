@@ -51,7 +51,7 @@ class _CreationRdvState extends State<CreationRdv> {
             ),
           ),
           const SizedBox(
-            height: 20,
+            height: 15,
           ),
           Container(
             padding: const EdgeInsets.all(40),
@@ -63,9 +63,9 @@ class _CreationRdvState extends State<CreationRdv> {
                 key: formKey,
                 child: Column(
                   children: [
-                    Row(
-                      children: const [
-                        DateRdv(),
+                    const Row(
+                      children: [
+                       DateRdv(),
                         SizedBox(
                           width: 20,
                         ),
@@ -95,36 +95,22 @@ class _CreationRdvState extends State<CreationRdv> {
                                   topLeft: Radius.circular(8),
                                   topRight: Radius.circular(8)),
                             ),
-                            child: TextFormField(
-                              controller: medecinController,
-                              decoration: const InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 10.0),
-                                hintText: 'NAYO Philippa',
-                                labelText: 'Medecin',
-                              ),
-                            ),
+                            child: DropdownCard(options : listeMedecin, defaultValue: listeMedecin[0], labelText: labelTextMedecin,),
+                           
                           ),
                         ),
                         const SizedBox(
                           width: 40,
                         ),
-                        Expanded(
+                         Expanded(
                           child: Card(
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(8),
                                   topRight: Radius.circular(8)),
                             ),
-                            child: TextFormField(
-                              controller: patientController,
-                              decoration: const InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 10.0),
-                                hintText: 'ADJO Afi',
-                                labelText: 'Patient',
-                              ),
-                            ),
+                            child: DropdownCard(options : listePatient, defaultValue: listePatient[0], labelText: labelTextPatient,),
+                           
                           ),
                         )
                       ],
@@ -134,22 +120,15 @@ class _CreationRdvState extends State<CreationRdv> {
                     ),
                     Row(
                       children: [
-                        Expanded(
+                         Expanded(
                           child: Card(
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(8),
                                   topRight: Radius.circular(8)),
                             ),
-                            child: TextFormField(
-                              controller: objetController,
-                              decoration: const InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 10.0),
-                                hintText: 'Consultation',
-                                labelText: 'Objet',
-                              ),
-                            ),
+                            child: DropdownCard(options : listeObjet, defaultValue: listeObjet[0], labelText: labelTextObjet,),
+                            
                           ),
                         ),
                         const SizedBox(
@@ -173,6 +152,7 @@ class _CreationRdvState extends State<CreationRdv> {
                             ),
                           ),
                         ),
+
                         const Expanded(
                             child: Card(
                           shape: RoundedRectangleBorder(

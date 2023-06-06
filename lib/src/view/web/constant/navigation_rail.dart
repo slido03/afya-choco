@@ -21,9 +21,6 @@ class _NavigationRailPageState extends State<NavigationRailPage> {
     Container(color: Colors.blue),
     Container(color: Colors.green),
     Container(color: Colors.yellow),
-
-//     LoginPage(),
-//     ConsultationPage(),
   ];
 
   @override

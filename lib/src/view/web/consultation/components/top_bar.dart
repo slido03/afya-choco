@@ -28,11 +28,11 @@ class _TopBarState extends State<TopBar> {
             ),
           ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
+        child: const Padding(
+          padding: EdgeInsets.all(10.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               AfyaLogo(),
               SizedBox(width : 600),
               ListeMessage(),

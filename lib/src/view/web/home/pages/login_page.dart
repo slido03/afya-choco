@@ -30,17 +30,17 @@ class _LoginPageState extends State<LoginPage> {
               fit: BoxFit.cover,
             ),
           ),
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.only(left: 90, right: 90),
+          child: const SingleChildScrollView(
+            padding: EdgeInsets.only(left: 20, right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 28.0),
+                Padding(
+                  padding: EdgeInsets.only(top: 28.0,),
                   child: AfyaLogo(),
                 ),
-                const SizedBox(
-                  height: 40,
+                SizedBox(
+                  height: 30,
                 ),
                 Center(
                   child: Padding(
@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
+                        children: [
                           Expanded(
                             child: HomeContainer1(),
                           ),
