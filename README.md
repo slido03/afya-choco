@@ -1,6 +1,6 @@
 # afya
 
-A new Flutter project.
+A new Flutter project, AFYA is is a mobile application aimed at simplifying access to healthcare for hospital patients by making it easier for them to make an appointment with their doctor and by organizing their medical information in a digital health record.
 
 ## Getting Started
 
